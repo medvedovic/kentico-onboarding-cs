@@ -54,7 +54,7 @@ namespace KenticoOnboardingCs.Api.Controllers
             }
             catch(Exception ex)
             {
-                return Conflict();
+                return BadRequest(ex.Message);
             }
         }
     }
