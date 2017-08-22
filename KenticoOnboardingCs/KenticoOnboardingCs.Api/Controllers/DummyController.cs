@@ -2,6 +2,7 @@
 using KenticoOnboardingCs.Api.Models.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 
 namespace KenticoOnboardingCs.Api.Controllers
@@ -56,6 +57,17 @@ namespace KenticoOnboardingCs.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteTodo(int id)
+        {
+            var isRemoved = _repository.Remove(id);
+
+            if (!isRemoved)
+                return NotFound();
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
