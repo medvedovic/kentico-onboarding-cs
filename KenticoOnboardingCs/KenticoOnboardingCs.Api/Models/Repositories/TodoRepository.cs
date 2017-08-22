@@ -43,9 +43,18 @@ namespace KenticoOnboardingCs.Api.Models.Repositories
         }
 
 
-        public void Remove(int id)
+        public bool Remove(int id)
         {
-            todos.RemoveAll(todo => todo.Id == id);
+            var todoToRemove = todos.Find(todo => todo.Id == id);
+
+            if(todoToRemove == null)
+            {
+                return false;
+            }
+
+            todos.Remove(todoToRemove);
+
+            return true;
         }
 
         public bool Update(Todo todo)

@@ -11,7 +11,7 @@ namespace KenticoOnboardingCs.Api.Models.Repositories
         IEnumerable<Todo> GetAll();
         Todo Get(int id);
         Todo Add(Todo item);
-        void Remove(int id);
+        bool Remove(int id);
         bool Update(Todo item);
     }
 }
