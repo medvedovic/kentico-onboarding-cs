@@ -57,19 +57,18 @@ namespace KenticoOnboardingCs.Api.Models.Repositories
             return true;
         }
 
-        public bool Update(Todo todo)
+        public bool Update(int id, Todo todo)
         {
             if (todo == null)
-            {
-                throw new ArgumentNullException("item");
-            }
-            int index = todos.FindIndex(p => p.Id == todo.Id);
+                throw new ArgumentNullException("todo");            
+
+            int index = todos.FindIndex(p => p.Id == id);
             if (index == -1)
-            {
-                return false;
-            }
+                return false;           
+
             todos.RemoveAt(index);
             todos.Add(todo);
+
             return true;
         }
     }
