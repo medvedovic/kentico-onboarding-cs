@@ -67,6 +67,7 @@
     <Compile Include="Controllers\DummyControllerTests_Delete.cs" />
     <Compile Include="Controllers\DummyControllerTests_Get.cs" />
     <Compile Include="Controllers\DummyControllerTests_Post.cs" />
+    <Compile Include="Controllers\DummyControllerTests_Put.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

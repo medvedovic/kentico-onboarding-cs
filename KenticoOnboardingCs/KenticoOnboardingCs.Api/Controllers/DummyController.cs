@@ -69,5 +69,26 @@ namespace KenticoOnboardingCs.Api.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+
+        [HttpPut]
+        public IHttpActionResult PutTodo(int id, [FromBody] Todo updated)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                if (!_repository.Update(id, updated))
+                    return NotFound();
+
+                return Ok(updated);
+            }
+            catch(ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
