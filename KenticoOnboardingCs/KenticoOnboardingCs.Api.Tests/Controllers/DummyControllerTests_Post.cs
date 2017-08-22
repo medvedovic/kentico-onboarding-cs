@@ -48,7 +48,6 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
             Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response);
             Assert.AreEqual("DefaultApi", (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteName);
             Assert.AreEqual(3, (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
-            //Assert.AreEqual("", (response as CreatedNegotiatedContentResult<Todo>).Location);
         }
 
         [Test]

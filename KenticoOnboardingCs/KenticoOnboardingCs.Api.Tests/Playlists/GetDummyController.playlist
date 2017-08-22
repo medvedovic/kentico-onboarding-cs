@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="KenticoOnboardingCs.Api.Tests.Controllers.DummyControllerTests_Get.GetDummyItem_ReturnsNotFound" /><Add Test="KenticoOnboardingCs.Api.Tests.Controllers.DummyControllerTests_Get.GetDummyItem_ReturnsItemWithSameId" /><Add Test="KenticoOnboardingCs.Api.Tests.Controllers.DummyControllerTests_Get.GetDummyItems_ReturnsAllTodos" /></Playlist>
