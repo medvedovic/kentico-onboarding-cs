@@ -5,30 +5,29 @@ using KenticoOnboardingCs.Api.Controllers;
 using Newtonsoft.Json;
 using System.Web.Http.Results;
 using System.Net;
+using KenticoOnboardingCs.Api.Models.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace KenticoOnboardingCs.Api.Tests.Controllers
 {
     [TestFixture]
-    class DummyControllerTests
+    class DummyControllerTests_Get
     {
         private DummyController dummyController;
-        private List<Todo> todos = new List<Todo>()
-        {
-            new Todo() { Id = 1, Name = "Make coffee", Done = true },
-            new Todo() { Id = 2, Name = "Master ASP.NET web api", Done = false }
-        };
+        private ITodoRepository repository;
 
         [SetUp]
         public void SetUp()
         {
-            dummyController = new DummyController(todos);
+            repository = new TodoRepository();
+            dummyController = new DummyController(repository);
         }
 
         [Test]
         public void GetDummyItem_ReturnsItemWithSameId()
         {
             var todoId = 2;
-            var expectedItem = todos.Find(todo => todo.Id == todoId);
+            var expectedItem = repository.Get(todoId);
 
             var response = dummyController.GetTodo(todoId);
 
@@ -40,7 +39,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         public void GetDummyItem_ReturnsNotFound()
         {
             var todoId = 5;
-            var expectedItem = todos.Find(todo => todo.Id == todoId);
+            var expectedItem = repository.Get(todoId);
 
             var response = dummyController.GetTodo(todoId);
 
@@ -48,11 +47,11 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         }
 
         [Test]
-        public void GetDummyItems_ReturnsAllProducts()
+        public void GetDummyItems_ReturnsAllTodos()
         {
             var response = dummyController.GetAllTodos();
 
-            Assert.AreEqual(todos, response);
+            Assert.AreEqual(repository.GetAll(), response);
         }
     }
 }
