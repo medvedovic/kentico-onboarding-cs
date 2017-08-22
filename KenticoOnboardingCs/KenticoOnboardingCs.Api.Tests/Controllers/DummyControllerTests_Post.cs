@@ -42,9 +42,13 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         {
             var itemToPost = new Todo() { Name = "Go home" };
 
+            dummyController.ModelState.Clear();
             var response = dummyController.PostTodo(itemToPost);
-
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response);
+            
+            Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response);
+            Assert.AreEqual("DefaultApi", (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteName);
+            Assert.AreEqual(3, (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
+            //Assert.AreEqual("", (response as CreatedNegotiatedContentResult<Todo>).Location);
         }
 
         [Test]

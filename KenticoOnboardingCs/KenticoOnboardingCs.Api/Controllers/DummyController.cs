@@ -51,9 +51,10 @@ namespace KenticoOnboardingCs.Api.Controllers
             try
             {
                 var newTodo =_repository.Add(todo);
-                return Ok(newTodo);
+
+                return CreatedAtRoute("DefaultApi", new { id = newTodo.Id }, newTodo);
             }
-            catch(Exception ex)
+            catch(ArgumentNullException ex)
             {
                 return BadRequest(ex.Message);
             }
