@@ -14,14 +14,14 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
     [TestFixture]
     class DummyControllerTests_Delete
     {
-        private DummyController dummyController;
+        private TodosController dummyController;
         private ITodoRepository repository;
 
         [SetUp]
         public void SetUp()
         {
             repository = new TodoRepository();
-            dummyController = new DummyController(repository);
+            dummyController = new TodosController(repository);
         }
 
         [Test]

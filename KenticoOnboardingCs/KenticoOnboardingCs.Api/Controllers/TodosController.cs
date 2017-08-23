@@ -7,16 +7,16 @@ using System.Web.Http;
 
 namespace KenticoOnboardingCs.Api.Controllers
 {
-    public class DummyController : ApiController
+    public class TodosController : ApiController
     {
         private ITodoRepository _repository;
 
-        public DummyController(ITodoRepository todoRepository)
+        public TodosController(ITodoRepository todoRepository)
         {
             _repository = todoRepository;
         }
 
-        public DummyController()
+        public TodosController()
         {
             _repository = new TodoRepository();
         }
