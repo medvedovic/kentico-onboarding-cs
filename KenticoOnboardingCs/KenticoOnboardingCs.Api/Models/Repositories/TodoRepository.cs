@@ -13,8 +13,8 @@ namespace KenticoOnboardingCs.Api.Models.Repositories
         {
             todos = new List<Todo>()
             {
-                new Todo() { Id = 1, Name = "Make coffee", Done = true },
-                new Todo() { Id = 2, Name = "Master ASP.NET web api" }
+                new Todo() { Id = 1, Value = "Make coffee" },
+                new Todo() { Id = 2, Value = "Master ASP.NET web api" }
             };
         }
 

@@ -40,7 +40,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         [Test]
         public void PostDummyItem_ReturnsNewTodo_WithValidModel()
         {
-            var itemToPost = new Todo() { Name = "Go home" };
+            var itemToPost = new Todo() { Value = "Go home" };
 
             dummyController.ModelState.Clear();
             var response = dummyController.PostTodo(itemToPost);

@@ -12,7 +12,6 @@ namespace KenticoOnboardingCs.Api.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
-        public bool Done { get; set; } = false;
+        public string Value { get; set; }
     }
 }

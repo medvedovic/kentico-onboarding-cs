@@ -22,7 +22,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         [Test]
         public void PutDummyItem_ReturnsOk_WithValidId_WithValidModel()
         {
-            var newTodo = new Todo() { Name = "Make coffee asap" };
+            var newTodo = new Todo() { Value = "Make coffee asap" };
 
             var response = dummyController.PutTodo(1, newTodo);
 
