@@ -1,12 +1,12 @@
-﻿using KenticoOnboardingCs.Api.Models;
-using KenticoOnboardingCs.Api.Models.Repositories;
+﻿using TodoApp.Api.Models;
+using TodoApp.Api.Models.Repositories;
 using Microsoft.Web.Http;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 
-namespace KenticoOnboardingCs.Api.Controllers
+namespace TodoApp.Api.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/Todos")]

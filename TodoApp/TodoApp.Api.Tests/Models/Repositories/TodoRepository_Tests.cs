@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using KenticoOnboardingCs.Api.Models.Repositories;
+using TodoApp.Api.Models.Repositories;
 using NUnit.Framework;
-using KenticoOnboardingCs.Api.Models;
+using TodoApp.Api.Models;
 
 namespace KenticoOnboardingCs.Api.Tests.Models.Repositories
 {

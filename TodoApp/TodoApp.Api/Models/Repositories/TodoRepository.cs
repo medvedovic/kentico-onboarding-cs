@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace KenticoOnboardingCs.Api.Models.Repositories
+namespace TodoApp.Api.Models.Repositories
 {
     public class TodoRepository : ITodoRepository, IAsyncTodoRepository
     {

@@ -1,12 +1,7 @@
-﻿using KenticoOnboardingCs.Api.Controllers;
-using KenticoOnboardingCs.Api.Models.Repositories;
+﻿using TodoApp.Api.Controllers;
+using TodoApp.Api.Models.Repositories;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http.Results;
 
 namespace KenticoOnboardingCs.Api.Tests.Controllers

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using KenticoOnboardingCs.Api.Models;
-using KenticoOnboardingCs.Api.Controllers;
+using TodoApp.Api.Models;
+using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
-using KenticoOnboardingCs.Api.Models.Repositories;
+using TodoApp.Api.Models.Repositories;
 using System.ComponentModel.DataAnnotations;
 
 namespace KenticoOnboardingCs.Api.Tests.Controllers

@@ -1,6 +1,6 @@
-﻿using KenticoOnboardingCs.Api.Controllers;
-using KenticoOnboardingCs.Api.Models;
-using KenticoOnboardingCs.Api.Models.Repositories;
+﻿using TodoApp.Api.Controllers;
+using TodoApp.Api.Models;
+using TodoApp.Api.Models.Repositories;
 using NUnit.Framework;
 using System.Web.Http.Results;
 

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace KenticoOnboardingCs.Api
+namespace TodoApp.Api
 {
     public class BundleConfig
     {

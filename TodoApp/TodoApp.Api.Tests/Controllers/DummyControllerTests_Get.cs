@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using KenticoOnboardingCs.Api.Models;
-using KenticoOnboardingCs.Api.Controllers;
-using Newtonsoft.Json;
+﻿using NUnit.Framework;
+using TodoApp.Api.Models;
+using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
-using System.Net;
-using KenticoOnboardingCs.Api.Models.Repositories;
-using System.ComponentModel.DataAnnotations;
+using TodoApp.Api.Models.Repositories;
 
 namespace KenticoOnboardingCs.Api.Tests.Controllers
 {

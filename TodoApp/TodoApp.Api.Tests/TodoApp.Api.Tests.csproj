@@ -72,14 +72,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KenticoOnboardingCs.Api\KenticoOnboardingCs.Api.csproj">
-      <Project>{CD445084-7158-4B9B-B774-C2AC376C9585}</Project>
-      <Name>KenticoOnboardingCs.Api</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TodoApp.Api\TodoApp.Api.csproj">
+      <Project>{e69864e0-bb10-49bf-9405-603cd877493c}</Project>
+      <Name>TodoApp.Api</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
