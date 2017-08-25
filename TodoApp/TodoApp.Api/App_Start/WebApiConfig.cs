@@ -2,7 +2,7 @@
 using System.Web.Http.Routing;
 using Microsoft.Web.Http.Routing;
 
-namespace KenticoOnboardingCs.Api
+namespace TodoApp.Api
 {
     public static class WebApiConfig
     {

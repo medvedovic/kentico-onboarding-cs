@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{561FDB26-184D-4CBD-B846-AC2B2F69C442}</ProjectGuid>
+    <ProjectGuid>{110CB921-7845-4BC0-A2E8-E9B4201F704F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KenticoOnboardingCs.Api.Tests</RootNamespace>
-    <AssemblyName>KenticoOnboardingCs.Api.Tests</AssemblyName>
+    <RootNamespace>TodoApp.Api.Tests</RootNamespace>
+    <AssemblyName>TodoApp.Api.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
