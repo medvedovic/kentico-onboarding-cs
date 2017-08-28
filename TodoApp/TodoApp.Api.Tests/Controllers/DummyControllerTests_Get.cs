@@ -10,13 +10,17 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
     class DummyControllerTests_Get
     {
         private TodosController dummyController;
+        private TodosV2Controller asyncController;
         private ITodoRepository repository;
+        private IAsyncTodoRepository asyncRepository;
 
         [SetUp]
         public void SetUp()
         {
             repository = new TodoRepository();
+            asyncRepository = new TodoRepository();
             dummyController = new TodosController(repository);
+            asyncController = new TodosV2Controller(asyncRepository);
         }
 
         [Test]
@@ -48,6 +52,16 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
             var response = dummyController.GetAllTodos();
 
             Assert.AreEqual(repository.GetAll(), response);
+        }
+
+        [Test]
+        public void GetAllAsync_ReturnsAllTodos()
+        {
+            var expectedItem = asyncRepository.GetAllAsync();
+
+            var response = asyncController.GetAllTodosAsync();
+
+            Assert.AreEqual(expectedItem.Result, response.Result);
         }
     }
 }
