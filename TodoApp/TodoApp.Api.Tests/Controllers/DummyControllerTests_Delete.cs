@@ -10,6 +10,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
     class DummyControllerTests_Delete
     {
         private TodosController dummyController;
+        private TodosV2Controller asyncController;
         private ITodoRepository repository;
 
         [SetUp]
@@ -28,7 +29,24 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         }
 
         [Test]
+        public void DeleteAsyncTodoItem_ReturnsNotFound_WithInvalidId()
+        {
+            var response = dummyController.DeleteTodo(50);
+
+            Assert.IsInstanceOf<NotFoundResult>(response);
+        }
+
+        [Test]
         public void DeleteDummyItem_ReturnsNoContent_WithValidId()
+        {
+            var response = dummyController.DeleteTodo(1);
+
+            Assert.IsInstanceOf<StatusCodeResult>(response);
+            Assert.AreEqual(HttpStatusCode.NoContent, (response as StatusCodeResult).StatusCode);
+        }
+
+        [Test]
+        public void DeleteAsyncTodoItem_ReturnsNoContent_WithValidId()
         {
             var response = dummyController.DeleteTodo(1);
 

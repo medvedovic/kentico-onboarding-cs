@@ -4,6 +4,7 @@ using Microsoft.Web.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Net;
 
 namespace TodoApp.Api.Controllers
 {
@@ -41,6 +42,19 @@ namespace TodoApp.Api.Controllers
                     }
 
                     return Ok(res.Result);
+                });
+        }
+
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteTodoAsync(int id)
+        {
+            return await _repository.RemoveAsync(id)
+                .ContinueWith<IHttpActionResult>(res =>
+                {
+                    if (res.Result == true)
+                        return StatusCode(HttpStatusCode.NoContent);
+
+                    return NotFound();
                 });
         }
     }
