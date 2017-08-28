@@ -9,7 +9,7 @@ using System.Web.Http;
 namespace TodoApp.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/Todos")]
+    [Route("api/v{version:apiVersion}/Todos/{id:int?}", Name = "Todos")]
     public class TodosController : ApiController
     {
         private ITodoRepository _repository;
@@ -55,7 +55,7 @@ namespace TodoApp.Api.Controllers
             {
                 var newTodo =_repository.Add(todo);
 
-                return CreatedAtRoute("DefaultApi", new { id = newTodo.Id }, newTodo);
+                return CreatedAtRoute("Todos", new { id = newTodo.Id }, newTodo);
             }
             catch(ArgumentNullException ex)
             {
