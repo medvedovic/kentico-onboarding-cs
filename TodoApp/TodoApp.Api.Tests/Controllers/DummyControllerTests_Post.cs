@@ -12,6 +12,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
     class DummyControllerTests_Post
     {
         private TodosController dummyController;
+        private TodosV2Controller asyncController;
         private ITodoRepository repository;
 
         [SetUp]
@@ -19,6 +20,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         {
             repository = new TodoRepository();
             dummyController = new TodosController(repository);
+            asyncController = new TodosV2Controller();
         }
 
         [Test]
@@ -46,7 +48,7 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
             var response = dummyController.PostTodo(itemToPost);
             
             Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response);
-            Assert.AreEqual("DefaultApi", (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteName);
+            Assert.AreEqual("Todos", (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteName);
             Assert.AreEqual(3, (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
         }
 
@@ -59,6 +61,28 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
             var response = dummyController.PostTodo(itemToPost);
 
             Assert.IsInstanceOf<InvalidModelStateResult>(response);
+        }
+
+        [Test]
+        public void PostAsyncDummyItem_ReturnsNewTodo_WithValidModel()
+        {
+            var itemToPost = new Todo() { Value = "Go home" };
+
+            var response = asyncController.PostTodoAsync(itemToPost);
+
+            Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response.Result);
+            Assert.AreEqual(3, (response.Result as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
+        }
+
+        [Test]
+        public void PostAsyncDummyItem_ReturnsError_WithInvalidModel()
+        {
+            var itemToPost = new Todo();
+
+            asyncController.ModelState.AddModelError("test", "test");
+            var response = asyncController.PostTodoAsync(itemToPost);
+
+            Assert.IsInstanceOf<InvalidModelStateResult>(response.Result);
         }
     }
 }
