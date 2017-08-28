@@ -8,7 +8,7 @@ using System.Web.Http;
 namespace TodoApp.Api.Controllers
 {
     [ApiVersion("2.0")]
-    [Route("api/v{version:apiVersion}/Todos")]
+    [Route("api/v{version:apiVersion}/Todos/{id:int?}")]
     public class TodosV2Controller : ApiController
     {
         private IAsyncTodoRepository _repository;
@@ -27,6 +27,21 @@ namespace TodoApp.Api.Controllers
         public async Task<IEnumerable<Todo>> GetAllTodosAsync()
         {
             return await _repository.GetAllAsync();
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTodoAsync(int id)
+        {
+            return await _repository.GetAsync(id)
+                .ContinueWith<IHttpActionResult>(res =>
+                {
+                    if (res.Result == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(res.Result);
+                });
         }
     }
 }

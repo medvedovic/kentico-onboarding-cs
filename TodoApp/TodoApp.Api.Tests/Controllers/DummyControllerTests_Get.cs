@@ -3,6 +3,7 @@ using TodoApp.Api.Models;
 using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
 using TodoApp.Api.Models.Repositories;
+using System.Threading.Tasks;
 
 namespace KenticoOnboardingCs.Api.Tests.Controllers
 {
@@ -36,6 +37,18 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         }
 
         [Test]
+        public void GetAsyncDummyItem_ReturnsItemWithSameId()
+        {
+            var todoId = 2;
+            var expectedItem = repository.Get(todoId);
+
+            var response = dummyController.GetTodo(todoId);
+
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response);
+            Assert.AreEqual(expectedItem, (response as OkNegotiatedContentResult<Todo>).Content);
+        }
+
+        [Test]
         public void GetDummyItem_ReturnsNotFound()
         {
             var todoId = 5;
@@ -44,6 +57,16 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
             var response = dummyController.GetTodo(todoId);
 
             Assert.IsInstanceOf<NotFoundResult>(response);
+        }
+
+        [Test]
+        public void GetAsyncDummyItem_ReturnsNotFound()
+        {
+            var todoId = 5;
+
+            var response = asyncController.GetTodoAsync(todoId);
+
+            Assert.IsInstanceOf<NotFoundResult>(response.Result);
         }
 
         [Test]
