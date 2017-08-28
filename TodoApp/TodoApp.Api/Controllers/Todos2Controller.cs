@@ -10,7 +10,7 @@ using System;
 namespace TodoApp.Api.Controllers
 {
     [ApiVersion("2.0")]
-    [Route("api/v{version:apiVersion}/Todos/{id:int?}", Name = "Todos")]
+    [Route("api/v{version:apiVersion}/Todos/{id:int?}", Name = "TodosV2")]
     public class TodosV2Controller : ApiController
     {
         private IAsyncTodoRepository _repository;
@@ -72,7 +72,7 @@ namespace TodoApp.Api.Controllers
                 return await _repository.AddAsync(todo)
                     .ContinueWith<IHttpActionResult>(res =>
                     {
-                        return CreatedAtRoute("Todos", new { id = res.Result.Id }, res.Result);
+                        return CreatedAtRoute("TodosV2", new { id = res.Result.Id }, res.Result);
                     });
             }
             catch(ArgumentNullException ex)
