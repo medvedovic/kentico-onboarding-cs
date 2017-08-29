@@ -52,7 +52,7 @@ namespace TodoApp.Api.Controllers
             return await _repository.RemoveAsync(id)
                 .ContinueWith<IHttpActionResult>(res =>
                 {
-                    if (res.Result == true)
+                    if (res.Result)
                         return StatusCode(HttpStatusCode.NoContent);
 
                     return NotFound();
@@ -70,10 +70,7 @@ namespace TodoApp.Api.Controllers
             try
             {
                 return await _repository.AddAsync(todo)
-                    .ContinueWith<IHttpActionResult>(res =>
-                    {
-                        return CreatedAtRoute("TodosV2", new { id = res.Result.Id }, res.Result);
-                    });
+                    .ContinueWith<IHttpActionResult>(res => CreatedAtRoute("TodosV2", new { id = res.Result.Id }, res.Result));
             }
             catch(ArgumentNullException ex)
             {
@@ -97,7 +94,7 @@ namespace TodoApp.Api.Controllers
                         return BadRequest(res.Exception.Message);
                     }
 
-                    if (res.Result == true)
+                    if (res.Result)
                         return Ok(todo);
 
                     return NotFound();
