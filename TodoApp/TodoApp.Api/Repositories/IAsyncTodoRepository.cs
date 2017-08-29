@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TodoApp.Api.Models;
 
-namespace TodoApp.Api.Models.Repositories
+namespace TodoApp.Api.Repositories
 {
     public interface IAsyncTodoRepository
     {

@@ -2,7 +2,6 @@
 using System.Web.Http.Routing;
 using Microsoft.Practices.Unity;
 using Microsoft.Web.Http.Routing;
-using TodoApp.Api.Models.Repositories;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TodoApp.Api.Models;
 
-namespace TodoApp.Api.Models.Repositories
+namespace TodoApp.Api.Repositories
 {
     public class TodoRepository : ITodoRepository, IAsyncTodoRepository
     {
