@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using TodoApp.Api.Models;
 using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
 using System.ComponentModel.DataAnnotations;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Tests.Controllers
@@ -11,19 +14,6 @@ namespace TodoApp.Api.Tests.Controllers
     [TestFixture]
     class DummyControllerTests_Post
     {
-        private TodosController dummyController;
-        private TodosV2Controller asyncController;
-        private ITodoRepository repository;
-        private IAsyncTodoRepository asyncRepository;
-
-        [SetUp]
-        public void SetUp()
-        {
-            repository = new TodoRepository();
-            dummyController = new TodosController(repository);
-            asyncController = new TodosV2Controller(asyncRepository);
-        }
-
         [Test]
         public void PostDummyItem_ValidatesModelCorrectly()
         {
@@ -36,18 +26,22 @@ namespace TodoApp.Api.Tests.Controllers
             var isModelStateValid = Validator.TryValidateObject(newTodo, context, results);
 
             //assert
-            Assert.NotZero(results.Count);
-            Assert.IsFalse(isModelStateValid);
+            Assert.That(results.Count, Is.Not.Zero);
+            Assert.That(isModelStateValid, Is.False);
         }
 
         [Test]
         public void PostDummyItem_ReturnsNewTodo_WithValidModel()
         {
-            var itemToPost = new Todo() { Value = "Go home" };
+            var itemToAdd = new Todo() {Value = "Go home"};
+            var mockRepo = Substitute.For<ITodoRepository>();
+            mockRepo.Add(itemToAdd).Returns(new Todo() { Id = 3, Value = "Go home" });
+            var controller = new TodosController(mockRepo);
 
-            dummyController.ModelState.Clear();
-            var response = dummyController.PostTodo(itemToPost);
+
+            var response = controller.PostTodo(itemToAdd);
             
+
             Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response);
             Assert.AreEqual("Todos", (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteName);
             Assert.AreEqual(3, (response as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
@@ -57,33 +51,44 @@ namespace TodoApp.Api.Tests.Controllers
         public void PostDummyItem_ReturnsError_WithInvalidModel()
         {
             var itemToPost = new Todo();
+            var mockRepo = Substitute.For<ITodoRepository>();
+            var controller = new TodosController(mockRepo);
 
-            dummyController.ModelState.AddModelError("test", "test");
-            var response = dummyController.PostTodo(itemToPost);
 
-            Assert.IsInstanceOf<InvalidModelStateResult>(response);
+            controller.ModelState.AddModelError("test", "test");
+            var response = controller.PostTodo(itemToPost);
+
+
+            Assert.That(response, Is.InstanceOf<InvalidModelStateResult>());
         }
 
         [Test]
         public void PostAsyncDummyItem_ReturnsNewTodo_WithValidModel()
         {
             var itemToPost = new Todo() { Value = "Go home" };
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.AddAsync(itemToPost).Returns(new Todo() {Id = 3, Value = "Go home"});
+            var controller = new TodosV2Controller(mockRepo);
 
-            var response = asyncController.PostTodoAsync(itemToPost);
+            var response = controller.PostTodoAsync(itemToPost);
 
-            Assert.IsInstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>(response.Result);
-            Assert.AreEqual(3, (response.Result as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"]);
+
+            Assert.That(response.Result, Is.InstanceOf<CreatedAtRouteNegotiatedContentResult<Todo>>());
+            Assert.That((response.Result as CreatedAtRouteNegotiatedContentResult<Todo>).RouteValues["id"], Is.EqualTo(3));
         }
 
         [Test]
         public void PostAsyncDummyItem_ReturnsError_WithInvalidModel()
         {
             var itemToPost = new Todo();
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            var controller = new TodosV2Controller(mockRepo);
 
-            asyncController.ModelState.AddModelError("test", "test");
-            var response = asyncController.PostTodoAsync(itemToPost);
 
-            Assert.IsInstanceOf<InvalidModelStateResult>(response.Result);
+            controller.ModelState.AddModelError("test", "test");
+            var response = controller.PostTodoAsync(itemToPost);
+
+            Assert.That(response.Result, Is.InstanceOf<InvalidModelStateResult>());
         }
     }
 }

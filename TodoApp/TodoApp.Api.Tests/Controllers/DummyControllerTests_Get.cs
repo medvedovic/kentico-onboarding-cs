@@ -1,7 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using TodoApp.Api.Models;
 using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
+using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Tests.Controllers
@@ -9,81 +12,100 @@ namespace TodoApp.Api.Tests.Controllers
     [TestFixture]
     class DummyControllerTests_Get
     {
-        private TodosController dummyController;
-        private TodosV2Controller asyncController;
-        private ITodoRepository repository;
-        private IAsyncTodoRepository asyncRepository;
-
-        [SetUp]
-        public void SetUp()
-        {
-            repository = new TodoRepository();
-            asyncRepository = new TodoRepository();
-            dummyController = new TodosController(repository);
-            asyncController = new TodosV2Controller(asyncRepository);
-        }
-
         [Test]
         public void GetDummyItem_ReturnsItemWithSameId()
         {
-            var todoId = 2;
-            var expectedItem = repository.Get(todoId);
+            var mockRepo = Substitute.For<ITodoRepository>();
+            var expectedItem = new Todo() { Id = 2, Value = "Go home" };
+            mockRepo.Get(2).Returns(expectedItem);
 
-            var response = dummyController.GetTodo(todoId);
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response);
-            Assert.AreEqual(expectedItem, (response as OkNegotiatedContentResult<Todo>).Content);
+            var controller = new TodosController(mockRepo);
+            var response = controller.GetTodo(2);
+
+
+            Assert.That(response, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That((response as OkNegotiatedContentResult<Todo>).Content, Is.EqualTo(expectedItem));
         }
 
         [Test]
         public void GetAsyncDummyItem_ReturnsItemWithSameId()
         {
-            var todoId = 2;
-            var expectedItem = repository.Get(todoId);
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            var expectedItem = new Todo() { Id = 2, Value = "Go home" };
+            mockRepo.GetAsync(2).Returns(expectedItem);
 
-            var response = dummyController.GetTodo(todoId);
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response);
-            Assert.AreEqual(expectedItem, (response as OkNegotiatedContentResult<Todo>).Content);
+            var controller = new TodosV2Controller(mockRepo);
+            var responseResult = controller.GetTodoAsync(2).Result;
+
+
+            Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That((responseResult as OkNegotiatedContentResult<Todo>).Content, Is.EqualTo(expectedItem));
         }
 
         [Test]
         public void GetDummyItem_ReturnsNotFound()
         {
-            var todoId = 5;
-            var expectedItem = repository.Get(todoId);
+            var mockRepo = Substitute.For<ITodoRepository>();
+            mockRepo.Get(5).ReturnsNull();
+            
 
-            var response = dummyController.GetTodo(todoId);
+            var controller = new TodosController(mockRepo);
+            var response = controller.GetTodo(5);
 
-            Assert.IsInstanceOf<NotFoundResult>(response);
+
+            Assert.That(response, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public void GetAsyncDummyItem_ReturnsNotFound()
         {
-            var todoId = 5;
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.GetAsync(5).ReturnsNull();
 
-            var response = asyncController.GetTodoAsync(todoId);
 
-            Assert.IsInstanceOf<NotFoundResult>(response.Result);
+            var controller = new TodosV2Controller(mockRepo);
+            var response = controller.GetTodoAsync(5);
+
+
+            Assert.That(response.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public void GetDummyItems_ReturnsAllTodos()
         {
-            var response = dummyController.GetAllTodos();
+            var mockRepo = Substitute.For<ITodoRepository>();
+            mockRepo.GetAll().Returns(new List<Todo>
+            {
+                new Todo {Id = 1, Value = "Make coffee"},
+                new Todo {Id = 2, Value = "Go home"}
+            });
+            var controller = new TodosController(mockRepo);
 
-            Assert.AreEqual(repository.GetAll(), response);
+
+            var response = controller.GetAllTodos();
+
+
+            Assert.That(response, Is.EqualTo(mockRepo.GetAll()));
         }
 
         [Test]
         public void GetAllAsync_ReturnsAllTodos()
         {
-            var expectedItem = asyncRepository.GetAllAsync();
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.GetAllAsync().Returns(new List<Todo>
+            {
+                new Todo {Id = 1, Value = "Make coffee"},
+                new Todo {Id = 2, Value = "Go home"}
+            });
+            var controller = new TodosV2Controller(mockRepo);
 
-            var response = asyncController.GetAllTodosAsync();
 
-            Assert.AreEqual(expectedItem.Result, response.Result);
+            var response = controller.GetAllTodosAsync();
+
+
+            Assert.That(response.Result, Is.EqualTo(mockRepo.GetAllAsync().Result));
         }
     }
 }

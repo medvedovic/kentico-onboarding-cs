@@ -1,7 +1,10 @@
-﻿using TodoApp.Api.Controllers;
+﻿using System;
+using TodoApp.Api.Controllers;
 using TodoApp.Api.Models;
 using NUnit.Framework;
 using System.Web.Http.Results;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Tests.Controllers
@@ -9,92 +12,128 @@ namespace TodoApp.Api.Tests.Controllers
     [TestFixture]
     class DummyControllerTests_Put
     {
-        private TodosController dummyController;
-        private ITodoRepository repository;
-        private TodosV2Controller asyncController;
-        private IAsyncTodoRepository asyncRepository;
-
-        [SetUp]
-        public void SetUp()
-        {
-            repository = new TodoRepository();
-            dummyController = new TodosController(repository);
-            asyncRepository = new TodoRepository();
-            asyncController = new TodosV2Controller(asyncRepository);
-        }
+        #region Synchronous calls
 
         [Test]
         public void PutDummyItem_ReturnsOk_WithValidId_WithValidModel()
         {
-            var newTodo = new Todo() { Value = "Make coffee asap" };
+            var todo = new Todo() { Value = "Make coffee asap" };
+            var mockRepository = Substitute.For<ITodoRepository>();
+            mockRepository.Update(1, todo).Returns(true);
+            var controller = new TodosController(mockRepository);
 
-            var response = dummyController.PutTodo(1, newTodo);
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response);
-            Assert.AreEqual(newTodo, (response as OkNegotiatedContentResult<Todo>).Content);
+            var response = controller.PutTodo(1, todo);
+
+
+            Assert.That(response, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That(todo, Is.EqualTo(((OkNegotiatedContentResult<Todo>) response).Content));
         }
 
         [Test]
         public void PutDummyItem_ReturnsBadRequest_WithValidId_WithInvalidModel()
         {
-            dummyController.ModelState.AddModelError("test", "test");
+            var mockRepo = Substitute.For<ITodoRepository>();
+            var controller = new TodosController(mockRepo);
 
-            var response = dummyController.PutTodo(1, new Todo());
+            
+            controller.ModelState.AddModelError("test", "test");
+            var response = controller.PutTodo(1, new Todo());
 
-            Assert.IsInstanceOf<InvalidModelStateResult>(response);
+
+            Assert.That(response, Is.InstanceOf<InvalidModelStateResult>());
         }
 
         [Test]
         public void PutDummyItem_ReturnsNotFound_WithInvalidId()
         {
-            var response = dummyController.PutTodo(50, new Todo());
+            var mockRepo = Substitute.For<ITodoRepository>();
+            mockRepo.Update(50, new Todo()).Returns(false);
+            var controller = new TodosController(mockRepo);
 
-            Assert.IsInstanceOf<NotFoundResult>(response);
+        
+            var response = controller.PutTodo(50, new Todo());
+
+
+            Assert.That(response, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public void PutDummyItem_ReturnsBadRequest_WithTodoIsNull()
         {
-            var response = dummyController.PutTodo(1, null);
+            var mockRepo = Substitute.For<ITodoRepository>();
+            mockRepo.Update(1, null).Throws(new ArgumentNullException());
+            var controller = new TodosController(mockRepo);
 
-            Assert.IsInstanceOf<BadRequestErrorMessageResult>(response);
+
+            var response = controller.PutTodo(1, null);
+
+
+            Assert.That(response, Is.InstanceOf<BadRequestErrorMessageResult>());
         }
+
+        #endregion
+
+        #region Asynchronous calls
 
         [Test]
         public void PutAsyncDummyItem_ReturnsOk_WithValidId_WithValidModel()
         {
-            var newTodo = new Todo() { Value = "Make coffee asap" };
+            var todo = new Todo() { Value = "Make coffee asap" };
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.UpdateAsync(1, todo).Returns(true);
+            var controller = new TodosV2Controller(mockRepo);
 
-            var response = asyncController.PutTodoAsync(1, newTodo);
 
-            Assert.IsInstanceOf<OkNegotiatedContentResult<Todo>>(response.Result);
-            Assert.AreEqual(newTodo, (response.Result as OkNegotiatedContentResult<Todo>).Content);
+            var response = controller.PutTodoAsync(1, todo);
+
+
+            Assert.That(response.Result, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That(todo, Is.EqualTo(((OkNegotiatedContentResult<Todo>) response.Result).Content));
         }
 
         [Test]
         public void PutAsyncDummyItem_ReturnsBadRequest_WithValidId_WithInvalidModel()
         {
-            asyncController.ModelState.AddModelError("test", "test");
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            var controller = new TodosV2Controller(mockRepo);
 
-            var response = asyncController.PutTodoAsync(1, new Todo());
 
-            Assert.IsInstanceOf<InvalidModelStateResult>(response.Result);
+            controller.ModelState.AddModelError("test", "test");
+            var response = controller.PutTodoAsync(1, new Todo());
+
+
+            Assert.That(response.Result, Is.InstanceOf<InvalidModelStateResult>());
         }
 
         [Test]
         public void PutAsyncDummyItem_ReturnsNotFound_WithInvalidId()
         {
-            var response = dummyController.PutTodo(50, new Todo());
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.UpdateAsync(50, new Todo()).Returns(false);
+            var controller = new TodosV2Controller(mockRepo);
 
-            Assert.IsInstanceOf<NotFoundResult>(response);
+
+            var response = controller.PutTodoAsync(50, new Todo());
+
+
+            Assert.That(response.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public void PutAsyncDummyItem_ReturnsBadRequest_WithTodoIsNull()
         {
-            var response = asyncController.PutTodoAsync(1, null);
+            var mockRepo = Substitute.For<IAsyncTodoRepository>();
+            mockRepo.UpdateAsync(1, null).Throws(new ArgumentNullException());
+            var controller = new TodosV2Controller(mockRepo);
 
-            Assert.IsInstanceOf<BadRequestErrorMessageResult>(response.Result);
+
+            var response = controller.PutTodoAsync(1, null);
+
+
+            Assert.That(response.Result, Is.InstanceOf<BadRequestErrorMessageResult>());
         }
+
+        #endregion
     }
 }
