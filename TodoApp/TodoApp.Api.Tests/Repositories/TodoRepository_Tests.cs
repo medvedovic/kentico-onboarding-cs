@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using TodoApp.Api.Models.Repositories;
 using NUnit.Framework;
 using TodoApp.Api.Models;
+using TodoApp.Api.Repositories;
 
-namespace KenticoOnboardingCs.Api.Tests.Models.Repositories
+namespace TodoApp.Api.Tests.Repositories
 {
     [TestFixture]
     class TodoRepository_Tests
