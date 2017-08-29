@@ -20,11 +20,6 @@ namespace TodoApp.Api.Controllers
             _repository = repository;
         }
 
-        public TodosV2Controller()
-        {
-            _repository = new TodoRepository();
-        }
-
         [HttpGet]
         public async Task<IEnumerable<Todo>> GetAllTodosAsync()
         {

@@ -19,19 +19,12 @@ namespace TodoApp.Api.Controllers
             _repository = todoRepository;
         }
 
-        public TodosController()
-        {
-            _repository = new TodoRepository();
-        }
-
-        //Get api/dummy/
         [HttpGet]
         public IEnumerable<Todo> GetAllTodos()
         {
             return _repository.GetAll();
         }
 
-        //Get api/dummy/{id}
         [HttpGet]
         public IHttpActionResult GetTodo(int id)
         {
@@ -42,7 +35,6 @@ namespace TodoApp.Api.Controllers
             return Ok(todo);
         }
 
-        //Post api/dummy/
         [HttpPost]
         public IHttpActionResult PostTodo(Todo todo)
         {
