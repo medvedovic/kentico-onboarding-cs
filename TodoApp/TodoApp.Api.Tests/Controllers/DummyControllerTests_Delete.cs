@@ -1,10 +1,10 @@
 ﻿using TodoApp.Api.Controllers;
-using TodoApp.Api.Models.Repositories;
 using NUnit.Framework;
 using System.Net;
 using System.Web.Http.Results;
+using TodoApp.Api.Repositories;
 
-namespace KenticoOnboardingCs.Api.Tests.Controllers
+namespace TodoApp.Api.Tests.Controllers
 {
     [TestFixture]
     class DummyControllerTests_Delete

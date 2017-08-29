@@ -3,10 +3,10 @@ using NUnit.Framework;
 using TodoApp.Api.Models;
 using TodoApp.Api.Controllers;
 using System.Web.Http.Results;
-using TodoApp.Api.Models.Repositories;
 using System.ComponentModel.DataAnnotations;
+using TodoApp.Api.Repositories;
 
-namespace KenticoOnboardingCs.Api.Tests.Controllers
+namespace TodoApp.Api.Tests.Controllers
 {
     [TestFixture]
     class DummyControllerTests_Post
@@ -14,13 +14,14 @@ namespace KenticoOnboardingCs.Api.Tests.Controllers
         private TodosController dummyController;
         private TodosV2Controller asyncController;
         private ITodoRepository repository;
+        private IAsyncTodoRepository asyncRepository;
 
         [SetUp]
         public void SetUp()
         {
             repository = new TodoRepository();
             dummyController = new TodosController(repository);
-            asyncController = new TodosV2Controller();
+            asyncController = new TodosV2Controller(asyncRepository);
         }
 
         [Test]
