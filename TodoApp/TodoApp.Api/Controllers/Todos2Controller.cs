@@ -81,19 +81,21 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return await _repository.UpdateAsync(id, todo)
-                .ContinueWith<IHttpActionResult>(res =>
-                {
-                    if(res.IsFaulted)
+            try
+            {
+                return await _repository.UpdateAsync(id, todo)
+                    .ContinueWith<IHttpActionResult>(res =>
                     {
-                        return BadRequest(res.Exception.Message);
-                    }
+                        if (res.Result)
+                            return Ok(todo);
 
-                    if (res.Result)
-                        return Ok(todo);
-
-                    return NotFound();
-                });
+                        return NotFound();
+                    });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
