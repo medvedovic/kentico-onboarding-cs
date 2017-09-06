@@ -3,12 +3,14 @@ using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Helpers;
@@ -134,9 +136,36 @@ namespace TodoApp.Api.Tests.Controllers
 
         #endregion
 
+        #region Delete
+
+        [Test]
+        public void DeleteTodo_ReturnsOk_OnValidId()
+        {
+            _mockRepo.RemoveAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .Returns(true);
+
+            var responseResult = _controller.DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
+            
+            Assert.That(((StatusCodeResult) responseResult).StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+        }
+
+        [Test]
+        public void DeleteTodo_ReturnsNotFound_OnInvalidInput()
+        {
+            _mockRepo.RemoveAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .Returns(false);
+
+            var responseResult = _controller.DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
+
+            Assert.That(responseResult, Is.InstanceOf<NotFoundResult>());
+        }
+
+        #endregion
+
+
         #region Helper methods
 
-        public HttpRequestMessage ConfigureRequestMessage()
+        private HttpRequestMessage ConfigureRequestMessage()
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/v1/todos");
 
