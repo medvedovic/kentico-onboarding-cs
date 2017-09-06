@@ -74,10 +74,15 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (id != updated.Id)
+                return BadRequest();
+
             try
             {
                 if (!_repository.Update(id, updated))
                     return NotFound();
+
+                updated.Id = id;
 
                 return Ok(updated);
             }
