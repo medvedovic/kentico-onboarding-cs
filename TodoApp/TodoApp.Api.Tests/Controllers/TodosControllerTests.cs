@@ -3,10 +3,15 @@ using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Hosting;
 using System.Web.Http.Results;
+using System.Web.Http.Routing;
 using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
+using TodoApp.Api.Helpers;
 using TodoApp.Api.Models;
 using TodoApp.Api.Repositories;
 
@@ -19,12 +24,30 @@ namespace TodoApp.Api.Tests.Controllers
 
         private TodosController _controller;
         private ITodoRepository _mockRepo;
+        private IUriHelper _uriHelper;
+        private Todo _mockTodo;
 
         [SetUp]
         public void Init()
         {
             _mockRepo = Substitute.For<ITodoRepository>();
-            _controller = new TodosController(_mockRepo);
+
+            var httpRequestMessage = ConfigureRequestMessage();
+
+            _uriHelper = Substitute.For<IUriHelper>();
+            _uriHelper.BuildUri(httpRequestMessage, new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .Returns(new Uri("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
+
+            _controller = new TodosController(_mockRepo, _uriHelper)
+            {
+                Request = httpRequestMessage
+            };
+
+            _mockTodo = new Todo()
+            {
+                Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"),
+                Value = "Make more coffee"
+            };
         }
 
         #endregion
@@ -48,17 +71,12 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsTodoWithSameId()
         {
-            var expectedResult = new Todo()
-            {
-                Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"),
-                Value = "Make more coffee"
-            };
-            _mockRepo.GetAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(expectedResult);
+            _mockRepo.GetAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(_mockTodo);
 
             var responseResult = _controller.GetTodo(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
 
             Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
-            Assert.That(((OkNegotiatedContentResult<Todo>) responseResult).Content, Is.EqualTo(expectedResult));
+            Assert.That(((OkNegotiatedContentResult<Todo>) responseResult).Content, Is.EqualTo(_mockTodo));
         }
 
         [Test]
@@ -73,5 +91,74 @@ namespace TodoApp.Api.Tests.Controllers
 
         #endregion
 
+        #region Post
+
+        [Test]
+        public void PostTodo_ValidatesModelCorrectly()
+        {
+            var todo = new Todo();
+            var context = new ValidationContext(todo);
+            var results = new List<ValidationResult>();
+
+            var isModelStateValid = Validator.TryValidateObject(todo, context, results);
+
+            Assert.That(results.Count, Is.Not.Zero);
+            Assert.That(isModelStateValid, Is.False);
+        }
+
+        [Test]
+        public void PostTodo_ReturnsNewTodo_WithValidModel()
+        {
+            var todo = new Todo()
+            {
+                Value = "Make more coffee"
+            };
+            _mockRepo.AddAsync(todo).Returns(_mockTodo);
+
+            var responseResult = _controller.PostTodo(todo).Result;
+
+            Assert.That(responseResult, Is.InstanceOf<CreatedNegotiatedContentResult<Todo>>());
+            Assert.That(((CreatedNegotiatedContentResult<Todo>) responseResult).Location.ToString(), Is.EqualTo("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
+        }
+
+        [Test]
+        public void PostTodo_ReturnsBadRequest_WithInvalidModel()
+        {
+            var todo = new Todo();
+
+            _controller.ModelState.AddModelError("test", "test");
+            var responseResult = _controller.PostTodo(todo).Result;
+            
+            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        public HttpRequestMessage ConfigureRequestMessage()
+        {
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/v1/todos");
+
+            var configuration = new HttpConfiguration();
+            var route = configuration.Routes.MapHttpRoute(
+                name: "DefautApi",
+                routeTemplate: "api/v1/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+            var routeData = new HttpRouteData(route,
+                new HttpRouteValueDictionary
+                {
+                    { "controller", "todos" }
+                }
+            );
+
+            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, configuration);
+            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpRouteDataKey, routeData);
+
+            return httpRequestMessage;
+        }
+
+        #endregion
     }
 }
