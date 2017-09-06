@@ -3,6 +3,7 @@ using Microsoft.Web.Http;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApp.Api.Repositories;
 
@@ -21,16 +22,17 @@ namespace TodoApp.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Todo> GetAllTodos()
+        public async Task<IEnumerable<Todo>> GetAllTodos()
         {
-            return _repository.GetAll();
+            return await _repository.GetAllAsync();
         }
 
         [HttpGet]
         [Route("{id:int}")]
-        public IHttpActionResult GetTodo(int id)
+        public async Task<IHttpActionResult> GetTodo(int id)
         {
-            var todo = _repository.Get(id);
+            var todo = await _repository.GetAsync(id);
+
             if (todo == null)
                 return NotFound();
 
@@ -39,7 +41,7 @@ namespace TodoApp.Api.Controllers
 
         [HttpPost]
         [Route("", Name = "PostTodo")]
-        public IHttpActionResult PostTodo(Todo todo)
+        public async Task<IHttpActionResult> PostTodo(Todo todo)
         {
             if(!ModelState.IsValid)
             {
@@ -48,7 +50,7 @@ namespace TodoApp.Api.Controllers
 
             try
             {
-                var newTodo =_repository.Add(todo);
+                var newTodo = await _repository.AddAsync(todo);
 
                 return CreatedAtRoute("PostTodo", new { id = newTodo.Id }, newTodo);
             }
@@ -60,9 +62,9 @@ namespace TodoApp.Api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        public IHttpActionResult DeleteTodo(int id)
+        public async Task<IHttpActionResult> DeleteTodo(int id)
         {
-            var isRemoved = _repository.Remove(id);
+            var isRemoved = await _repository.RemoveAsync(id);
 
             if (!isRemoved)
                 return NotFound();
@@ -72,7 +74,7 @@ namespace TodoApp.Api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public IHttpActionResult PutTodo(int id, [FromBody] Todo updated)
+        public async Task<IHttpActionResult> PutTodo(int id, [FromBody] Todo updated)
         {
             if(!ModelState.IsValid)
             {
@@ -84,7 +86,7 @@ namespace TodoApp.Api.Controllers
 
             try
             {
-                if (!_repository.Update(id, updated))
+                if (!await _repository.UpdateAsync(id, updated))
                     return NotFound();
 
                 updated.Id = id;
