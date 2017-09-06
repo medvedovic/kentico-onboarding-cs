@@ -2,6 +2,8 @@
 using System.Web.Http.Routing;
 using Microsoft.Practices.Unity;
 using Microsoft.Web.Http.Routing;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api
@@ -14,6 +16,10 @@ namespace TodoApp.Api
             container.RegisterType<ITodoRepository, TodoRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IAsyncTodoRepository, TodoRepository>(new HierarchicalLifetimeManager());
             config.DependencyResolver = new UnityResolver(container);
+
+            var settings = config.Formatters.JsonFormatter.SerializerSettings;
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.Formatting = Formatting.Indented;
 
             // Web API configuration and services
             var constraintResolver = new DefaultInlineConstraintResolver()
