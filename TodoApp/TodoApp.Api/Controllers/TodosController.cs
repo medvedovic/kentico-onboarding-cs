@@ -13,7 +13,7 @@ namespace TodoApp.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/todos")]
     public class TodosController : ApiController
     {
-        private ITodoRepository _repository;
+        private readonly ITodoRepository _repository;
 
         public TodosController(ITodoRepository todoRepository)
         {
@@ -28,8 +28,8 @@ namespace TodoApp.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IHttpActionResult> GetTodo(int id)
+        [Route("{id:guid}")]
+        public async Task<IHttpActionResult> GetTodo(Guid id)
         {
             var todo = await _repository.GetAsync(id);
 
@@ -63,8 +63,8 @@ namespace TodoApp.Api.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IHttpActionResult> DeleteTodo(int id)
+        [Route("{id:guid}")]
+        public async Task<IHttpActionResult> DeleteTodo(Guid id)
         {
             var isRemoved = await _repository.RemoveAsync(id);
 
@@ -75,8 +75,8 @@ namespace TodoApp.Api.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IHttpActionResult> PutTodo(int id, [FromBody] Todo updated)
+        [Route("{id:guid}")]
+        public async Task<IHttpActionResult> PutTodo(Guid id, [FromBody] Todo updated)
         {
             if(!ModelState.IsValid)
             {
