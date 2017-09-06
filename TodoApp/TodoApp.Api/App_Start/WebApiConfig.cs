@@ -4,6 +4,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Web.Http.Routing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TodoApp.Api.Helpers;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api
@@ -14,6 +15,7 @@ namespace TodoApp.Api
         {
             var container = new UnityContainer();
             container.RegisterType<ITodoRepository, TodoRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());
             config.DependencyResolver = new UnityResolver(container);
 
             var settings = config.Formatters.JsonFormatter.SerializerSettings;

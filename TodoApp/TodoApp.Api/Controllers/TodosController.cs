@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using TodoApp.Api.Helpers;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Controllers
@@ -14,10 +15,12 @@ namespace TodoApp.Api.Controllers
     public class TodosController : ApiController
     {
         private readonly ITodoRepository _repository;
+        private readonly IUriHelper _uriHelper;
 
-        public TodosController(ITodoRepository todoRepository)
+        public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
         {
             _repository = todoRepository;
+            _uriHelper = uriHelper;
         }
 
         [HttpGet]
@@ -52,7 +55,7 @@ namespace TodoApp.Api.Controllers
             {
                 var newTodo = await _repository.AddAsync(todo);
 
-                return CreatedAtRoute("PostTodo", new { id = newTodo.Id }, newTodo);
+                return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);
             }
             catch(ArgumentNullException ex)
             {
