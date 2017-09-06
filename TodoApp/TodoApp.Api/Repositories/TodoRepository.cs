@@ -6,7 +6,7 @@ using TodoApp.Api.Models;
 
 namespace TodoApp.Api.Repositories
 {
-    public class TodoRepository : ITodoRepository, IAsyncTodoRepository
+    public class TodoRepository : ITodoRepository
     {
         public List<Todo> Todos { get; }
         private int nextId = 3;

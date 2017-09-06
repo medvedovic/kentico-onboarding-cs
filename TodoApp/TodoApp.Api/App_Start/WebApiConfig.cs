@@ -14,7 +14,6 @@ namespace TodoApp.Api
         {
             var container = new UnityContainer();
             container.RegisterType<ITodoRepository, TodoRepository>(new HierarchicalLifetimeManager());
-            container.RegisterType<IAsyncTodoRepository, TodoRepository>(new HierarchicalLifetimeManager());
             config.DependencyResolver = new UnityResolver(container);
 
             var settings = config.Formatters.JsonFormatter.SerializerSettings;
