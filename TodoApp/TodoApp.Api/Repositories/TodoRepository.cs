@@ -8,11 +8,11 @@ namespace TodoApp.Api.Repositories
 {
     public class TodoRepository : ITodoRepository
     {
-        public List<Todo> Todos { get; }
+        private readonly List<Todo> todos;
         private int nextId = 3;
         public TodoRepository()
         {
-            Todos = new List<Todo>()
+            todos = new List<Todo>()
             {
                 new Todo() { Id = 1, Value = "Make coffee" },
                 new Todo() { Id = 2, Value = "Master ASP.NET web api" }
@@ -20,22 +20,19 @@ namespace TodoApp.Api.Repositories
         }
 
         public IEnumerable<Todo> GetAll()
-        {
-            return Todos;
-        }
+            => todos;
 
         public async Task<IEnumerable<Todo>> GetAllAsync()
-            => await Task.FromResult(Todos);
-        
+            => await Task.FromResult(todos);      
 
         public Todo Get(int id)
         {
-            return Todos
+            return todos
                 .Find(todo => todo.Id == id);
         }
 
         public async Task<Todo> GetAsync(int id)
-            => await Task.FromResult(Todos.SingleOrDefault(todo => todo.Id == id));
+            => await Task.FromResult(todos.SingleOrDefault(todo => todo.Id == id));
 
         public Todo Add(Todo todo)
         {
@@ -45,7 +42,7 @@ namespace TodoApp.Api.Repositories
             }
 
             todo.Id = nextId++;
-            Todos.Add(todo);
+            todos.Add(todo);
 
             return todo;
         }
@@ -60,7 +57,7 @@ namespace TodoApp.Api.Repositories
                 }
 
                 todo.Id = nextId++;
-                Todos.Add(todo);
+                todos.Add(todo);
             })
             .ContinueWith((prevResult) =>
             {
@@ -70,14 +67,14 @@ namespace TodoApp.Api.Repositories
 
         public bool Remove(int id)
         {
-            var todoToRemove = Todos.Find(todo => todo.Id == id);
+            var todoToRemove = todos.Find(todo => todo.Id == id);
 
             if(todoToRemove == null)
             {
                 return false;
             }
 
-            Todos.Remove(todoToRemove);
+            todos.Remove(todoToRemove);
 
             return true;
         }
@@ -86,14 +83,14 @@ namespace TodoApp.Api.Repositories
         {
             return await Task.Run(() =>
             {
-                var todoToRemove = Todos.Find(todo => todo.Id == id);
+                var todoToRemove = todos.Find(todo => todo.Id == id);
 
                 if (todoToRemove == null)
                 {
                     return false;
                 }
 
-                Todos.Remove(todoToRemove);
+                todos.Remove(todoToRemove);
 
                 return true;
             });
@@ -104,12 +101,12 @@ namespace TodoApp.Api.Repositories
             if (todo == null)
                 throw new ArgumentNullException("todo");            
 
-            int index = Todos.FindIndex(p => p.Id == id);
+            int index = todos.FindIndex(p => p.Id == id);
             if (index == -1)
                 return false;
 
-            Todos.RemoveAt(index);
-            Todos.Add(todo);
+            todos.RemoveAt(index);
+            todos.Add(todo);
 
             return true;
         }
@@ -121,12 +118,12 @@ namespace TodoApp.Api.Repositories
                 if (todo == null)
                     throw new ArgumentNullException("todo");
 
-                int index = Todos.FindIndex(p => p.Id == id);
+                int index = todos.FindIndex(p => p.Id == id);
                 if (index == -1)
                     return false;
 
-                Todos.RemoveAt(index);
-                Todos.Add(todo);
+                todos.RemoveAt(index);
+                todos.Add(todo);
 
                 return true;
             });
