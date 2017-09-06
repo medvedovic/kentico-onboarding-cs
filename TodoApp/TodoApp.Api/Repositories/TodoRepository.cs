@@ -26,10 +26,8 @@ namespace TodoApp.Api.Repositories
             => await Task.FromResult(todos);      
 
         public Todo Get(int id)
-        {
-            return todos
+            => todos
                 .Find(todo => todo.Id == id);
-        }
 
         public async Task<Todo> GetAsync(int id)
             => await Task.FromResult(todos.SingleOrDefault(todo => todo.Id == id));
@@ -38,7 +36,7 @@ namespace TodoApp.Api.Repositories
         {
             if (todo == null)
             {
-                throw new ArgumentNullException("todo");
+                throw new ArgumentNullException(nameof(todo));
             }
 
             todo.Id = nextId++;
@@ -53,7 +51,7 @@ namespace TodoApp.Api.Repositories
             {
                 if (todo == null)
                 {
-                    throw new ArgumentNullException("Todo");
+                    throw new ArgumentNullException(nameof(todo));
                 }
 
                 todo.Id = nextId++;
@@ -69,14 +67,7 @@ namespace TodoApp.Api.Repositories
         {
             var todoToRemove = todos.Find(todo => todo.Id == id);
 
-            if(todoToRemove == null)
-            {
-                return false;
-            }
-
-            todos.Remove(todoToRemove);
-
-            return true;
+            return todos.Remove(todoToRemove);
         }
 
         public async Task<bool> RemoveAsync(int id)
@@ -99,7 +90,7 @@ namespace TodoApp.Api.Repositories
         public bool Update(int id, Todo todo)
         {
             if (todo == null)
-                throw new ArgumentNullException("todo");            
+                throw new ArgumentNullException(nameof(todo));            
 
             int index = todos.FindIndex(p => p.Id == id);
             if (index == -1)
@@ -116,7 +107,7 @@ namespace TodoApp.Api.Repositories
             return await Task.Run(() =>
             {
                 if (todo == null)
-                    throw new ArgumentNullException("todo");
+                    throw new ArgumentNullException(nameof(todo));
 
                 int index = todos.FindIndex(p => p.Id == id);
                 if (index == -1)
