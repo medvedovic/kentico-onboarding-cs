@@ -67,11 +67,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\DummyControllerTests_Delete.cs" />
-    <Compile Include="Controllers\DummyControllerTests_Get.cs" />
-    <Compile Include="Controllers\DummyControllerTests_Post.cs" />
-    <Compile Include="Controllers\DummyControllerTests_Put.cs" />
-    <Compile Include="Repositories\TodoRepository_Tests.cs" />
+    <Compile Include="Controllers\TodosControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +79,9 @@
       <Project>{e69864e0-bb10-49bf-9405-603cd877493c}</Project>
       <Name>TodoApp.Api</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repositories\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
