@@ -56,7 +56,9 @@ namespace TodoApp.Api.Controllers
             }
             catch(ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                ModelState.AddModelError("TodoNullError", ex);
+
+                return BadRequest(ModelState);
             }
         }
 
@@ -95,7 +97,9 @@ namespace TodoApp.Api.Controllers
             }
             catch(ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                ModelState.AddModelError("TodoNullError", ex);
+
+                return BadRequest(ModelState);
             }
         }
     }
