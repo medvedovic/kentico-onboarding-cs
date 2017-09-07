@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.GetAllTodos_ReturnsAllItems" /><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.GetTodo_ReturnsNotFound" /><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.GetTodo_ReturnsTodoWithSameId" /></Playlist>
