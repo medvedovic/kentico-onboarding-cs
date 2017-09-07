@@ -162,6 +162,61 @@ namespace TodoApp.Api.Tests.Controllers
 
         #endregion
 
+        #region Put
+
+        [Test]
+        public void PutTodo_ReturnsNewTodo_OnValidId_OnValidTodo()
+        {
+            _mockRepo.UpdateAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
+                .Returns(true);
+
+            var responseResult =
+                _controller.PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
+                .Result;
+
+            Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
+        }
+
+        [Test]
+        public void PutTodo_ReturnsInvalidModel_OnIdNotEqualTodoId()
+        {
+            _mockRepo.UpdateAsync(Guid.Empty, _mockTodo)
+                .Throws(new ArgumentException(nameof(Todo)));
+
+            var responseResult =
+                _controller.PutTodo(Guid.Empty, _mockTodo)
+                .Result;
+
+            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
+        }
+
+        [Test]
+        public void PutTodo_ReturnsNotFound_OnWrongId()
+        {
+            _mockRepo.Update(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo).Returns(false);
+
+            var responseResult = _controller
+                .PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
+                .Result;
+
+            Assert.That(responseResult, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public void PutTodo_ReturnsInvalidModel_OnTodoIsNull()
+        {
+            _mockRepo.UpdateAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), null)
+                .Throws(new ArgumentNullException(nameof(Todo)));
+
+            var responseResult = _controller
+                .PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), null)
+                .Result;
+
+            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
+        }
+        
+        #endregion
 
         #region Helper methods
 
