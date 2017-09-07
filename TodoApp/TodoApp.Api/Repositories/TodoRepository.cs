@@ -19,6 +19,11 @@ namespace TodoApp.Api.Repositories
             };
         }
 
+        public TodoRepository(List<Todo> todos)
+        {
+            _todos = todos;
+        }
+
         public IEnumerable<Todo> GetAll()
             => _todos;
 
@@ -26,8 +31,7 @@ namespace TodoApp.Api.Repositories
             => await Task.FromResult(_todos);      
 
         public Todo Get(Guid id)
-            => _todos
-                .Find(todo => todo.Id == id);
+            => _todos.Find(todo => todo.Id == id);
 
         public async Task<Todo> GetAsync(Guid id)
             => await Task.FromResult(_todos.FirstOrDefault(todo => todo.Id == id));
@@ -45,19 +49,18 @@ namespace TodoApp.Api.Repositories
             return todo;
         }
 
-        public async Task<Todo> AddAsync(Todo todo)
+        public Task<Todo> AddAsync(Todo todo)
         {
-            return await Task.Run(() => 
+            return Task.Run(() =>
             {
                 if (todo == null)
-                {
                     throw new ArgumentNullException(nameof(todo));
-                }
 
                 todo.Id = Guid.NewGuid();
                 _todos.Add(todo);
-            })
-            .ContinueWith((prevResult) => todo);
+
+                return todo;
+            });
         }
 
         public bool Remove(Guid id)
@@ -67,9 +70,9 @@ namespace TodoApp.Api.Repositories
             return _todos.Remove(todoToRemove);
         }
 
-        public async Task<bool> RemoveAsync(Guid id)
+        public Task<bool> RemoveAsync(Guid id)
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
                 var todoToRemove = _todos.Find(todo => todo.Id == id);
 
@@ -80,7 +83,10 @@ namespace TodoApp.Api.Repositories
         public bool Update(Guid id, Todo todo)
         {
             if (todo == null)
-                throw new ArgumentNullException(nameof(todo));            
+                throw new ArgumentNullException(nameof(todo));
+
+            if (todo.Id != id)
+                throw new ArgumentException("Provided ids do not correspont");
 
             var index = _todos.FindIndex(p => p.Id == id);
             if (index == -1)
@@ -92,12 +98,15 @@ namespace TodoApp.Api.Repositories
             return true;
         }
 
-        public async Task<bool> UpdateAsync(Guid id, Todo todo)
+        public Task<bool> UpdateAsync(Guid id, Todo todo)
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
                 if (todo == null)
                     throw new ArgumentNullException(nameof(todo));
+                
+                if(todo.Id != id)
+                    throw new ArgumentException("Provided ids do not correspont");
 
                 var index = _todos.FindIndex(p => p.Id == id);
                 if (index == -1)
