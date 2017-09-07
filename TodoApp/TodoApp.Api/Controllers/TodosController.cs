@@ -81,26 +81,27 @@ namespace TodoApp.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutTodo(Guid id, [FromBody] Todo updated)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != updated.Id)
-                return BadRequest();
 
             try
             {
                 if (!await _repository.UpdateAsync(id, updated))
                     return NotFound();
 
-                updated.Id = id;
-
                 return Ok(updated);
             }
             catch(ArgumentNullException ex)
             {
                 ModelState.AddModelError("TodoNullError", ex);
+
+                return BadRequest(ModelState);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("IdsNoncompliance", ex);
 
                 return BadRequest(ModelState);
             }
