@@ -46,32 +46,19 @@ namespace TodoApp.Api.Controllers
         [Route("", Name = "PostTodo")]
         public async Task<IHttpActionResult> PostTodo(Todo todo)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var newTodo = await _repository.Add(todo);
 
-            try
-            {
-                var newTodo = await _repository.Add(todo);
+            if (newTodo == null)
+                return BadRequest();
 
-                return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);
-            }
-            catch(ArgumentNullException ex)
-            {
-                ModelState.AddModelError("TodoNullError", ex);
-
-                return BadRequest(ModelState);
-            }
+            return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);          
         }
 
         [HttpDelete]
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteTodo(Guid id)
         {
-            var isRemoved = await _repository.Remove(id);
-
-            if (!isRemoved)
+            if (!await _repository.Remove(id))
                 return NotFound();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -81,30 +68,10 @@ namespace TodoApp.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutTodo(Guid id, [FromBody] Todo updated)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!await _repository.Update(id, updated))
+                return BadRequest();
 
-            try
-            {
-                if (!await _repository.Update(id, updated))
-                    return NotFound();
-
-                return Ok(updated);
-            }
-            catch(ArgumentNullException ex)
-            {
-                ModelState.AddModelError("TodoNullError", ex);
-
-                return BadRequest(ModelState);
-            }
-            catch (ArgumentException ex)
-            {
-                ModelState.AddModelError("IdsNoncompliance", ex);
-
-                return BadRequest(ModelState);
-            }
+            return Ok(updated);
         }
     }
 }
