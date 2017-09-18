@@ -28,52 +28,16 @@ namespace TodoApp.DL.Repositories
         public async Task<IEnumerable<Todo>> GetAll()
             => await Task.FromResult(_todos);      
 
-        public async Task<Todo> Get(Guid id)
-            => await Task.FromResult(_todos.FirstOrDefault(todo => todo.Id == id));
+        public Task<Todo> Get(Guid id)
+            => Task.FromResult(_todos[0]);
 
         public Task<Todo> Add(Todo todo)
-        {
-            return Task.Run(() =>
-            {
-                if (todo == null)
-                    throw new ArgumentNullException(nameof(todo));
-
-                todo.Id = Guid.NewGuid();
-                _todos.Add(todo);
-
-                return todo;
-            });
-        }
+            => Task.FromResult(todo);            
 
         public Task<bool> Remove(Guid id)
-        {
-            return Task.Run(() =>
-            {
-                var todoToRemove = _todos.Find(todo => todo.Id == id);
-
-                return _todos.Remove(todoToRemove);
-            });
-        }
+            => Task.FromResult(true);
 
         public Task<bool> Update(Guid id, Todo todo)
-        {
-            return Task.Run(() =>
-            {
-                if (todo == null)
-                    throw new ArgumentNullException(nameof(todo));
-                
-                if(todo.Id != id)
-                    throw new ArgumentException("Provided ids do not correspont");
-
-                var index = _todos.FindIndex(p => p.Id == id);
-                if (index == -1)
-                    return false;
-
-                _todos.RemoveAt(index);
-                _todos.Add(todo);
-
-                return true;
-            });
-        }
+            => Task.FromResult(true);
     }
 }
