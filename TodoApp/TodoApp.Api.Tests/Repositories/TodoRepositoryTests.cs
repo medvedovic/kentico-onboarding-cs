@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
-using TodoApp.Api.Models;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Tests.Repositories

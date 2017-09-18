@@ -1,12 +1,12 @@
-﻿using TodoApp.Api.Models;
-using Microsoft.Web.Http;
+﻿using Microsoft.Web.Http;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApp.Api.Helpers;
-using TodoApp.Api.Repositories;
+using TodoApp.Contracts.Models;
+using TodoApp.Contracts.Repositories;
 
 namespace TodoApp.Api.Controllers
 {

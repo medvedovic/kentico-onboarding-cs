@@ -14,7 +14,6 @@ using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Helpers;
-using TodoApp.Api.Models;
 using TodoApp.Api.Repositories;
 
 namespace TodoApp.Api.Tests.Controllers

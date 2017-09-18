@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TodoApp.Api.Models;
+using TodoApp.Contracts.Models;
 
-namespace TodoApp.Api.Repositories
+namespace TodoApp.Contracts.Repositories
 {
     public interface ITodoRepository
     {

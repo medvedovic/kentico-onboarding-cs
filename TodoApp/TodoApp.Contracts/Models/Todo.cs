@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace TodoApp.Api.Models
+namespace TodoApp.Contracts.Models
 {
     public class Todo
     {
@@ -10,6 +9,10 @@ namespace TodoApp.Api.Models
         [Required]
         [MaxLength(255)]
         public string Value { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
 
         public override bool Equals(object obj)
         {
