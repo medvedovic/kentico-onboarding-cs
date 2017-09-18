@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TodoApp.Api.Helpers;
 using TodoApp.Api.Repositories;
+using TodoApp.Contracts.Repositories;
+using TodoApp.DL.Repositories;
 
 namespace TodoApp.Api
 {

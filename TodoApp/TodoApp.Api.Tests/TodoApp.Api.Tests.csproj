@@ -70,7 +70,6 @@
     <Compile Include="Controllers\TodosControllerTests.cs" />
     <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\TodoRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -80,6 +79,10 @@
     <ProjectReference Include="..\TodoApp.Api\TodoApp.Api.csproj">
       <Project>{e69864e0-bb10-49bf-9405-603cd877493c}</Project>
       <Name>TodoApp.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TodoApp.Contracts\TodoApp.Contracts.csproj">
+      <Project>{BCAD3D79-6BD9-4AB0-89DE-A4426FD75124}</Project>
+      <Name>TodoApp.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

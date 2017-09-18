@@ -139,10 +139,7 @@
     </Compile>
     <Compile Include="Helpers\IUriHelper.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
-    <Compile Include="Models\Todo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ITodoRepository.cs" />
-    <Compile Include="Repositories\TodoRepository.cs" />
     <Compile Include="Repositories\UnityResolver.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +152,16 @@
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TodoApp.Contracts\TodoApp.Contracts.csproj">
+      <Project>{BCAD3D79-6BD9-4AB0-89DE-A4426FD75124}</Project>
+      <Name>TodoApp.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TodoApp.DL\TodoApp.DL.csproj">
+      <Project>{91fea4cb-008c-4f10-ae8e-77b1c29e8635}</Project>
+      <Name>TodoApp.DL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

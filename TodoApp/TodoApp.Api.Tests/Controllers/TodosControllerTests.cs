@@ -15,6 +15,8 @@ using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Helpers;
 using TodoApp.Api.Repositories;
+using TodoApp.Contracts.Models;
+using TodoApp.Contracts.Repositories;
 
 namespace TodoApp.Api.Tests.Controllers
 {
