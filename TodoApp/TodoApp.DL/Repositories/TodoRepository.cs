@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -13,16 +12,11 @@ namespace TodoApp.DL.Repositories
 
         public TodoRepository()
         {
-            _todos = new List<Todo>()
+            _todos = new List<Todo>
             {
                 new Todo() { Id = new Guid("454ad8b4-d5c8-4117-81d6-6a8385cfdc38"), Value = "Make coffee" },
                 new Todo() { Id = new Guid("466083f9-14f9-4286-ae56-b95a2ccdc7d3"), Value = "Master ASP.NET web api" }
             };
-        }
-
-        public TodoRepository(List<Todo> todos)
-        {
-            _todos = todos;
         }
 
         public async Task<IEnumerable<Todo>> GetAll()
