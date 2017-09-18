@@ -25,32 +25,13 @@ namespace TodoApp.DL.Repositories
             _todos = todos;
         }
 
-        public IEnumerable<Todo> GetAll()
-            => _todos;
-
-        public async Task<IEnumerable<Todo>> GetAllAsync()
+        public async Task<IEnumerable<Todo>> GetAll()
             => await Task.FromResult(_todos);      
 
-        public Todo Get(Guid id)
-            => _todos.Find(todo => todo.Id == id);
-
-        public async Task<Todo> GetAsync(Guid id)
+        public async Task<Todo> Get(Guid id)
             => await Task.FromResult(_todos.FirstOrDefault(todo => todo.Id == id));
 
-        public Todo Add(Todo todo)
-        {
-            if (todo == null)
-            {
-                throw new ArgumentNullException(nameof(todo));
-            }
-
-            todo.Id = Guid.NewGuid();
-            _todos.Add(todo);
-
-            return todo;
-        }
-
-        public Task<Todo> AddAsync(Todo todo)
+        public Task<Todo> Add(Todo todo)
         {
             return Task.Run(() =>
             {
@@ -64,14 +45,7 @@ namespace TodoApp.DL.Repositories
             });
         }
 
-        public bool Remove(Guid id)
-        {
-            var todoToRemove = _todos.Find(todo => todo.Id == id);
-
-            return _todos.Remove(todoToRemove);
-        }
-
-        public Task<bool> RemoveAsync(Guid id)
+        public Task<bool> Remove(Guid id)
         {
             return Task.Run(() =>
             {
@@ -81,25 +55,7 @@ namespace TodoApp.DL.Repositories
             });
         }
 
-        public bool Update(Guid id, Todo todo)
-        {
-            if (todo == null)
-                throw new ArgumentNullException(nameof(todo));
-
-            if (todo.Id != id)
-                throw new ArgumentException("Provided ids do not correspont");
-
-            var index = _todos.FindIndex(p => p.Id == id);
-            if (index == -1)
-                return false;
-
-            _todos.RemoveAt(index);
-            _todos.Add(todo);
-
-            return true;
-        }
-
-        public Task<bool> UpdateAsync(Guid id, Todo todo)
+        public Task<bool> Update(Guid id, Todo todo)
         {
             return Task.Run(() =>
             {

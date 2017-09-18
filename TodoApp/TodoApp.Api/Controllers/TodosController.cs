@@ -27,14 +27,14 @@ namespace TodoApp.Api.Controllers
         [Route("")]
         public async Task<IEnumerable<Todo>> GetAllTodos()
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAll();
         }
 
         [HttpGet]
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> GetTodo(Guid id)
         {
-            var todo = await _repository.GetAsync(id);
+            var todo = await _repository.Get(id);
 
             if (todo == null)
                 return NotFound();
@@ -53,7 +53,7 @@ namespace TodoApp.Api.Controllers
 
             try
             {
-                var newTodo = await _repository.AddAsync(todo);
+                var newTodo = await _repository.Add(todo);
 
                 return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);
             }
@@ -69,7 +69,7 @@ namespace TodoApp.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteTodo(Guid id)
         {
-            var isRemoved = await _repository.RemoveAsync(id);
+            var isRemoved = await _repository.Remove(id);
 
             if (!isRemoved)
                 return NotFound();
@@ -88,7 +88,7 @@ namespace TodoApp.Api.Controllers
 
             try
             {
-                if (!await _repository.UpdateAsync(id, updated))
+                if (!await _repository.Update(id, updated))
                     return NotFound();
 
                 return Ok(updated);
