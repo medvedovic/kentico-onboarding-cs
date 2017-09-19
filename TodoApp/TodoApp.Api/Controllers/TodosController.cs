@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApp.Api.Helpers;
+using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 

@@ -2,6 +2,7 @@
 using Microsoft.Practices.Unity;
 using TodoApp.Api.Helpers;
 using TodoApp.Api.Repositories;
+using TodoApp.Contracts.Helpers;
 using TodoApp.DL;
 
 namespace TodoApp.Api
@@ -12,7 +13,7 @@ namespace TodoApp.Api
         {
             var container = new UnityContainer();
             RepositoryDependencyResolver.RegisterType(container);
-            container.RegisterType<IUriHelper, UriHelper>(new ContainerControlledLifetimeManager());
+            UriHelper.Register(container);
             config.DependencyResolver = new UnityResolver(container);
         }
     }

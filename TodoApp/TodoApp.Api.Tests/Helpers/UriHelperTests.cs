@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Web;
 using NUnit.Framework;
 using TodoApp.Api.Helpers;
+using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api.Tests.Helpers
 {
