@@ -5,7 +5,7 @@ using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api.Helpers
 {
-    public class UriHelper : IUriHelper
+    internal class UriHelper : IUriHelper
     {
         public Uri BuildUri(HttpRequestMessage request, Guid id)
         {
