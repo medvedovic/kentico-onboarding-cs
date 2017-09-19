@@ -6,7 +6,7 @@ using TodoApp.Contracts.Repositories;
 
 namespace TodoApp.DL.Repositories
 {
-    public class TodoRepository : ITodoRepository
+    internal class TodoRepository : ITodoRepository
     {
         private readonly List<Todo> _todos;
 
