@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Web;
 using System.Web.Http.Dependencies;
 using Microsoft.Practices.Unity;
 
@@ -10,18 +7,18 @@ namespace TodoApp.Api.Repositories
 {
     public class UnityResolver : IDependencyResolver
     {
-        private readonly IUnityContainer container;
+        private readonly IUnityContainer _container;
 
         public UnityResolver(IUnityContainer container)
         {
-            this.container = container;
+            _container = container;
         }
 
         public object GetService(Type serviceType)
         {
             try
             {
-                return container.Resolve(serviceType);
+                return _container.Resolve(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -33,7 +30,7 @@ namespace TodoApp.Api.Repositories
         {
             try
             {
-                return container.ResolveAll(serviceType);
+                return _container.ResolveAll(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -43,7 +40,7 @@ namespace TodoApp.Api.Repositories
 
         public IDependencyScope BeginScope()
         {
-            var child = container.CreateChildContainer();
+            var child = _container.CreateChildContainer();
             return new UnityResolver(child);
         }
 
@@ -54,7 +51,7 @@ namespace TodoApp.Api.Repositories
 
         public virtual void Dispose(bool disposing)
         {
-            container.Dispose();
+            _container.Dispose();
         }
     }
 }
