@@ -24,14 +24,12 @@ namespace TodoApp.Api.Controllers
             _uriHelper = uriHelper;
         }
 
-        [HttpGet]
         [Route("")]
         public async Task<IEnumerable<Todo>> GetAllTodos()
         {
             return await _repository.GetAll();
         }
 
-        [HttpGet]
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> GetTodo(Guid id)
         {
@@ -43,7 +41,6 @@ namespace TodoApp.Api.Controllers
             return Ok(todo);
         }
 
-        [HttpPost]
         [Route("", Name = "PostTodo")]
         public async Task<IHttpActionResult> PostTodo(Todo todo)
         {
@@ -55,7 +52,6 @@ namespace TodoApp.Api.Controllers
             return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);          
         }
 
-        [HttpDelete]
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteTodo(Guid id)
         {
@@ -65,7 +61,6 @@ namespace TodoApp.Api.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [HttpPut]
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutTodo(Guid id, [FromBody] Todo updated)
         {
