@@ -2,19 +2,15 @@
 using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
-using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Helpers;
-using TodoApp.Api.Repositories;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 
@@ -72,14 +68,13 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void GetTodo_ReturnsTodoWithSameId()
+        public void GetTodo_ReturnsOk()
         {
             _mockRepo.Get(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(_mockTodo);
 
             var responseResult = _controller.GetTodo(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
 
             Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
-            Assert.That(((OkNegotiatedContentResult<Todo>) responseResult).Content, Is.EqualTo(_mockTodo));
         }
 
         [Test]
@@ -97,20 +92,7 @@ namespace TodoApp.Api.Tests.Controllers
         #region Post
 
         [Test]
-        public void PostTodo_ValidatesModelCorrectly()
-        {
-            var todo = new Todo();
-            var context = new ValidationContext(todo);
-            var results = new List<ValidationResult>();
-
-            var isModelStateValid = Validator.TryValidateObject(todo, context, results);
-
-            Assert.That(results.Count, Is.Not.Zero);
-            Assert.That(isModelStateValid, Is.False);
-        }
-
-        [Test]
-        public void PostTodo_ReturnsNewTodo_WithValidModel()
+        public void PostTodo_ReturnsOk()
         {
             var todo = new Todo()
             {
@@ -121,18 +103,20 @@ namespace TodoApp.Api.Tests.Controllers
             var responseResult = _controller.PostTodo(todo).Result;
 
             Assert.That(responseResult, Is.InstanceOf<CreatedNegotiatedContentResult<Todo>>());
-            Assert.That(((CreatedNegotiatedContentResult<Todo>) responseResult).Location.ToString(), Is.EqualTo("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
         }
 
         [Test]
-        public void PostTodo_ReturnsBadRequest_WithInvalidModel()
+        public void PostTodo_ReturnsBadRequest()
         {
-            var todo = new Todo();
+            var todo = new Todo()
+            {
+                Value = "Make more coffee"
+            };
+            _mockRepo.Add(todo).ReturnsNull();
 
-            _controller.ModelState.AddModelError("test", "test");
             var responseResult = _controller.PostTodo(todo).Result;
-            
-            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
+
+            Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
         }
 
         #endregion
@@ -166,7 +150,7 @@ namespace TodoApp.Api.Tests.Controllers
         #region Put
 
         [Test]
-        public void PutTodo_ReturnsNewTodo_OnValidId_OnValidTodo()
+        public void PutTodo_ReturnsOK()
         {
             _mockRepo.Update(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
                 .Returns(true);
@@ -180,20 +164,7 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void PutTodo_ReturnsInvalidModel_OnIdNotEqualTodoId()
-        {
-            _mockRepo.Update(Guid.Empty, _mockTodo)
-                .Throws(new ArgumentException(nameof(Todo)));
-
-            var responseResult =
-                _controller.PutTodo(Guid.Empty, _mockTodo)
-                .Result;
-
-            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
-        }
-
-        [Test]
-        public void PutTodo_ReturnsNotFound_OnWrongId()
+        public void PutTodo_ReturnsBadRequest()
         {
             _mockRepo.Update(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo).Returns(false);
 
@@ -201,20 +172,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
                 .Result;
 
-            Assert.That(responseResult, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void PutTodo_ReturnsInvalidModel_OnTodoIsNull()
-        {
-            _mockRepo.Update(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), null)
-                .Throws(new ArgumentNullException(nameof(Todo)));
-
-            var responseResult = _controller
-                .PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), null)
-                .Result;
-
-            Assert.That(responseResult, Is.InstanceOf<InvalidModelStateResult>());
+            Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
         }
         
         #endregion
