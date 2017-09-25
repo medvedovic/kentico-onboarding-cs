@@ -13,7 +13,7 @@ namespace TodoApp.Api
         {
             var container = new UnityContainer();
             RepositoryDependencyResolver.RegisterType(container);
-            UriHelper.Register(container);
+            new UriHelper().RegisterType(container);
             config.DependencyResolver = new UnityResolver(container);
         }
     }
