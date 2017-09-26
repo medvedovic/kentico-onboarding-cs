@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Api", "src\TodoApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Api.Tests", "tests\TodoApp.Api.Tests\TodoApp.Api.Tests.csproj", "{110CB921-7845-4BC0-A2E8-E9B4201F704F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.DL", "src\TodoApp.DL\TodoApp.DL.csproj", "{91FEA4CB-008C-4F10-AE8E-77B1C29E8635}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Database", "src\TodoApp.DL\TodoApp.Database.csproj", "{91FEA4CB-008C-4F10-AE8E-77B1C29E8635}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Contracts", "src\TodoApp.Contracts\TodoApp.Contracts.csproj", "{BCAD3D79-6BD9-4AB0-89DE-A4426FD75124}"
 EndProject

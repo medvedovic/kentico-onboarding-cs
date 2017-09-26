@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\TodoRepository.cs" />
-    <Compile Include="RepositoryDependencyResolver.cs" />
+    <Compile Include="RepositoryDependencyBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TodoApp.Contracts\TodoApp.Contracts.csproj">
