@@ -7,8 +7,8 @@
     <ProjectGuid>{91FEA4CB-008C-4F10-AE8E-77B1C29E8635}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TodoApp.DL</RootNamespace>
-    <AssemblyName>TodoApp.DL</AssemblyName>
+    <RootNamespace>TodoApp.Repository</RootNamespace>
+    <AssemblyName>TodoApp.Repository</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

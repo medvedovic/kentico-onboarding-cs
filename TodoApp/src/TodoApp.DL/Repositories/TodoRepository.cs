@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 
-namespace TodoApp.DL.Repositories
+namespace TodoApp.Repository.Repositories
 {
     internal class TodoRepository : ITodoRepository
     {

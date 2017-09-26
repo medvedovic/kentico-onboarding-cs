@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Microsoft.Practices.Unity;
 using TodoApp.Api.Repositories;
-using TodoApp.DL;
+using TodoApp.Repository;
 
 namespace TodoApp.Api
 {
