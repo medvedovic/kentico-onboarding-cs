@@ -1,5 +1,4 @@
-﻿using System.Web.DynamicData;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Microsoft.Practices.Unity;
 using TodoApp.Api.Repositories;
 using TodoApp.Contracts;

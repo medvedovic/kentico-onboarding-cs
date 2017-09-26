@@ -10,7 +10,6 @@ using System.Web.Http.Results;
 using System.Web.Http.Routing;
 using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
-using TodoApp.Api.Helpers;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
