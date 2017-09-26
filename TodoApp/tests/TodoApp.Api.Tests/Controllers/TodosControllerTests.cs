@@ -35,7 +35,7 @@ namespace TodoApp.Api.Tests.Controllers
             var httpRequestMessage = ConfigureRequestMessage();
 
             _uriHelper = Substitute.For<IUriHelper>();
-            _uriHelper.BuildUri(httpRequestMessage, new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+            _uriHelper.BuildUri(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), "PostTodo")
                 .Returns(new Uri("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
 
             _controller = new TodosController(_mockRepo, _uriHelper)
