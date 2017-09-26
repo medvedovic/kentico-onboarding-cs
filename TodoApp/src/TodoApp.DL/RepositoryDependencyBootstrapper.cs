@@ -1,12 +1,13 @@
 ﻿using Microsoft.Practices.Unity;
+using TodoApp.Contracts;
 using TodoApp.Contracts.Repositories;
 using TodoApp.DL.Repositories;
 
 namespace TodoApp.DL
 {
-    public static class RepositoryDependencyResolver
+    public class RepositoryDependencyBootstrapper: IUnityBootstrapper
     {
-        public static void RegisterType(IUnityContainer container)
+        public void RegisterType(IUnityContainer container)
         {
             container.RegisterType<ITodoRepository, TodoRepository>(new ContainerControlledLifetimeManager());
         }
