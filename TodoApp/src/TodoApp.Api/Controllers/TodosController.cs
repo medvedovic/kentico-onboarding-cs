@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using TodoApp.Api.Helpers;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -17,6 +16,8 @@ namespace TodoApp.Api.Controllers
     {
         private readonly ITodoRepository _repository;
         private readonly IUriHelper _uriHelper;
+
+        private const string POST_TODO_ROUTE = "PostTodo";
 
         public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
         {
@@ -41,7 +42,7 @@ namespace TodoApp.Api.Controllers
             return Ok(todo);
         }
 
-        [Route("", Name = "PostTodo")]
+        [Route("", Name = POST_TODO_ROUTE)]
         public async Task<IHttpActionResult> PostTodo(Todo todo)
         {
             var newTodo = await _repository.Add(todo);
@@ -49,7 +50,7 @@ namespace TodoApp.Api.Controllers
             if (newTodo == null)
                 return BadRequest();
 
-            return Created(_uriHelper.BuildUri(Request, newTodo.Id), newTodo);          
+            return Created(_uriHelper.BuildUri(newTodo.Id, POST_TODO_ROUTE), newTodo);          
         }
 
         [Route("{id:guid}")]
