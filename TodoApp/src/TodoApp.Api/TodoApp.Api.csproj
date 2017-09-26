@@ -158,9 +158,9 @@
       <Project>{BCAD3D79-6BD9-4AB0-89DE-A4426FD75124}</Project>
       <Name>TodoApp.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TodoApp.DL\TodoApp.DL.csproj">
+    <ProjectReference Include="..\TodoApp.DL\TodoApp.Repository.csproj">
       <Project>{91fea4cb-008c-4f10-ae8e-77b1c29e8635}</Project>
-      <Name>TodoApp.DL</Name>
+      <Name>TodoApp.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
