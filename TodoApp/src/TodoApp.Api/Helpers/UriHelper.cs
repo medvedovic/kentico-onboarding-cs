@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Net.Http;
 using System.Web.Http.Routing;
-using Microsoft.Practices.Unity;
-using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api.Helpers
 {
-    internal class UriHelper : IUriHelper, IUnityBootstrapper
+    internal class UriHelper : IUriHelper
     {
-        public Uri BuildUri(HttpRequestMessage request, Guid id) =>
-            new Uri(new UrlHelper(request).Route("PostTodo", new {id}), UriKind.Relative);
+        private readonly UrlHelper _urlHelper;
 
-        public void RegisterType(IUnityContainer container)
+        public UriHelper(HttpRequestMessage httpRequestMessage)
         {
-            container.RegisterType<IUriHelper, UriHelper>(new ContainerControlledLifetimeManager());
+            _urlHelper = new UrlHelper(httpRequestMessage);
         }
+
+        public Uri BuildUri(Guid id, string atRoute) =>
+            new Uri(_urlHelper.Route(atRoute, new {id}), UriKind.Relative);
     }
 }
