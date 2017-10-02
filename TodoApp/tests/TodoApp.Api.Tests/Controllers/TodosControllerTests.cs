@@ -72,16 +72,6 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void GetTodo_ReturnsNotFound()
-        {
-            _mockRepo.RetrieveAsync(Guid.Parse("00000000-0000-0000-0000-000000000000")).ReturnsNull();
-
-            var result = _controller.GetTodo(Guid.Parse("00000000-0000-0000-0000-000000000000"));
-
-            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
         public void PostTodo_ReturnsOk()
         {
             var todo = new Todo()
@@ -96,20 +86,6 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void PostTodo_ReturnsBadRequest()
-        {
-            var todo = new Todo()
-            {
-                Value = "Make more coffee"
-            };
-            _mockRepo.CreateAsync(todo).ReturnsNull();
-
-            var responseResult = _controller.PostTodo(todo).Result;
-
-            Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
-        }
-
-        [Test]
         public void DeleteTodo_ReturnsOk_OnValidId()
         {
             _mockRepo.RemoveAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
@@ -118,17 +94,6 @@ namespace TodoApp.Api.Tests.Controllers
             var responseResult = _controller.DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
             
             Assert.That(((StatusCodeResult) responseResult).StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
-        }
-
-        [Test]
-        public void DeleteTodo_ReturnsNotFound_OnInvalidInput()
-        {
-            _mockRepo.RemoveAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
-                .Returns(false);
-
-            var responseResult = _controller.DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
-
-            Assert.That(responseResult, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
@@ -143,18 +108,6 @@ namespace TodoApp.Api.Tests.Controllers
 
             Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
             Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
-        }
-
-        [Test]
-        public void PutTodo_ReturnsBadRequest()
-        {
-            _mockRepo.UpdateAsync(_mockTodo).Returns(false);
-
-            var responseResult = _controller
-                .PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
-                .Result;
-
-            Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
         }
         
         private HttpRequestMessage ConfigureRequestMessage()
