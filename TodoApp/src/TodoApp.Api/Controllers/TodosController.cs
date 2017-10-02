@@ -17,7 +17,7 @@ namespace TodoApp.Api.Controllers
         private readonly ITodoRepository _repository;
         private readonly IUriHelper _uriHelper;
 
-        private const string POST_TODO_ROUTE = "PostTodo";
+        public const string POST_TODO_ROUTE = "PostTodo";
 
         public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
         {
@@ -28,16 +28,15 @@ namespace TodoApp.Api.Controllers
         [Route("")]
         public async Task<IHttpActionResult> GetAllTodos()
         {
-            return Ok(await _repository.RetrieveAllAsync());
+            var todos = await _repository.RetrieveAllAsync();
+
+            return Ok(todos);
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> GetTodo(Guid id)
         {
             var todo = await _repository.RetrieveAsync(id);
-
-            if (todo == null)
-                return NotFound();
 
             return Ok(todo);
         }
@@ -47,27 +46,20 @@ namespace TodoApp.Api.Controllers
         {
             var newTodo = await _repository.CreateAsync(todo);
 
-            if (newTodo == null)
-                return BadRequest();
+            var location = _uriHelper.BuildUri(newTodo.Id, POST_TODO_ROUTE);
 
-            return Created(_uriHelper.BuildUri(newTodo.Id, POST_TODO_ROUTE), newTodo);          
+            return Created(location, newTodo);          
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteTodo(Guid id)
         {
-            if (!await _repository.RemoveAsync(id))
-                return NotFound();
-
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutTodo(Guid id, [FromBody] Todo updated)
         {
-            if (!await _repository.UpdateAsync(updated))
-                return BadRequest();
-
             return Ok(updated);
         }
     }
