@@ -11,11 +11,13 @@ namespace TodoApp.Api.Controllers
 {
     [ApiVersion("1.0")]
     [RoutePrefix("api/v{version:apiVersion}/todos")]
+    [Route("{id:guid?}", Name = DEFAULT_ROUTE)]
     public class TodosController : ApiController
     {
         private readonly ITodoRepository _repository;
         private readonly IUriHelper _uriHelper;
 
+        public const string DEFAULT_ROUTE = "Default";
         public const string POST_TODO_ROUTE = "PostTodo";
 
         public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
@@ -24,7 +26,6 @@ namespace TodoApp.Api.Controllers
             _uriHelper = uriHelper;
         }
 
-        [Route("")]
         public async Task<IHttpActionResult> GetAllTodosAsync()
         {
             var todos = await _repository.RetrieveAllAsync();
@@ -32,7 +33,7 @@ namespace TodoApp.Api.Controllers
             return Ok(todos);
         }
 
-        [Route("{id:guid}")]
+        [Route(Name = POST_TODO_ROUTE)]
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
             var todo = await _repository.RetrieveAsync(id);
@@ -40,7 +41,6 @@ namespace TodoApp.Api.Controllers
             return Ok(todo);
         }
 
-        [Route("", Name = POST_TODO_ROUTE)]
         public async Task<IHttpActionResult> PostTodoAsync(Todo todo)
         {
             var newTodo = await _repository.CreateAsync(todo);
@@ -50,16 +50,14 @@ namespace TodoApp.Api.Controllers
             return Created(location, newTodo);          
         }
 
-        [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
-            return StatusCode(HttpStatusCode.NoContent);
+            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
         }
 
-        [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] Todo updated)
         {
-            return Ok(updated);
+            return await Task.FromResult(Ok(updated));
         }
     }
 }
