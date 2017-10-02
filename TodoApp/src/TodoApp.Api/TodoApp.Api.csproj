@@ -133,8 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiDependencyBootstrapper.cs" />
+    <Compile Include="App_Start\FormattingConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\TodosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
