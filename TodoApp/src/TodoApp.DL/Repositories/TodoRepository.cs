@@ -19,19 +19,19 @@ namespace TodoApp.Repository.Repositories
             };
         }
 
-        public async Task<IEnumerable<Todo>> GetAll()
+        public async Task<IEnumerable<Todo>> RetrieveAllAsync()
             => await Task.FromResult(_todos);      
 
-        public Task<Todo> Get(Guid id)
+        public Task<Todo> RetrieveAsync(Guid id)
             => Task.FromResult(_todos[0]);
 
-        public Task<Todo> Add(Todo todo)
+        public Task<Todo> CreateAsync(Todo todo)
             => Task.FromResult(todo);            
 
-        public Task<bool> Remove(Guid id)
+        public Task<bool> RemoveAsync(Guid id)
             => Task.FromResult(true);
 
-        public Task<bool> Update(Guid id, Todo todo)
+        public Task<bool> UpdateAsync(Todo todo)
             => Task.FromResult(true);
     }
 }

@@ -7,10 +7,10 @@ namespace TodoApp.Contracts.Repositories
 {
     public interface ITodoRepository
     {
-        Task<Todo> Get(Guid id);
-        Task<IEnumerable<Todo>> GetAll();
-        Task<Todo> Add(Todo todo);
-        Task<bool> Remove(Guid id);
-        Task<bool> Update(Guid id, Todo todo);
+        Task<Todo> RetrieveAsync(Guid id);
+        Task<IEnumerable<Todo>> RetrieveAllAsync();
+        Task<Todo> CreateAsync(Todo todo);
+        Task<bool> RemoveAsync(Guid id);
+        Task<bool> UpdateAsync(Todo todo);
     }
 }
