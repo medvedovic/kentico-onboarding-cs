@@ -62,9 +62,9 @@ namespace TodoApp.Api.Tests.Controllers
                 new Todo() {Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), Value = "Make more coffee"}
             });
 
-            var response = _controller.GetAllTodos();
+            var response = _controller.GetAllTodos().Result;
 
-            CollectionAssert.AreEqual(response.Result, _mockRepo.RetrieveAllAsync().Result);
+            Assert.That(response, Is.TypeOf<OkNegotiatedContentResult<IEnumerable<Todo>>>());
         }
 
         [Test]

@@ -26,9 +26,9 @@ namespace TodoApp.Api.Controllers
         }
 
         [Route("")]
-        public async Task<IEnumerable<Todo>> GetAllTodos()
+        public async Task<IHttpActionResult> GetAllTodos()
         {
-            return await _repository.RetrieveAllAsync();
+            return Ok(await _repository.RetrieveAllAsync());
         }
 
         [Route("{id:guid}")]
