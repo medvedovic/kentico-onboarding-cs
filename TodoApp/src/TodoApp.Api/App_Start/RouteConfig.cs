@@ -1,12 +1,10 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Routing;
 using Microsoft.Web.Http.Routing;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace TodoApp.Api
 {
-    public static class WebApiConfig
+    public static class RouteConfig
     {
         public static void Register(HttpConfiguration config)
         {
