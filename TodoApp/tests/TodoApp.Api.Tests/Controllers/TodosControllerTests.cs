@@ -55,7 +55,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo.RetrieveAllAsync().Returns(_mockTodos);
 
 
-            var response = _controller.GetAllTodos().Result;
+            var response = _controller.GetAllTodosAsync().Result;
 
 
             CollectionAssert.AreEqual(((OkNegotiatedContentResult<IEnumerable<Todo>>)response).Content, _mockTodos);
@@ -68,7 +68,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo.RetrieveAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(_mockTodo);
 
 
-            var responseResult = _controller.GetTodo(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
+            var responseResult = _controller.GetTodoAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
 
 
             Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
@@ -84,7 +84,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo.CreateAsync(todo).Returns(_mockTodo);
 
 
-            var responseResult = _controller.PostTodo(todo).Result;
+            var responseResult = _controller.PostTodoAsync(todo).Result;
 
 
             Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location.AbsoluteUri, Is.EqualTo("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
@@ -95,7 +95,7 @@ namespace TodoApp.Api.Tests.Controllers
         public void DeleteTodo_ReturnsNoContent()
         {
             var responseResult = _controller
-                .DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .DeleteTodoAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
                 .Result;
             
 
@@ -106,7 +106,7 @@ namespace TodoApp.Api.Tests.Controllers
         public void PutTodo_ReturnsOK()
         {
             var responseResult =
-                _controller.PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
+                _controller.PutTodoAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
                 .Result;
 
 
