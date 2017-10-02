@@ -19,8 +19,6 @@ namespace TodoApp.Api.Tests.Controllers
     [TestFixture]
     class TodosControllerTests
     {
-        #region SetUp
-
         private TodosController _controller;
         private ITodoRepository _mockRepo;
         private IUriHelper _uriHelper;
@@ -48,10 +46,6 @@ namespace TodoApp.Api.Tests.Controllers
                 Value = "Make more coffee"
             };
         }
-
-        #endregion
-
-        #region RetrieveAsync
 
         [Test]
         public void GetAllTodos_ReturnsAllItems()
@@ -87,10 +81,6 @@ namespace TodoApp.Api.Tests.Controllers
             Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
-        #endregion
-
-        #region Post
-
         [Test]
         public void PostTodo_ReturnsOk()
         {
@@ -119,10 +109,6 @@ namespace TodoApp.Api.Tests.Controllers
             Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
         }
 
-        #endregion
-
-        #region Delete
-
         [Test]
         public void DeleteTodo_ReturnsOk_OnValidId()
         {
@@ -144,10 +130,6 @@ namespace TodoApp.Api.Tests.Controllers
 
             Assert.That(responseResult, Is.InstanceOf<NotFoundResult>());
         }
-
-        #endregion
-
-        #region Put
 
         [Test]
         public void PutTodo_ReturnsOK()
@@ -175,10 +157,6 @@ namespace TodoApp.Api.Tests.Controllers
             Assert.That(responseResult, Is.InstanceOf<BadRequestResult>());
         }
         
-        #endregion
-
-        #region Helper methods
-
         private HttpRequestMessage ConfigureRequestMessage()
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/v1/todos");
@@ -201,7 +179,5 @@ namespace TodoApp.Api.Tests.Controllers
 
             return httpRequestMessage;
         }
-
-        #endregion
     }
 }
