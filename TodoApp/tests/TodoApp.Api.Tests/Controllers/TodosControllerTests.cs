@@ -23,41 +23,42 @@ namespace TodoApp.Api.Tests.Controllers
         private ITodoRepository _mockRepo;
         private IUriHelper _uriHelper;
         private Todo _mockTodo;
+        private List<Todo> _mockTodos;
 
         [SetUp]
         public void Init()
         {
             _mockRepo = Substitute.For<ITodoRepository>();
 
-            var httpRequestMessage = ConfigureRequestMessage();
-
             _uriHelper = Substitute.For<IUriHelper>();
             _uriHelper.BuildUri(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), "PostTodo")
                 .Returns(new Uri("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
 
-            _controller = new TodosController(_mockRepo, _uriHelper)
-            {
-                Request = httpRequestMessage
-            };
+            _controller = new TodosController(_mockRepo, _uriHelper);
 
             _mockTodo = new Todo()
             {
                 Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"),
                 Value = "Make more coffee"
             };
+
+            _mockTodos = new List<Todo>
+            {
+                new Todo() {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
+                new Todo() {Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), Value = "Make more coffee"}
+            };
         }
 
         [Test]
         public void GetAllTodos_ReturnsAllItems()
         {
-            _mockRepo.RetrieveAllAsync().Returns(new List<Todo>()
-            {
-                new Todo() {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
-                new Todo() {Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), Value = "Make more coffee"}
-            });
+            _mockRepo.RetrieveAllAsync().Returns(_mockTodos);
+
 
             var response = _controller.GetAllTodos().Result;
 
+
+            CollectionAssert.AreEqual(((OkNegotiatedContentResult<IEnumerable<Todo>>)response).Content, _mockTodos);
             Assert.That(response, Is.TypeOf<OkNegotiatedContentResult<IEnumerable<Todo>>>());
         }
 
@@ -66,9 +67,11 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo.RetrieveAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(_mockTodo);
 
+
             var responseResult = _controller.GetTodo(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
 
-            Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+
+            Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
         }
 
         [Test]
@@ -80,19 +83,21 @@ namespace TodoApp.Api.Tests.Controllers
             };
             _mockRepo.CreateAsync(todo).Returns(_mockTodo);
 
+
             var responseResult = _controller.PostTodo(todo).Result;
+
 
             Assert.That(responseResult, Is.InstanceOf<CreatedNegotiatedContentResult<Todo>>());
         }
 
         [Test]
-        public void DeleteTodo_ReturnsOk_OnValidId()
+        public void DeleteTodo_ReturnsNoContent()
         {
-            _mockRepo.RemoveAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
-                .Returns(true);
-
-            var responseResult = _controller.DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
+            var responseResult = _controller
+                .DeleteTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .Result;
             
+
             Assert.That(((StatusCodeResult) responseResult).StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
@@ -102,11 +107,13 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo.UpdateAsync(_mockTodo)
                 .Returns(true);
 
+
             var responseResult =
                 _controller.PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
                 .Result;
 
-            Assert.That(responseResult, Is.InstanceOf<OkNegotiatedContentResult<Todo>>());
+
+            Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
             Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
         }
         
