@@ -12,7 +12,7 @@ namespace TodoApp.Api
         public IUnityContainer RegisterType(IUnityContainer container) => 
             container
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
-                .RegisterType<IUriHelper, UriHelper>(new ContainerControlledLifetimeManager());
+                .RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());
 
         private static HttpRequestMessage GetHttpRequestMessage(IUnityContainer container) =>
             (HttpRequestMessage) HttpContext.Current.Items["MS_HttpRequestMessage"];
