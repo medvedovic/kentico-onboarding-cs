@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Web.Http.Routing;
+using TodoApp.Api.Controllers;
 using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api.Helpers
@@ -14,7 +15,7 @@ namespace TodoApp.Api.Helpers
             _urlHelper = new UrlHelper(httpRequestMessage);
         }
 
-        public Uri BuildUri(Guid id, string atRoute) =>
-            new Uri(_urlHelper.Route(atRoute, new {id}), UriKind.Relative);
+        public Uri BuildUriForPostTodo(Guid id) =>
+            new Uri(_urlHelper.Route(TodosController.POST_TODO_ROUTE, new {id}), UriKind.Relative);
     }
 }

@@ -31,7 +31,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo = Substitute.For<ITodoRepository>();
 
             _uriHelper = Substitute.For<IUriHelper>();
-            _uriHelper.BuildUri(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), "PostTodo")
+            _uriHelper.BuildUriForPostTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
                 .Returns(new Uri("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
 
             _controller = new TodosController(_mockRepo, _uriHelper);
@@ -87,7 +87,8 @@ namespace TodoApp.Api.Tests.Controllers
             var responseResult = _controller.PostTodo(todo).Result;
 
 
-            Assert.That(responseResult, Is.InstanceOf<CreatedNegotiatedContentResult<Todo>>());
+            Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location.AbsoluteUri, Is.EqualTo("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
+            Assert.That(responseResult, Is.TypeOf<CreatedNegotiatedContentResult<Todo>>());
         }
 
         [Test]
@@ -104,10 +105,6 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PutTodo_ReturnsOK()
         {
-            _mockRepo.UpdateAsync(_mockTodo)
-                .Returns(true);
-
-
             var responseResult =
                 _controller.PutTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
                 .Result;

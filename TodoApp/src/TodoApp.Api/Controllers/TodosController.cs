@@ -1,6 +1,5 @@
 ﻿using Microsoft.Web.Http;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -46,7 +45,7 @@ namespace TodoApp.Api.Controllers
         {
             var newTodo = await _repository.CreateAsync(todo);
 
-            var location = _uriHelper.BuildUri(newTodo.Id, POST_TODO_ROUTE);
+            var location = _uriHelper.BuildUriForPostTodo(newTodo.Id);
 
             return Created(location, newTodo);          
         }
