@@ -8,11 +8,12 @@ using System.Web.Http;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
-using NSubstitute.ReturnsExtensions;
 using TodoApp.Api.Controllers;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
+using Assert = NUnit.Framework.Assert;
+using CollectionAssert = NUnit.Framework.CollectionAssert;
 
 namespace TodoApp.Api.Tests.Controllers
 {
@@ -24,6 +25,7 @@ namespace TodoApp.Api.Tests.Controllers
         private IUriHelper _uriHelper;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
+        private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
 
         [SetUp]
         public void Init()
@@ -31,21 +33,21 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo = Substitute.For<ITodoRepository>();
 
             _uriHelper = Substitute.For<IUriHelper>();
-            _uriHelper.BuildUriForPostTodo(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
-                .Returns(new Uri("http://localhost/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
+            _uriHelper.BuildUriForPostTodo(Arg.Any<Guid>())
+                .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
             _controller = new TodosController(_mockRepo, _uriHelper);
 
             _mockTodo = new Todo()
             {
-                Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"),
+                Id = _guid,
                 Value = "Make more coffee"
             };
 
             _mockTodos = new List<Todo>
             {
                 new Todo() {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
-                new Todo() {Id = new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), Value = "Make more coffee"}
+                new Todo() {Id = _guid, Value = "Make more coffee"}
             };
         }
 
@@ -65,10 +67,10 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsOk()
         {
-            _mockRepo.RetrieveAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Returns(_mockTodo);
+            _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
 
 
-            var responseResult = _controller.GetTodoAsync(Guid.Parse("56d9ed92-91ad-4171-9be9-11356384ce37")).Result;
+            var responseResult = _controller.GetTodoAsync(_guid).Result;
 
 
             Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
@@ -77,17 +79,18 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PostTodo_ReturnsOk()
         {
-            var todo = new Todo()
+            var todo = new Todo
             {
                 Value = "Make more coffee"
             };
             _mockRepo.CreateAsync(todo).Returns(_mockTodo);
+            var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
 
             var responseResult = _controller.PostTodoAsync(todo).Result;
 
 
-            Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location.AbsoluteUri, Is.EqualTo("http://localhost/api/v1/todos/56d9ed92-91ad-4171-9be9-11356384ce37"));
+            Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location, Is.EqualTo(expectedUriResult));
             Assert.That(responseResult, Is.TypeOf<CreatedNegotiatedContentResult<Todo>>());
         }
 
@@ -95,7 +98,7 @@ namespace TodoApp.Api.Tests.Controllers
         public void DeleteTodo_ReturnsNoContent()
         {
             var responseResult = _controller
-                .DeleteTodoAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"))
+                .DeleteTodoAsync(_guid)
                 .Result;
             
 
@@ -106,35 +109,12 @@ namespace TodoApp.Api.Tests.Controllers
         public void PutTodo_ReturnsOK()
         {
             var responseResult =
-                _controller.PutTodoAsync(new Guid("56d9ed92-91ad-4171-9be9-11356384ce37"), _mockTodo)
+                _controller.PutTodoAsync(_guid, _mockTodo)
                 .Result;
 
 
             Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
             Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
-        }
-        
-        private HttpRequestMessage ConfigureRequestMessage()
-        {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/v1/todos");
-
-            var configuration = new HttpConfiguration();
-            var route = configuration.Routes.MapHttpRoute(
-                name: "DefautApi",
-                routeTemplate: "api/v1/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-            var routeData = new HttpRouteData(route,
-                new HttpRouteValueDictionary
-                {
-                    { "controller", "todos" }
-                }
-            );
-
-            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, configuration);
-            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpRouteDataKey, routeData);
-
-            return httpRequestMessage;
         }
     }
 }
