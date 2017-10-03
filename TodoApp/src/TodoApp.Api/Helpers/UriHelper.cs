@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Web.Http.Routing;
 using TodoApp.Api.Controllers;
 using TodoApp.Contracts.Helpers;
 
+[assembly: InternalsVisibleTo("TodoApp.Api.Tests")]
 namespace TodoApp.Api.Helpers
 {
     internal class UriHelper : IUriHelper
