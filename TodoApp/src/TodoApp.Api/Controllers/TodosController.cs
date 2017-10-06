@@ -13,11 +13,11 @@ namespace TodoApp.Api.Controllers
     [Route("api/v{version:apiVersion}/todos/{id:guid?}", Name = DEFAULT_ROUTE)]
     public class TodosController : ApiController
     {
-        private readonly ITodoRepository _repository;
-        private readonly IUriHelper _uriHelper;
-
         public const string DEFAULT_ROUTE = "Default";
         public const string POST_TODO_ROUTE = "PostTodo";
+
+        private readonly ITodoRepository _repository;
+        private readonly IUriHelper _uriHelper;
 
         public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
         {
