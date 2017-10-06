@@ -44,17 +44,22 @@ namespace TodoApp.Api.Controllers
 
             var location = _uriHelper.BuildRouteUri(newTodo.Id);
 
-            return Created(location, newTodo);          
+            return Created(location, newTodo);
         }
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
+            if (await _repository.RemoveAsync(id))
+                return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+
             return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
         }
 
         public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] Todo updated)
         {
-            return await Task.FromResult(Ok(updated));
+            var newTodo = await _repository.UpdateAsync(updated);
+
+            return await Task.FromResult(Ok(newTodo));
         }
     }
 }
