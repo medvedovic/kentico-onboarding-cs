@@ -10,8 +10,7 @@ using TodoApp.Contracts.Repositories;
 namespace TodoApp.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [RoutePrefix("api/v{version:apiVersion}/todos")]
-    [Route("{id:guid?}", Name = DEFAULT_ROUTE)]
+    [Route("api/v{version:apiVersion}/todos/{id:guid?}", Name = DEFAULT_ROUTE)]
     public class TodosController : ApiController
     {
         private readonly ITodoRepository _repository;
