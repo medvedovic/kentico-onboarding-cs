@@ -1,15 +1,13 @@
 ﻿using System;
-using NSubstitute;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http.Results;
+using NSubstitute;
+using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
-using Assert = NUnit.Framework.Assert;
-using CollectionAssert = NUnit.Framework.CollectionAssert;
 
 namespace TodoApp.Api.Tests.Controllers
 {
@@ -34,7 +32,7 @@ namespace TodoApp.Api.Tests.Controllers
 
             _controller = new TodosController(_mockRepo, _uriHelper);
 
-            _mockTodo = new Todo()
+            _mockTodo = new Todo
             {
                 Id = _guid,
                 Value = "Make more coffee"
@@ -42,8 +40,8 @@ namespace TodoApp.Api.Tests.Controllers
 
             _mockTodos = new List<Todo>
             {
-                new Todo() {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
-                new Todo() {Id = _guid, Value = "Make more coffee"}
+                new Todo {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
+                new Todo {Id = _guid, Value = "Make more coffee"}
             };
         }
 

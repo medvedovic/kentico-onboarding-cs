@@ -9,7 +9,7 @@ namespace TodoApp.Api
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            var constraintResolver = new DefaultInlineConstraintResolver()
+            var constraintResolver = new DefaultInlineConstraintResolver
             {
                 ConstraintMap =
                 {
