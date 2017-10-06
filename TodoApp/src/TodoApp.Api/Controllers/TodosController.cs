@@ -13,8 +13,7 @@ namespace TodoApp.Api.Controllers
     [Route("api/v{version:apiVersion}/todos/{id:guid?}", Name = DEFAULT_ROUTE)]
     public class TodosController : ApiController
     {
-        public const string DEFAULT_ROUTE = "Default";
-        public const string POST_TODO_ROUTE = "PostTodo";
+        public const string DEFAULT_ROUTE = "TodosDefault";
 
         private readonly ITodoRepository _repository;
         private readonly IUriHelper _uriHelper;
@@ -32,7 +31,6 @@ namespace TodoApp.Api.Controllers
             return Ok(todos);
         }
 
-        [Route(Name = POST_TODO_ROUTE)]
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
             var todo = await _repository.RetrieveAsync(id);
