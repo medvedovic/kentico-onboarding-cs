@@ -27,7 +27,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo = Substitute.For<ITodoRepository>();
 
             _uriHelper = Substitute.For<IUriHelper>();
-            _uriHelper.BuildUriForPostTodo(Arg.Any<Guid>())
+            _uriHelper.BuildRouteUri(Arg.Any<Guid>())
                 .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
             _controller = new TodosController(_mockRepo, _uriHelper);

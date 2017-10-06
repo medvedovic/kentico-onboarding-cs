@@ -15,7 +15,7 @@ namespace TodoApp.Api.Helpers
             _urlHelper = new UrlHelper(httpRequestMessage);
         }
 
-        public Uri BuildUriForPostTodo(Guid id) =>
+        public Uri BuildRouteUri(Guid id) =>
             new Uri(_urlHelper.Route(TodosController.DEFAULT_ROUTE, new {id}), UriKind.Relative);
     }
 }

@@ -42,7 +42,7 @@ namespace TodoApp.Api.Controllers
         {
             var newTodo = await _repository.CreateAsync(todo);
 
-            var location = _uriHelper.BuildUriForPostTodo(newTodo.Id);
+            var location = _uriHelper.BuildRouteUri(newTodo.Id);
 
             return Created(location, newTodo);          
         }

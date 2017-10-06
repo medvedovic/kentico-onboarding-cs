@@ -4,6 +4,6 @@ namespace TodoApp.Contracts.Helpers
 {
     public interface IUriHelper
     {
-        Uri BuildUriForPostTodo(Guid id);
+        Uri BuildRouteUri(Guid id);
     }
 }

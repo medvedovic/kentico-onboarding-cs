@@ -28,7 +28,7 @@ namespace TodoApp.Api.Tests.Helpers
             var guid = new Guid("93c4a131-5d1d-4856-818b-b5d234731f1b");
             var expectedResult = $"/{routeTemplate}/{guid}";
 
-            var uri = _uriHelper.BuildUriForPostTodo(guid);
+            var uri = _uriHelper.BuildRouteUri(guid);
 
 
             Assert.That(uri.ToString(), Is.EqualTo(expectedResult));
