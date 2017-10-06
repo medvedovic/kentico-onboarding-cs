@@ -50,9 +50,7 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo.RetrieveAllAsync().Returns(_mockTodos);
 
-
             var response = _controller.GetAllTodosAsync().Result;
-
 
             CollectionAssert.AreEqual(((OkNegotiatedContentResult<IEnumerable<Todo>>)response).Content, _mockTodos);
             Assert.That(response, Is.TypeOf<OkNegotiatedContentResult<IEnumerable<Todo>>>());
@@ -63,9 +61,7 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
 
-
             var responseResult = _controller.GetTodoAsync(_guid).Result;
-
 
             Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
         }
@@ -80,9 +76,7 @@ namespace TodoApp.Api.Tests.Controllers
             _mockRepo.CreateAsync(todo).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
-
             var responseResult = _controller.PostTodoAsync(todo).Result;
-
 
             Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location, Is.EqualTo(expectedUriResult));
             Assert.That(responseResult, Is.TypeOf<CreatedNegotiatedContentResult<Todo>>());
@@ -95,7 +89,6 @@ namespace TodoApp.Api.Tests.Controllers
                 .DeleteTodoAsync(_guid)
                 .Result;
             
-
             Assert.That(((StatusCodeResult) responseResult).StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
@@ -105,7 +98,6 @@ namespace TodoApp.Api.Tests.Controllers
             var responseResult =
                 _controller.PutTodoAsync(_guid, _mockTodo)
                 .Result;
-
 
             Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
             Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
