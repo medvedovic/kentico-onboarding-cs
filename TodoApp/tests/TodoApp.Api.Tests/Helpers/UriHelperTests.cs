@@ -40,7 +40,7 @@ namespace TodoApp.Api.Tests.Helpers
 
             var configuration = new HttpConfiguration();
             var route = configuration.Routes.MapHttpRoute(
-                name: TodosController.POST_TODO_ROUTE,
+                name: TodosController.DEFAULT_ROUTE,
                 routeTemplate: $"{routeTemplate}/{{id}}",
                 defaults: new { id = RouteParameter.Optional }
             );
