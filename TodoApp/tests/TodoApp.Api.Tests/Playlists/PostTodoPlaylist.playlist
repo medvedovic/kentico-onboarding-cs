@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.PostTodo_ValidatesModelCorrectly" /><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.PostTodo_ReturnsBadRequest_WithInvalidModel" /><Add Test="TodoApp.Api.Tests.Controllers.TodosControllerTests.PostTodo_ReturnsNewTodo_WithValidModel" /></Playlist>

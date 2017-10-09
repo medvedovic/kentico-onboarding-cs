@@ -1,0 +1,65 @@
+﻿using Microsoft.Web.Http;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
+using TodoApp.Contracts.Helpers;
+using TodoApp.Contracts.Models;
+using TodoApp.Contracts.Repositories;
+
+namespace TodoApp.Api.Controllers
+{
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/todos/{id:guid?}", Name = DEFAULT_ROUTE)]
+    public class TodosController : ApiController
+    {
+        public const string DEFAULT_ROUTE = "TodosDefault";
+
+        private readonly ITodoRepository _repository;
+        private readonly IUriHelper _uriHelper;
+
+        public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
+        {
+            _repository = todoRepository;
+            _uriHelper = uriHelper;
+        }
+
+        public async Task<IHttpActionResult> GetAllTodosAsync()
+        {
+            var todos = await _repository.RetrieveAllAsync();
+
+            return Ok(todos);
+        }
+
+        public async Task<IHttpActionResult> GetTodoAsync(Guid id)
+        {
+            var todo = await _repository.RetrieveAsync(id);
+
+            return Ok(todo);
+        }
+
+        public async Task<IHttpActionResult> PostTodoAsync(Todo todo)
+        {
+            var newTodo = await _repository.CreateAsync(todo);
+
+            var location = _uriHelper.BuildRouteUri(newTodo.Id);
+
+            return Created(location, newTodo);
+        }
+
+        public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
+        {
+            if (await _repository.RemoveAsync(id))
+                return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+
+            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+        }
+
+        public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] Todo updated)
+        {
+            var newTodo = await _repository.UpdateAsync(updated);
+
+            return await Task.FromResult(Ok(newTodo));
+        }
+    }
+}
