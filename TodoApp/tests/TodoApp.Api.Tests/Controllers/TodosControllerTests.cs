@@ -95,6 +95,8 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PutTodo_ReturnsOK()
         {
+            _mockRepo.UpdateAsync(_mockTodo).Returns(_mockTodo);
+
             var responseResult =
                 _controller.PutTodoAsync(_guid, _mockTodo)
                 .Result;
