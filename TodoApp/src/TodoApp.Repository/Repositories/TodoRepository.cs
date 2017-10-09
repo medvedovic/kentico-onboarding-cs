@@ -31,7 +31,7 @@ namespace TodoApp.Repository.Repositories
         public Task<bool> RemoveAsync(Guid id)
             => Task.FromResult(true);
 
-        public Task<bool> UpdateAsync(Todo todo)
-            => Task.FromResult(true);
+        public Task<Todo> UpdateAsync(Todo todo)
+            => Task.FromResult(todo);
     }
 }

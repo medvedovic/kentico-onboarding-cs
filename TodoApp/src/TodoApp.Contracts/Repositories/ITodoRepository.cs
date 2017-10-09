@@ -11,6 +11,6 @@ namespace TodoApp.Contracts.Repositories
         Task<IEnumerable<Todo>> RetrieveAllAsync();
         Task<Todo> CreateAsync(Todo todo);
         Task<bool> RemoveAsync(Guid id);
-        Task<bool> UpdateAsync(Todo todo);
+        Task<Todo> UpdateAsync(Todo todo);
     }
 }
