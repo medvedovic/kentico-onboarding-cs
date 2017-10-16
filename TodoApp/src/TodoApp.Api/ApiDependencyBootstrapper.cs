@@ -9,7 +9,7 @@ namespace TodoApp.Api
 {
     public class ApiDependencyBootstrapper: IUnityBootstrapper
     {
-        public IUnityContainer RegisterType(IUnityContainer container) => 
+        public IUnityContainer RegisterType(IUnityContainer container, DependencyBootstrapperConfig configuration = null) => 
             container
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
                 .RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());

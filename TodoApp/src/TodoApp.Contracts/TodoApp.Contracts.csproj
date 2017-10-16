@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\IUriHelper.cs" />
+    <Compile Include="DependencyBootstrapperConfig.cs" />
     <Compile Include="IUnityBootstrapper.cs" />
     <Compile Include="Models\Todo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
