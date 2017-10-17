@@ -47,16 +47,16 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> PostTodoAsync(TodoDto todo)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var newTodo = await _postTodoService.CreateTodoAsync(todo);
-
-                var location = _uriHelper.BuildRouteUri(newTodo.Id);
-
-                return Created(location, newTodo);
+                return BadRequest(ModelState);
             }
 
-            return BadRequest(ModelState);
+            var newTodo = await _postTodoService.CreateTodoAsync(todo);
+
+            var location = _uriHelper.BuildRouteUri(newTodo.Id);
+
+            return Created(location, newTodo);
         }
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
