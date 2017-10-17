@@ -11,13 +11,8 @@ namespace TodoApp.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var configuration = new DependencyBootstrapperConfig
-            {
-                ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString
-            };
-
             var container = new UnityContainer()
-                .Register<RepositoryDependencyBootstrapper>(configuration)
+                .Register<RepositoryDependencyBootstrapper>()
                 .Register<ApiDependencyBootstrapper>()
                 .Register<ServicesDependencyBootstrapper>();
 
