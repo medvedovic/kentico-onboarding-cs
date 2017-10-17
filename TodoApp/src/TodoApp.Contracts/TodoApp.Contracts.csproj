@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\TodoDtoExtensions.cs" />
     <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\IUriHelper.cs" />
     <Compile Include="DependencyBootstrapperConfig.cs" />
