@@ -5,9 +5,11 @@ using System.Web.Http.Results;
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
+using TodoApp.Contracts.Dtos;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
+using TodoApp.Contracts.Services.Todos;
 
 namespace TodoApp.Api.Tests.Controllers
 {
@@ -17,6 +19,7 @@ namespace TodoApp.Api.Tests.Controllers
         private TodosController _controller;
         private ITodoRepository _mockRepo;
         private IUriHelper _uriHelper;
+        private IPostTodoService _mockPostService;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
         private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
@@ -30,7 +33,9 @@ namespace TodoApp.Api.Tests.Controllers
             _uriHelper.BuildRouteUri(Arg.Any<Guid>())
                 .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
-            _controller = new TodosController(_mockRepo, _uriHelper);
+            _mockPostService = Substitute.For<IPostTodoService>();
+
+            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper);
 
             _mockTodo = new Todo
             {
@@ -69,11 +74,12 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PostTodo_ReturnsOk()
         {
-            var todo = new Todo
+            var todo = new TodoDto
             {
                 Value = "Make more coffee"
             };
-            _mockRepo.CreateAsync(todo).Returns(_mockTodo);
+            _mockPostService.CreateTodoAsync(todo).Returns(_mockTodo);
+            _mockRepo.CreateAsync(_mockTodo).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
             var responseResult = _controller.PostTodoAsync(todo).Result;
