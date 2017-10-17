@@ -22,7 +22,7 @@ namespace TodoApp.Repository.Repositories
             => await _todosCollection.AsQueryable().ToListAsync();
 
         public Task<Todo> RetrieveAsync(Guid id)
-            => _todosCollection.Find(doc => doc.Id == id).SingleAsync();
+            => _todosCollection.Find(doc => doc.Id == id).SingleOrDefaultAsync();
 
         public async Task<Todo> CreateAsync(Todo todo)
         {
