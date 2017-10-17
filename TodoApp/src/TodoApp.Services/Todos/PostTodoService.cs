@@ -18,8 +18,6 @@ namespace TodoApp.Services.Todos
 
         public async Task<Todo> CreateTodoAsync(TodoDto todoDto)
         {
-            // validate model
-
             var newTodo = new Todo
             {
                 Id = Guid.NewGuid(),
