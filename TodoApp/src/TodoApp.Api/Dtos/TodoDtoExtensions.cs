@@ -1,6 +1,6 @@
 ﻿using TodoApp.Contracts.Models;
 
-namespace TodoApp.Contracts.Dtos
+namespace TodoApp.Api.Dtos
 {
     public static class TodoDtoExtensions
     {

@@ -5,7 +5,7 @@ using System.Web.Http.Results;
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
-using TodoApp.Contracts.Dtos;
+using TodoApp.Api.Dtos;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
