@@ -164,6 +164,10 @@
       <Project>{91fea4cb-008c-4f10-ae8e-77b1c29e8635}</Project>
       <Name>TodoApp.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TodoApp.Services\TodoApp.Services.csproj">
+      <Project>{2251A9FC-891E-4DF5-A426-367145297B09}</Project>
+      <Name>TodoApp.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
