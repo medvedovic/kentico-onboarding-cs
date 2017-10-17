@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\TodosControllerTests.cs" />
+    <Compile Include="Helpers\ServiceHelperTests.cs" />
     <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Todos\PostTodoServiceTests.cs" />
