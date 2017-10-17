@@ -78,7 +78,7 @@ namespace TodoApp.Api.Tests.Controllers
             {
                 Value = "Make more coffee"
             };
-            _mockPostService.CreateTodoAsync(todo.ToTodo()).Returns(_mockTodo);
+            _mockPostService.CreateTodoAsync(todo.ConvertToTodoModel()).Returns(_mockTodo);
             _mockRepo.CreateAsync(_mockTodo).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
