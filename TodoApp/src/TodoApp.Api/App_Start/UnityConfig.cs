@@ -19,8 +19,8 @@ namespace TodoApp.Api
             config.DependencyResolver = new UnityResolver(container);
         }
 
-        public static IUnityContainer Register<TAssemblyBootstrapper>(this IUnityContainer container, DependencyBootstrapperConfig configuration = null) 
+        public static IUnityContainer Register<TAssemblyBootstrapper>(this IUnityContainer container) 
             where TAssemblyBootstrapper : IUnityBootstrapper, new() => 
-                new TAssemblyBootstrapper().RegisterType(container, configuration);
+                new TAssemblyBootstrapper().RegisterType(container);
     }
 }

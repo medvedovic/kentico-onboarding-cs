@@ -9,7 +9,7 @@ namespace TodoApp.Api
 {
     public class ApiDependencyBootstrapper: IUnityBootstrapper
     {
-        public IUnityContainer RegisterType(IUnityContainer container, DependencyBootstrapperConfig configuration = null) => 
+        public IUnityContainer RegisterType(IUnityContainer container) => 
             container
                 .RegisterType<DependencyBootstrapperConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(GenerateDependencyBootstrapperConfig))
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
@@ -18,7 +18,8 @@ namespace TodoApp.Api
         private static DependencyBootstrapperConfig GenerateDependencyBootstrapperConfig(IUnityContainer arg) => 
             new DependencyBootstrapperConfig
             {
-                ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString
+                ConnectionString = System.Configuration.ConfigurationManager
+                    .ConnectionStrings["DefaultConnection"].ConnectionString
             };
 
         private static HttpRequestMessage GetHttpRequestMessage(IUnityContainer container) =>

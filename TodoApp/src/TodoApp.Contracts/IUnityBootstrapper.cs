@@ -4,6 +4,6 @@ namespace TodoApp.Contracts
 {
     public interface IUnityBootstrapper
     {
-        IUnityContainer RegisterType(IUnityContainer container, DependencyBootstrapperConfig configuration = null);
+        IUnityContainer RegisterType(IUnityContainer container);
     }
 }

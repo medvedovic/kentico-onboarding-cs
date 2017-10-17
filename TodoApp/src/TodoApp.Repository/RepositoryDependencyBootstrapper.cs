@@ -7,7 +7,7 @@ namespace TodoApp.Repository
 {
     public class RepositoryDependencyBootstrapper: IUnityBootstrapper
     {
-        public IUnityContainer RegisterType(IUnityContainer container, DependencyBootstrapperConfig configuration) => 
+        public IUnityContainer RegisterType(IUnityContainer container) => 
             container
                 .RegisterType<ITodoRepository, TodoRepository>(new ContainerControlledLifetimeManager());
     }
