@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using TodoApp.Contracts.Dtos;
 using TodoApp.Contracts.Models;
 
 namespace TodoApp.Contracts.Services.Todos
 {
     public interface IPostTodoService
     {
-        Task<Todo> CreateTodoAsync(TodoDto todoDto);
+        Task<Todo> CreateTodoAsync(Todo todo);
     }
 }

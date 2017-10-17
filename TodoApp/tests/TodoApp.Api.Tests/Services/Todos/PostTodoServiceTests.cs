@@ -43,7 +43,7 @@ namespace TodoApp.Api.Tests.Services.Todos
                 Value = "Do stuff"
             };
 
-            var result = _service.CreateTodoAsync(dto).Result;
+            var result = _service.CreateTodoAsync(dto.ToTodo()).Result;
 
             Assert.That(result, Is.EqualTo(expectedResult).Using(new TodosEqualityComparer()));
         }

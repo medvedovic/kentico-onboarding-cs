@@ -52,7 +52,7 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var newTodo = await _postTodoService.CreateTodoAsync(todo);
+            var newTodo = await _postTodoService.CreateTodoAsync(todo.ToTodo());
 
             var location = _uriHelper.BuildRouteUri(newTodo.Id);
 
