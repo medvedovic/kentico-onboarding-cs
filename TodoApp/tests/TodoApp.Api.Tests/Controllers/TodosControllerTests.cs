@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Web.Http.Results;
 using NSubstitute;
 using NUnit.Framework;
@@ -72,7 +74,7 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void PostTodo_ReturnsOk()
+        public void PostTodo_ReturnsOk_OnValidModelState()
         {
             var todo = new TodoDto
             {
@@ -85,6 +87,17 @@ namespace TodoApp.Api.Tests.Controllers
 
             Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location, Is.EqualTo(expectedUriResult));
             Assert.That(responseResult, Is.TypeOf<CreatedNegotiatedContentResult<Todo>>());
+        }
+
+        [Test]
+        public void PostTodo_ReturnsBadRequest_OnInvalidModelState()
+        {
+            var todo = new TodoDto();
+            _controller.ModelState.AddModelError("test", "test");
+
+            var responseResult = _controller.PostTodoAsync(todo).Result;
+
+            Assert.That(responseResult, Is.TypeOf<InvalidModelStateResult>());
         }
 
         [Test]
