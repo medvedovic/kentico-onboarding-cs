@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
+using TodoApp.Api.Tests.Helpers;
 using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
@@ -46,21 +46,6 @@ namespace TodoApp.Api.Tests.Services.Todos
             var result = _service.CreateTodoAsync(dto).Result;
 
             Assert.That(result, Is.EqualTo(expectedResult).Using(new TodosEqualityComparer()));
-        }
-
-        private class TodosEqualityComparer : IEqualityComparer<Todo>
-        {
-            public bool Equals(Todo x, Todo y)
-            {
-                return x.Id == y.Id
-                       && x.Value == y.Value
-                       && x.CreatedAt == y.CreatedAt;
-            }
-
-            public int GetHashCode(Todo obj)
-            {
-                return obj.Id.GetHashCode() ^ obj.CreatedAt.GetHashCode();
-            }
         }
     }
 }
