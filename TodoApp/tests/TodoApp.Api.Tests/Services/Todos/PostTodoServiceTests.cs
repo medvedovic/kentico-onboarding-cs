@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
-using TodoApp.Api.Dtos;
+using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -38,7 +38,7 @@ namespace TodoApp.Api.Tests.Services.Todos
             _repository.CreateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
             _helper.GenerateGuid().Returns(Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7"));
             _helper.GetCurrentDateTime().Returns(new DateTime(2017, 10, 17, 12, 00, 00));
-            var dto = new TodoDto
+            var dto = new TodoViewModel
             {
                 Value = "Do stuff"
             };

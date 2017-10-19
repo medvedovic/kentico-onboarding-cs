@@ -137,8 +137,8 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\TodosController.cs" />
-    <Compile Include="Dtos\TodoDto.cs" />
-    <Compile Include="Dtos\TodoDtoExtensions.cs" />
+    <Compile Include="ViewModels\TodoViewModel.cs" />
+    <Compile Include="ViewModels\TodoViewModelExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

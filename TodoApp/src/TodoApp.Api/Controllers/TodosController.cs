@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using TodoApp.Api.Dtos;
+using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -45,7 +45,7 @@ namespace TodoApp.Api.Controllers
             return Ok(todo);
         }
 
-        public async Task<IHttpActionResult> PostTodoAsync(TodoDto todo)
+        public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
         {
             if (!ModelState.IsValid)
             {

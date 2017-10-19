@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TodoApp.Api.Dtos
+namespace TodoApp.Api.ViewModels
 {
-    public class TodoDto
+    public class TodoViewModel
     {
         [Required]
         [StringLength(255)]

@@ -7,7 +7,7 @@ using System.Web.Http.Results;
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
-using TodoApp.Api.Dtos;
+using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -76,7 +76,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PostTodo_ReturnsOk_OnValidModelState()
         {
-            var todo = new TodoDto
+            var todo = new TodoViewModel
             {
                 Value = "Make more coffee"
             };
@@ -92,7 +92,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PostTodo_ReturnsBadRequest_OnInvalidModelState()
         {
-            var todo = new TodoDto();
+            var todo = new TodoViewModel();
             _controller.ModelState.AddModelError("test", "test");
 
             var responseResult = _controller.PostTodoAsync(todo).Result;
