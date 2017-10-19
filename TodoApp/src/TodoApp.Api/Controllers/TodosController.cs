@@ -47,6 +47,11 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
         {
+            if (todo == null)
+            {
+                return BadRequest();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
