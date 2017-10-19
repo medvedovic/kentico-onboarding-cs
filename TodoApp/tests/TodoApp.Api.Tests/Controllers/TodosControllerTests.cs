@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Web.Http.Results;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Http;
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
+using TodoApp.Api.Tests.Helpers;
 using TodoApp.Api.ViewModels;
 using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
@@ -36,7 +39,11 @@ namespace TodoApp.Api.Tests.Controllers
 
             _mockPostService = Substitute.For<IPostTodoService>();
 
-            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper);
+            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper)
+            {
+                Configuration = new HttpConfiguration(),
+                Request = new HttpRequestMessage()
+            };
 
             _mockTodo = new Todo
             {
@@ -56,20 +63,36 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo.RetrieveAllAsync().Returns(_mockTodos);
 
-            var response = _controller.GetAllTodosAsync().Result;
+            var response = _controller.GetAllTodosAsync().Result
+                .ExecuteAsync(CancellationToken.None).Result;
+            response.TryGetContentValue(out List<Todo> actualTodos);
 
-            CollectionAssert.AreEqual(((OkNegotiatedContentResult<IEnumerable<Todo>>)response).Content, _mockTodos);
-            Assert.That(response, Is.TypeOf<OkNegotiatedContentResult<IEnumerable<Todo>>>());
+            CollectionAssert.AreEqual(actualTodos, _mockTodos);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]
-        public void GetTodo_ReturnsOk()
+        public void GetTodo_ReturnsOk_OnValidId()
         {
             _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
 
-            var responseResult = _controller.GetTodoAsync(_guid).Result;
+            var responseResult = _controller.GetTodoAsync(_guid).Result
+                .ExecuteAsync(CancellationToken.None).Result;
+            responseResult.TryGetContentValue(out Todo actualtodo);
 
-            Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
+            Assert.That(actualtodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer()));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
+
+        [Test]
+        public void GetTodo_ReturnsNotFound_OnInvalidId()
+        {
+            _mockRepo.RetrieveAsync(Guid.Empty).Returns(_mockTodo);
+
+            var responseResult = _controller.GetTodoAsync(_guid).Result
+                .ExecuteAsync(CancellationToken.None).Result;
+            
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
@@ -82,10 +105,13 @@ namespace TodoApp.Api.Tests.Controllers
             _mockPostService.CreateTodoAsync(Arg.Any<IConvertibleTo<Todo>>()).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
-            var responseResult = _controller.PostTodoAsync(todo).Result;
+            var responseResult = _controller.PostTodoAsync(todo).Result
+                .ExecuteAsync(CancellationToken.None).Result;
+            responseResult.TryGetContentValue(out Todo actualTodo);
 
-            Assert.That(((CreatedNegotiatedContentResult<Todo>)responseResult).Location, Is.EqualTo(expectedUriResult));
-            Assert.That(responseResult, Is.TypeOf<CreatedNegotiatedContentResult<Todo>>());
+            Assert.That(actualTodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer()));
+            Assert.That(responseResult.Headers.Location, Is.EqualTo(expectedUriResult));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
 
         [Test]
@@ -94,19 +120,30 @@ namespace TodoApp.Api.Tests.Controllers
             var todo = new TodoViewModel();
             _controller.ModelState.AddModelError("test", "test");
 
-            var responseResult = _controller.PostTodoAsync(todo).Result;
+            var responseResult = _controller.PostTodoAsync(todo).Result
+                .ExecuteAsync(CancellationToken.None).Result;
 
-            Assert.That(responseResult, Is.TypeOf<InvalidModelStateResult>());
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public void PostTodo_ReturnsBadRequest_OnNull()
+        {
+            var responseResult = _controller.PostTodoAsync(null).Result
+                .ExecuteAsync(CancellationToken.None).Result;
+
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         [Test]
         public void DeleteTodo_ReturnsNoContent()
         {
-            var responseResult = _controller
-                .DeleteTodoAsync(_guid)
+            var responseResult = _controller.DeleteTodoAsync(_guid)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
                 .Result;
             
-            Assert.That(((StatusCodeResult) responseResult).StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
         [Test]
@@ -114,12 +151,15 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo.UpdateAsync(_mockTodo).Returns(_mockTodo);
 
-            var responseResult =
-                _controller.PutTodoAsync(_guid, _mockTodo)
+            var responseResult = _controller.PutTodoAsync(_guid, _mockTodo)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
                 .Result;
 
-            Assert.That(responseResult, Is.TypeOf<OkNegotiatedContentResult<Todo>>());
-            Assert.That(((OkNegotiatedContentResult<Todo>)responseResult).Content, Is.EqualTo(_mockTodo));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
+
+        private static TodosEqualityComparer TodosEqualityComparer() =>
+            new TodosEqualityComparer();
     }
 }
