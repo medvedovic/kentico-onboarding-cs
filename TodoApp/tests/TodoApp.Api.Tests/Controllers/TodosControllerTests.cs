@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
 using System.Web.Http.Results;
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.ViewModels;
+using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -80,7 +79,7 @@ namespace TodoApp.Api.Tests.Controllers
             {
                 Value = "Make more coffee"
             };
-            _mockPostService.CreateTodoAsync(Arg.Any<Todo>()).Returns(_mockTodo);
+            _mockPostService.CreateTodoAsync(Arg.Any<IConvertibleTo<Todo>>()).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
             var responseResult = _controller.PostTodoAsync(todo).Result;

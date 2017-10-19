@@ -5,6 +5,6 @@ namespace TodoApp.Contracts.Services.Todos
 {
     public interface IPostTodoService
     {
-        Task<Todo> CreateTodoAsync(Todo todo);
+        Task<Todo> CreateTodoAsync(IConvertibleTo<Todo> todoViewModel);
     }
 }

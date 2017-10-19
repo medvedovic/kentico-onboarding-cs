@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -17,12 +18,13 @@ namespace TodoApp.Services.Todos
             _helper = helper;
         }
 
-        public async Task<Todo> CreateTodoAsync(Todo todo)
+        public async Task<Todo> CreateTodoAsync(IConvertibleTo<Todo> todoViewModel)
         {
-            todo.Id = _helper.GenerateGuid();
-            todo.CreatedAt = _helper.GetCurrentDateTime();
+            var newTodo = todoViewModel.Convert();
+            newTodo.Id = _helper.GenerateGuid();
+            newTodo.CreatedAt = _helper.GetCurrentDateTime();
 
-            return await _repository.CreateAsync(todo);
+            return await _repository.CreateAsync(newTodo);
         }
     }
 }
