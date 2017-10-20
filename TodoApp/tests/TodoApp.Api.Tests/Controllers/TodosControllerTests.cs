@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Web.Http;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Tests.Helpers;
@@ -24,6 +25,8 @@ namespace TodoApp.Api.Tests.Controllers
         private ITodoRepository _mockRepo;
         private IUriHelper _uriHelper;
         private IPostTodoService _mockPostService;
+        private IPutTodoService _mockPutService;
+        private IServiceHelper _mockServiceHelper;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
         private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
@@ -38,8 +41,10 @@ namespace TodoApp.Api.Tests.Controllers
                 .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
             _mockPostService = Substitute.For<IPostTodoService>();
+            _mockPutService = Substitute.For<IPutTodoService>();
+            _mockServiceHelper = Substitute.For<IServiceHelper>();
 
-            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper)
+            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper, _mockPutService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -147,16 +152,67 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void PutTodo_ReturnsOK()
+        public void PutTodo_ReturnsOK_OnValidId_OnValidModel()
         {
-            _mockRepo.UpdateAsync(_mockTodo).Returns(_mockTodo);
+            var todo = new TodoViewModel { Value = "Make more coffee" };
+            var expectedTodo = new Todo
+            {
+                Id = _guid,
+                Value = "Make more coffee",
+                CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
+                UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
+            };
+            _mockPutService.UpdateTodoAsync(_guid, todo).Returns(expectedTodo);
 
-            var responseResult = _controller.PutTodoAsync(_guid, _mockTodo)
+            var responseResult = _controller.PutTodoAsync(_guid, todo)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
+                .Result;
+            responseResult.TryGetContentValue(out Todo actualResult);
+
+            Assert.That(actualResult, Is.EqualTo(expectedTodo).Using(TodosEqualityComparer()));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
+
+        [Test]
+        public void PutTodo_ReturnsBadRequest_OnValidId_OnInvalidModel()
+        {
+            _controller.ModelState.AddModelError(string.Empty, string.Empty);
+
+            var responseResult = _controller.PutTodoAsync(_guid, new TodoViewModel())
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
 
-            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public void PutTodo_ReturnsBadRequest_OnValidId_OnNull()
+        {
+            var responseResult = _controller.PutTodoAsync(_guid, null)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
+                .Result;
+
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public void PutTodo_ReturnsNotFound_OnInvalidId()
+        {
+            var todo = new TodoViewModel
+            {
+                Value = "Make more coffee"
+            };
+            _mockPutService.UpdateTodoAsync(Guid.Empty, todo).Throws(new ArgumentNullException());
+            
+            var responseResult = _controller.PutTodoAsync(Guid.Empty, todo)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
+                .Result;
+
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         private static TodosEqualityComparer TodosEqualityComparer() =>
