@@ -19,13 +19,15 @@ namespace TodoApp.Api.Controllers
 
         private readonly ITodoRepository _repository;
         private readonly IPostTodoService _postTodoService;
+        private readonly IPutTodoService _putTodoService;
         private readonly IUriHelper _uriHelper;
 
-        public TodosController(ITodoRepository todoRepository, IPostTodoService postTodoService, IUriHelper uriHelper)
+        public TodosController(ITodoRepository todoRepository, IPostTodoService postTodoService, IUriHelper uriHelper, IPutTodoService putTodoService)
         {
             _postTodoService = postTodoService;
             _repository = todoRepository;
             _uriHelper = uriHelper;
+            _putTodoService = putTodoService;
         }
 
         public async Task<IHttpActionResult> GetAllTodosAsync()
@@ -49,7 +51,7 @@ namespace TodoApp.Api.Controllers
         {
             if (todo == null)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "Model cannot be null");
             }
 
             if (!ModelState.IsValid)
@@ -72,11 +74,26 @@ namespace TodoApp.Api.Controllers
             return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
         }
 
-        public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] Todo updated)
+        public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] TodoViewModel updated)
         {
-            var newTodo = await _repository.UpdateAsync(updated);
+            if (updated == null)
+            {
+                ModelState.AddModelError(string.Empty, "Model cannot be null");
+            }
 
-            return await Task.FromResult(Ok(newTodo));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                return Ok(await _putTodoService.UpdateTodoAsync(id, updated));
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound();
+            }
         }
     }
 }
