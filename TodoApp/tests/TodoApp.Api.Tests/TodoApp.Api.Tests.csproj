@@ -73,6 +73,7 @@
     <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Todos\PostTodoServiceTests.cs" />
+    <Compile Include="Services\Todos\PutTodoServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
