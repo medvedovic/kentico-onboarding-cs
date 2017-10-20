@@ -35,7 +35,7 @@ namespace TodoApp.Repository.Repositories
         public Task<bool> RemoveAsync(Guid id)
             => Task.FromResult(true);
 
-        public Task<Todo> UpdateAsync(Todo todo)
-            => Task.FromResult(todo);
+        public async Task<Todo> UpdateAsync(Todo todo)
+            => await _todosCollection.FindOneAndReplaceAsync(doc => doc.Id == todo.Id, todo);      
     }
 }
