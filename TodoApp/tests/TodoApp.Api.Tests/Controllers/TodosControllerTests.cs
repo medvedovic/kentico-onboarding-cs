@@ -162,6 +162,7 @@ namespace TodoApp.Api.Tests.Controllers
                 CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
             };
+            _mockRepo.RetrieveAsync(_guid).Returns(expectedTodo);
             _mockPutService.UpdateTodoAsync(_guid, todo).Returns(expectedTodo);
 
             var responseResult = _controller.PutTodoAsync(_guid, todo)

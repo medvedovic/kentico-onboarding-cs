@@ -28,15 +28,6 @@ namespace TodoApp.Api.Tests.Services.Todos
         }
 
         [Test]
-        public void UpdateTodoAsync_ThrowsException_OnTodoNotFound()
-        {
-            var guid = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
-            _mockTodoRepository.RetrieveAsync(guid).Throws(new ArgumentNullException());
-            
-            Assert.That(() => _putTodoService.UpdateTodoAsync(guid, new TodoViewModel()), Throws.ArgumentNullException);
-        }
-
-        [Test]
         public void UpdateTodoAsync_ReturnsCorrectTodo()
         {
             var guid = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
@@ -55,7 +46,7 @@ namespace TodoApp.Api.Tests.Services.Todos
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 44, 12)
             };
             _mockServiceHelper.GetCurrentDateTime().Returns(new DateTime(2017, 10, 21, 10, 44, 12));
-            _mockTodoRepository.RetrieveAsync(guid).Returns(returnedTodo);
+            _putTodoService.ExistingTodo = returnedTodo;
             _mockTodoRepository.UpdateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
 
             var result = _putTodoService.UpdateTodoAsync(guid, todoViewModel).Result;
