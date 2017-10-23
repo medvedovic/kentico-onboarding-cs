@@ -141,14 +141,27 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void DeleteTodo_ReturnsNoContent()
+        public void DeleteTodo_ReturnsNoContent_OnTodoFound()
         {
+            _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
+
             var responseResult = _controller.DeleteTodoAsync(_guid)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
             
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+        }
+
+        [Test]
+        public void DeleteTodo_ReturnsNotFound_OnTodoNotFound()
+        {
+            var responseResult = _controller.DeleteTodoAsync(_guid)
+                .Result
+                .ExecuteAsync(CancellationToken.None)
+                .Result;
+
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
