@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Helpers;
-using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
 
@@ -68,10 +67,16 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
-            if (await _repository.RemoveAsync(id))
-                return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            var todoInDb = await _repository.RetrieveAsync(id);
 
-            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            if (todoInDb == null)
+            {
+                return NotFound();
+            }
+
+            await _repository.RemoveAsync(id);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] TodoViewModel updated)
