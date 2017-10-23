@@ -137,6 +137,8 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\TodosController.cs" />
+    <Compile Include="Filters\NullModelFilterAttribute.cs" />
+    <Compile Include="Filters\ValidationFilterAttribute.cs" />
     <Compile Include="ViewModels\TodoViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
