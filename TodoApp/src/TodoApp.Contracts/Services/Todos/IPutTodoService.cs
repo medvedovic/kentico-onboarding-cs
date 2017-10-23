@@ -6,6 +6,7 @@ namespace TodoApp.Contracts.Services.Todos
 {
     public interface IPutTodoService
     {
+        Todo ExistingTodo { get; set; }
         Task<Todo> UpdateTodoAsync(Guid id, IConvertibleTo<Todo> todoViewModel);
     }
 }

@@ -91,14 +91,16 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                return Ok(await _putTodoService.UpdateTodoAsync(id, updated));
-            }
-            catch (ArgumentNullException ex)
+            var todoInDb = await _repository.RetrieveAsync(id);
+
+            if (todoInDb == null)
             {
                 return NotFound();
             }
+
+            _putTodoService.ExistingTodo = todoInDb;
+
+            return Ok(await _putTodoService.UpdateTodoAsync(id, updated));
         }
     }
 }

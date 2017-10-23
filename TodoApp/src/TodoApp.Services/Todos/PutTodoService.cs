@@ -13,6 +13,8 @@ namespace TodoApp.Services.Todos
         private readonly IServiceHelper _helper;
         private readonly ITodoRepository _repository;
 
+        public Todo ExistingTodo { get; set; }
+
         public PutTodoService(IServiceHelper helper, ITodoRepository repository)
         {
             _helper = helper;
@@ -21,17 +23,12 @@ namespace TodoApp.Services.Todos
 
         public async Task<Todo> UpdateTodoAsync(Guid id, IConvertibleTo<Todo> todoViewModel)
         {
-            var existingTodo = await _repository.RetrieveAsync(id);
-            
-            if (existingTodo == null)
-                throw new ArgumentNullException();
-
             var todo = todoViewModel.Convert();
 
-            existingTodo.Value = todo.Value;
-            existingTodo.UpdatedAt = _helper.GetCurrentDateTime();
+            ExistingTodo.Value = todo.Value;
+            ExistingTodo.UpdatedAt = _helper.GetCurrentDateTime();
 
-            return await _repository.UpdateAsync(existingTodo);
+            return await _repository.UpdateAsync(ExistingTodo);
         }
     }
 }
