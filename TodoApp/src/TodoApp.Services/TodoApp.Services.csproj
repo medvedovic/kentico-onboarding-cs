@@ -55,6 +55,7 @@
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesDependencyBootstrapper.cs" />
+    <Compile Include="Todos\GetTodoService.cs" />
     <Compile Include="Todos\PostTodoService.cs" />
     <Compile Include="Todos\PutTodoService.cs" />
   </ItemGroup>
