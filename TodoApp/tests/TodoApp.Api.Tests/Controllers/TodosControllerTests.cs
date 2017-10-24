@@ -27,6 +27,7 @@ namespace TodoApp.Api.Tests.Controllers
         private IPostTodoService _mockPostService;
         private IPutTodoService _mockPutService;
         private IServiceHelper _mockServiceHelper;
+        private IGetTodoService _mockGetTodoService;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
         private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
@@ -43,8 +44,9 @@ namespace TodoApp.Api.Tests.Controllers
             _mockPostService = Substitute.For<IPostTodoService>();
             _mockPutService = Substitute.For<IPutTodoService>();
             _mockServiceHelper = Substitute.For<IServiceHelper>();
+            _mockGetTodoService = Substitute.For<IGetTodoService>();
 
-            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper, _mockPutService)
+            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper, _mockPutService, _mockGetTodoService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -79,7 +81,8 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsOk_OnValidId()
         {
-            _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
+            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
+            _mockGetTodoService.RetrieveTodoAsync(_guid).Returns(_mockTodo);
 
             var responseResult = _controller.GetTodoAsync(_guid).Result
                 .ExecuteAsync(CancellationToken.None).Result;
@@ -92,7 +95,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsNotFound_OnInvalidId()
         {
-            _mockRepo.RetrieveAsync(Guid.Empty).Returns(_mockTodo);
+            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(false);
 
             var responseResult = _controller.GetTodoAsync(_guid).Result
                 .ExecuteAsync(CancellationToken.None).Result;
@@ -143,7 +146,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNoContent_OnTodoFound()
         {
-            _mockRepo.RetrieveAsync(_guid).Returns(_mockTodo);
+            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
 
             var responseResult = _controller.DeleteTodoAsync(_guid)
                 .Result
@@ -156,6 +159,8 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNotFound_OnTodoNotFound()
         {
+            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(false);
+
             var responseResult = _controller.DeleteTodoAsync(_guid)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
@@ -175,8 +180,9 @@ namespace TodoApp.Api.Tests.Controllers
                 CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
             };
+            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
             _mockRepo.RetrieveAsync(_guid).Returns(expectedTodo);
-            _mockPutService.UpdateTodoAsync(_guid, todo).Returns(expectedTodo);
+            _mockPutService.UpdateTodoAsync(todo).Returns(expectedTodo);
 
             var responseResult = _controller.PutTodoAsync(_guid, todo)
                 .Result
@@ -215,13 +221,14 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PutTodo_ReturnsNotFound_OnInvalidId()
         {
+            var id = new Guid("d85f4233-4da0-462e-a34d-6a3ad8e9ecfd");
             var todo = new TodoViewModel
             {
                 Value = "Make more coffee"
             };
-            _mockPutService.UpdateTodoAsync(Guid.Empty, todo).Throws(new ArgumentNullException());
+            _mockGetTodoService.IsTodoInDbAsync(id).Returns(false);
             
-            var responseResult = _controller.PutTodoAsync(Guid.Empty, todo)
+            var responseResult = _controller.PutTodoAsync(id, todo)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
