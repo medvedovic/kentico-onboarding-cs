@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
@@ -12,23 +11,23 @@ namespace TodoApp.Services.Todos
     {
         private readonly IServiceHelper _helper;
         private readonly ITodoRepository _repository;
+        private readonly IGetTodoService _getTodoService;
 
-        public Todo ExistingTodo { get; set; }
-
-        public PutTodoService(IServiceHelper helper, ITodoRepository repository)
+        public PutTodoService(IServiceHelper helper, ITodoRepository repository, IGetTodoService getTodoService)
         {
             _helper = helper;
             _repository = repository;
+            _getTodoService = getTodoService;
         }
 
-        public async Task<Todo> UpdateTodoAsync(Guid id, IConvertibleTo<Todo> todoViewModel)
+        public async Task<Todo> UpdateTodoAsync(IConvertibleTo<Todo> todoViewModel)
         {
             var todo = todoViewModel.Convert();
 
-            ExistingTodo.Value = todo.Value;
-            ExistingTodo.UpdatedAt = _helper.GetCurrentDateTime();
+            _getTodoService.CachedTodo.Value = todo.Value;
+            _getTodoService.CachedTodo.UpdatedAt = _helper.GetCurrentDateTime();
 
-            return await _repository.UpdateAsync(ExistingTodo);
+            return await _repository.UpdateAsync(_getTodoService.CachedTodo);
         }
     }
 }

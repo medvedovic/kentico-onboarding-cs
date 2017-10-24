@@ -19,14 +19,16 @@ namespace TodoApp.Api.Controllers
         private readonly ITodoRepository _repository;
         private readonly IPostTodoService _postTodoService;
         private readonly IPutTodoService _putTodoService;
+        private readonly IGetTodoService _getTodoService;
         private readonly IUriHelper _uriHelper;
 
-        public TodosController(ITodoRepository todoRepository, IPostTodoService postTodoService, IUriHelper uriHelper, IPutTodoService putTodoService)
+        public TodosController(ITodoRepository todoRepository, IPostTodoService postTodoService, IUriHelper uriHelper, IPutTodoService putTodoService, IGetTodoService getTodoService)
         {
             _postTodoService = postTodoService;
             _repository = todoRepository;
             _uriHelper = uriHelper;
             _putTodoService = putTodoService;
+            _getTodoService = getTodoService;
         }
 
         public async Task<IHttpActionResult> GetAllTodosAsync()
@@ -67,9 +69,7 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
-            var todoInDb = await _repository.RetrieveAsync(id);
-
-            if (todoInDb == null)
+            if (!await _getTodoService.IsTodoInDbAsync(id))
             {
                 return NotFound();
             }
@@ -91,16 +91,12 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var todoInDb = await _repository.RetrieveAsync(id);
-
-            if (todoInDb == null)
+            if (!await _getTodoService.IsTodoInDbAsync(id))
             {
                 return NotFound();
             }
 
-            _putTodoService.ExistingTodo = todoInDb;
-
-            return Ok(await _putTodoService.UpdateTodoAsync(id, updated));
+            return Ok(await _putTodoService.UpdateTodoAsync(updated));
         }
     }
 }
