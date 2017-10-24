@@ -63,6 +63,7 @@
     <Compile Include="Repositories\ITodoRepository.cs" />
     <Compile Include="Services\Todos\IPostTodoService.cs" />
     <Compile Include="Services\Todos\IPutTodoService.cs" />
+    <Compile Include="Services\Todos\IGetTodoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
