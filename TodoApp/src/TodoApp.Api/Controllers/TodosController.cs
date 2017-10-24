@@ -40,12 +40,12 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
-            var todo = await _repository.RetrieveAsync(id);
-
-            if (todo == null)
+            if (!await _getTodoService.IsTodoInDbAsync(id))
+            {
                 return NotFound();
+            }
 
-            return Ok(todo);
+            return Ok(await _getTodoService.RetrieveTodoAsync(id));
         }
 
         public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
