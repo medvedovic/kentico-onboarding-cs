@@ -25,7 +25,7 @@ namespace TodoApp.Api.Tests.Services.Todos
             _mockTodoRepository = Substitute.For<ITodoRepository>();
             _mockServiceHelper = Substitute.For<IServiceHelper>();
             _mockRetrieveTodoService = Substitute.For<IRetrieveTodoService>();
-            _updateTodoService = new UpdateTodoService(_mockServiceHelper, _mockTodoRepository, _mockRetrieveTodoService);
+            _updateTodoService = new UpdateTodoService(_mockServiceHelper, _mockTodoRepository);
         }
 
         [Test]
@@ -46,12 +46,11 @@ namespace TodoApp.Api.Tests.Services.Todos
                 CreatedAt = new DateTime(2017, 10, 17, 10, 00, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 44, 12)
             };
-            _mockRetrieveTodoService.CachedTodo.Returns(returnedTodo);
             _mockServiceHelper.GetCurrentDateTime().Returns(new DateTime(2017, 10, 21, 10, 44, 12));
 
             _mockTodoRepository.UpdateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
 
-            var result = _updateTodoService.UpdateTodoAsync(todoViewModel).Result;
+            var result = _updateTodoService.UpdateTodoAsync(returnedTodo, todoViewModel).Result;
 
             Assert.That(result, Is.EqualTo(expectedResult).Using(new TodosEqualityComparer()));
         }

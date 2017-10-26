@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Web.Http;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.Tests.Helpers;
@@ -26,7 +25,6 @@ namespace TodoApp.Api.Tests.Controllers
         private IUriHelper _uriHelper;
         private ICreateTodoService _mockCreateService;
         private IUpdateTodoService _mockUpdateService;
-        private IServiceHelper _mockServiceHelper;
         private IRetrieveTodoService _mockRetrieveTodoService;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
@@ -43,7 +41,6 @@ namespace TodoApp.Api.Tests.Controllers
 
             _mockCreateService = Substitute.For<ICreateTodoService>();
             _mockUpdateService = Substitute.For<IUpdateTodoService>();
-            _mockServiceHelper = Substitute.For<IServiceHelper>();
             _mockRetrieveTodoService = Substitute.For<IRetrieveTodoService>();
 
             _controller = new TodosController(_mockRepo, _mockCreateService, _uriHelper, _mockUpdateService, _mockRetrieveTodoService)
@@ -88,7 +85,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .ExecuteAsync(CancellationToken.None).Result;
             responseResult.TryGetContentValue(out Todo actualtodo);
 
-            Assert.That(actualtodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer()));
+            Assert.That(actualtodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer));
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
@@ -117,7 +114,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .ExecuteAsync(CancellationToken.None).Result;
             responseResult.TryGetContentValue(out Todo actualTodo);
 
-            Assert.That(actualTodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer()));
+            Assert.That(actualTodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer));
             Assert.That(responseResult.Headers.Location, Is.EqualTo(expectedUriResult));
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
@@ -173,6 +170,12 @@ namespace TodoApp.Api.Tests.Controllers
         public void PutTodo_ReturnsOK_OnValidId_OnValidModel()
         {
             var todo = new TodoViewModel { Value = "Make more coffee" };
+            var returnedTodo = new Todo
+            {
+                Id = _guid,
+                Value = "Make coffee",
+                CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00)
+            };
             var expectedTodo = new Todo
             {
                 Id = _guid,
@@ -181,8 +184,8 @@ namespace TodoApp.Api.Tests.Controllers
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
             };
             _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
-            _mockRepo.RetrieveAsync(_guid).Returns(expectedTodo);
-            _mockUpdateService.UpdateTodoAsync(todo).Returns(expectedTodo);
+            _mockRetrieveTodoService.RetrieveTodoAsync(_guid).Returns(returnedTodo);
+            _mockUpdateService.UpdateTodoAsync(returnedTodo, todo).Returns(expectedTodo);
 
             var responseResult = _controller.PutTodoAsync(_guid, todo)
                 .Result
@@ -190,7 +193,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .Result;
             responseResult.TryGetContentValue(out Todo actualResult);
 
-            Assert.That(actualResult, Is.EqualTo(expectedTodo).Using(TodosEqualityComparer()));
+            Assert.That(actualResult, Is.EqualTo(expectedTodo).Using(TodosEqualityComparer));
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
@@ -219,24 +222,33 @@ namespace TodoApp.Api.Tests.Controllers
         }
 
         [Test]
-        public void PutTodo_ReturnsNotFound_OnInvalidId()
+        public void PutTodo_ReturnsCreated_OnIdNotExisting()
         {
             var id = new Guid("d85f4233-4da0-462e-a34d-6a3ad8e9ecfd");
             var todo = new TodoViewModel
             {
                 Value = "Make more coffee"
             };
+            var returnedTodo = new Todo
+            {
+                Value = "Make more coffee",
+                CreatedAt = new DateTime(2017, 10, 26),
+                Id = Guid.Parse("80c0fc24-2ede-48ee-b33c-acdbfa96107b")
+            };
             _mockRetrieveTodoService.IsTodoInDbAsync(id).Returns(false);
+            _mockCreateService.CreateTodoAsync(todo).Returns(returnedTodo);
             
             var responseResult = _controller.PutTodoAsync(id, todo)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
+            responseResult.TryGetContentValue(out Todo actualResult);
 
-            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            Assert.That(actualResult, Is.EqualTo(returnedTodo).Using(TodosEqualityComparer));
         }
 
-        private static TodosEqualityComparer TodosEqualityComparer() =>
+        private static TodosEqualityComparer TodosEqualityComparer =>
             new TodosEqualityComparer();
     }
 }
