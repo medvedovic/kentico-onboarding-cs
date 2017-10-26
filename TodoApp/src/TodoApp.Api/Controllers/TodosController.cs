@@ -50,22 +50,16 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
         {
-            if (todo == null)
-            {
-                ModelState.AddModelError(string.Empty, "Model cannot be null");
-            }
+            ValidateViewModelForNull(todo);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var newTodo = await _postTodoService.CreateTodoAsync(todo);
-
-            var location = _uriHelper.BuildRouteUri(newTodo.Id);
-
-            return Created(location, newTodo);
+            return await CreateNewTodoAsync(todo);
         }
+
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
@@ -81,10 +75,7 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] TodoViewModel updated)
         {
-            if (updated == null)
-            {
-                ModelState.AddModelError(string.Empty, "Model cannot be null");
-            }
+            ValidateViewModelForNull(updated);
 
             if (!ModelState.IsValid)
             {
@@ -93,10 +84,27 @@ namespace TodoApp.Api.Controllers
 
             if (!await _getTodoService.IsTodoInDbAsync(id))
             {
-                return NotFound();
+                return await CreateNewTodoAsync(updated);
             }
 
             return Ok(await _putTodoService.UpdateTodoAsync(updated));
+        }
+
+        private void ValidateViewModelForNull(TodoViewModel updated)
+        {
+            if (updated == null)
+            {
+                ModelState.AddModelError(string.Empty, "TodoViewModel cannot be null");
+            }
+        }
+
+        private async Task<IHttpActionResult> CreateNewTodoAsync(TodoViewModel todo)
+        {
+            var newTodo = await _postTodoService.CreateTodoAsync(todo);
+
+            var location = _uriHelper.BuildRouteUri(newTodo.Id);
+
+            return Created(location, newTodo);
         }
     }
 }
