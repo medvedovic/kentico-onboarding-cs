@@ -11,23 +11,21 @@ namespace TodoApp.Services.Todos
     {
         private readonly IServiceHelper _helper;
         private readonly ITodoRepository _repository;
-        private readonly IRetrieveTodoService _retrieveTodoService;
 
-        public UpdateTodoService(IServiceHelper helper, ITodoRepository repository, IRetrieveTodoService retrieveTodoService)
+        public UpdateTodoService(IServiceHelper helper, ITodoRepository repository)
         {
             _helper = helper;
             _repository = repository;
-            _retrieveTodoService = retrieveTodoService;
         }
 
-        public async Task<Todo> UpdateTodoAsync(IConvertibleTo<Todo> todoViewModel)
+        public async Task<Todo> UpdateTodoAsync(IConvertibleTo<Todo> todoViewModel, Todo existingTodo)
         {
             var todo = todoViewModel.Convert();
 
-            _retrieveTodoService.CachedTodo.Value = todo.Value;
-            _retrieveTodoService.CachedTodo.UpdatedAt = _helper.GetCurrentDateTime();
+            existingTodo.Value = todo.Value;
+            existingTodo.UpdatedAt = _helper.GetCurrentDateTime();
 
-            return await _repository.UpdateAsync(_retrieveTodoService.CachedTodo);
+            return await _repository.UpdateAsync(existingTodo);
         }
     }
 }

@@ -28,19 +28,12 @@ namespace TodoApp.Services.Todos
 
         public async Task<bool> IsTodoInDbAsync(Guid id)
         {
-            try
-            {
-                if (CachedTodo?.Id == id)
-                    return true;
+            if (CachedTodo?.Id == id)
+                return true;
 
-                CachedTodo = await _repository.RetrieveAsync(id);
+            CachedTodo = await _repository.RetrieveAsync(id);
 
-                return CachedTodo != null;
-            }
-            catch
-            {
-                return false;
-            }
+            return CachedTodo != null;
         }
     }
 }

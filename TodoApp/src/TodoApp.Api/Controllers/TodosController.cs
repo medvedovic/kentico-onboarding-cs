@@ -31,12 +31,8 @@ namespace TodoApp.Api.Controllers
             _retrieveTodoService = retrieveTodoService;
         }
 
-        public async Task<IHttpActionResult> GetAllTodosAsync()
-        {
-            var todos = await _repository.RetrieveAllAsync();
-
-            return Ok(todos);
-        }
+        public async Task<IHttpActionResult> GetAllTodosAsync() => 
+            Ok(await _repository.RetrieveAllAsync());
 
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
@@ -87,12 +83,13 @@ namespace TodoApp.Api.Controllers
                 return await CreateNewTodoAsync(updated);
             }
 
-            return Ok(await _updateTodoService.UpdateTodoAsync(updated));
+            var existringTodo = await _retrieveTodoService.RetrieveTodoAsync(id);
+            return Ok(await _updateTodoService.UpdateTodoAsync(updated, existringTodo));
         }
 
-        private void ValidateViewModelForNull(TodoViewModel updated)
+        private void ValidateViewModelForNull(TodoViewModel todo)
         {
-            if (updated == null)
+            if (todo == null)
             {
                 ModelState.AddModelError(string.Empty, "TodoViewModel cannot be null");
             }
@@ -103,7 +100,6 @@ namespace TodoApp.Api.Controllers
             var newTodo = await _createTodoService.CreateTodoAsync(todo);
 
             var location = _uriHelper.BuildRouteUri(newTodo.Id);
-
             return Created(location, newTodo);
         }
     }
