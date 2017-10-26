@@ -13,20 +13,22 @@ namespace TodoApp.Api.Tests.Services.Todos
     {
         private IRetrieveTodoService _retrieveTodoService;
         private ITodoRepository _mockRepository;
-        private static readonly Guid _guid = Guid.Parse("bba2acfe-9f08-4a07-b72f-1540156a857a");
-        private static readonly Todo _retrieveTodoResult = new Todo
-        {
-            Id = _guid,
-            Value = "Go home",
-            CreatedAt = new DateTime(2017, 10, 20),
-            UpdatedAt = new DateTime(2017, 10, 20)
-        };
+        private Guid _guid;
+        private Todo _retrieveTodoResult;
 
         [SetUp]
         public void Init()
         {
             _mockRepository = Substitute.For<ITodoRepository>();
             _retrieveTodoService = new RetrieveTodoService(_mockRepository);
+            _guid = Guid.Parse("bba2acfe-9f08-4a07-b72f-1540156a857a");
+            _retrieveTodoResult = new Todo
+            {
+                Id = _guid,
+                Value = "Go home",
+                CreatedAt = new DateTime(2017, 10, 20),
+                UpdatedAt = new DateTime(2017, 10, 20)
+            };
         }
 
         [Test]
