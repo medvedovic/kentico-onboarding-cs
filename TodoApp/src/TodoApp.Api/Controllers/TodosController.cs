@@ -84,7 +84,7 @@ namespace TodoApp.Api.Controllers
             }
 
             var existringTodo = await _retrieveTodoService.RetrieveTodoAsync(id);
-            return Ok(await _updateTodoService.UpdateTodoAsync(updated, existringTodo));
+            return Ok(await _updateTodoService.UpdateTodoAsync(existringTodo, updated));
         }
 
         private void ValidateViewModelForNull(TodoViewModel todo)

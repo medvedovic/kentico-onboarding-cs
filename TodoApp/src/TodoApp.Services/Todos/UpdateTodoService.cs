@@ -18,7 +18,7 @@ namespace TodoApp.Services.Todos
             _repository = repository;
         }
 
-        public async Task<Todo> UpdateTodoAsync(IConvertibleTo<Todo> todoViewModel, Todo existingTodo)
+        public async Task<Todo> UpdateTodoAsync(Todo existingTodo, IConvertibleTo<Todo> todoViewModel)
         {
             var todo = todoViewModel.Convert();
 
