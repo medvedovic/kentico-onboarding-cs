@@ -6,12 +6,12 @@ using TodoApp.Contracts.Services.Todos;
 
 namespace TodoApp.Services.Todos
 {
-    class GetTodoService: IGetTodoService
+    class RetrieveTodoService: IRetrieveTodoService
     {
         private readonly ITodoRepository _repository;
-        public Todo CachedTodo { get; private set; }
+        private Todo CachedTodo { get; set; }
 
-        public GetTodoService(ITodoRepository repository)
+        public RetrieveTodoService(ITodoRepository repository)
         {
             _repository = repository;
         }
@@ -30,11 +30,14 @@ namespace TodoApp.Services.Todos
         {
             try
             {
+                if (CachedTodo?.Id == id)
+                    return true;
+
                 CachedTodo = await _repository.RetrieveAsync(id);
 
                 return CachedTodo != null;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

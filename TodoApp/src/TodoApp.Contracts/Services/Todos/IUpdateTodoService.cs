@@ -3,8 +3,8 @@ using TodoApp.Contracts.Models;
 
 namespace TodoApp.Contracts.Services.Todos
 {
-    public interface IPostTodoService
+    public interface IUpdateTodoService
     {
-        Task<Todo> CreateTodoAsync(IConvertibleTo<Todo> todoViewModel);
+        Task<Todo> UpdateTodoAsync(IConvertibleTo<Todo> todoViewModel);
     }
 }

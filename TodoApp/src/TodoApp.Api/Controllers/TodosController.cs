@@ -17,18 +17,18 @@ namespace TodoApp.Api.Controllers
         public const string DEFAULT_ROUTE = "TodosDefault";
 
         private readonly ITodoRepository _repository;
-        private readonly IPostTodoService _postTodoService;
-        private readonly IPutTodoService _putTodoService;
-        private readonly IGetTodoService _getTodoService;
+        private readonly ICreateTodoService _createTodoService;
+        private readonly IUpdateTodoService _updateTodoService;
+        private readonly IRetrieveTodoService _retrieveTodoService;
         private readonly IUriHelper _uriHelper;
 
-        public TodosController(ITodoRepository todoRepository, IPostTodoService postTodoService, IUriHelper uriHelper, IPutTodoService putTodoService, IGetTodoService getTodoService)
+        public TodosController(ITodoRepository todoRepository, ICreateTodoService createTodoService, IUriHelper uriHelper, IUpdateTodoService updateTodoService, IRetrieveTodoService retrieveTodoService)
         {
-            _postTodoService = postTodoService;
+            _createTodoService = createTodoService;
             _repository = todoRepository;
             _uriHelper = uriHelper;
-            _putTodoService = putTodoService;
-            _getTodoService = getTodoService;
+            _updateTodoService = updateTodoService;
+            _retrieveTodoService = retrieveTodoService;
         }
 
         public async Task<IHttpActionResult> GetAllTodosAsync()
@@ -40,12 +40,12 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
-            if (!await _getTodoService.IsTodoInDbAsync(id))
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
             {
                 return NotFound();
             }
 
-            return Ok(await _getTodoService.RetrieveTodoAsync(id));
+            return Ok(await _retrieveTodoService.RetrieveTodoAsync(id));
         }
 
         public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
@@ -63,7 +63,7 @@ namespace TodoApp.Api.Controllers
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
-            if (!await _getTodoService.IsTodoInDbAsync(id))
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
             {
                 return NotFound();
             }
@@ -82,12 +82,12 @@ namespace TodoApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!await _getTodoService.IsTodoInDbAsync(id))
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
             {
                 return await CreateNewTodoAsync(updated);
             }
 
-            return Ok(await _putTodoService.UpdateTodoAsync(updated));
+            return Ok(await _updateTodoService.UpdateTodoAsync(updated));
         }
 
         private void ValidateViewModelForNull(TodoViewModel updated)
@@ -100,7 +100,7 @@ namespace TodoApp.Api.Controllers
 
         private async Task<IHttpActionResult> CreateNewTodoAsync(TodoViewModel todo)
         {
-            var newTodo = await _postTodoService.CreateTodoAsync(todo);
+            var newTodo = await _createTodoService.CreateTodoAsync(todo);
 
             var location = _uriHelper.BuildRouteUri(newTodo.Id);
 

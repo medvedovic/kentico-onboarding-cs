@@ -11,7 +11,7 @@ namespace TodoApp.Api.Tests.Services.Todos
 {
     class GetTodoServiceTests
     {
-        private IGetTodoService _getTodoService;
+        private IRetrieveTodoService _retrieveTodoService;
         private ITodoRepository _mockRepository;
         private static readonly Guid _guid = Guid.Parse("bba2acfe-9f08-4a07-b72f-1540156a857a");
         private static readonly Todo _retrieveTodoResult = new Todo
@@ -26,7 +26,7 @@ namespace TodoApp.Api.Tests.Services.Todos
         public void Init()
         {
             _mockRepository = Substitute.For<ITodoRepository>();
-            _getTodoService = new GetTodoService(_mockRepository);
+            _retrieveTodoService = new RetrieveTodoService(_mockRepository);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace TodoApp.Api.Tests.Services.Todos
         {
             _mockRepository.RetrieveAsync(_guid).Returns(_retrieveTodoResult);
 
-            var isTodoInDbResult = _getTodoService.IsTodoInDbAsync(_guid)
+            var isTodoInDbResult = _retrieveTodoService.IsTodoInDbAsync(_guid)
                 .Result;
 
             Assert.That(isTodoInDbResult, Is.True);
@@ -45,7 +45,7 @@ namespace TodoApp.Api.Tests.Services.Todos
         {
             _mockRepository.RetrieveAsync(_guid).ReturnsNull();
 
-            var isTodoInDbResult = _getTodoService.IsTodoInDbAsync(_guid)
+            var isTodoInDbResult = _retrieveTodoService.IsTodoInDbAsync(_guid)
                 .Result;
 
             Assert.That(isTodoInDbResult, Is.False);
@@ -55,9 +55,9 @@ namespace TodoApp.Api.Tests.Services.Todos
         public void RetrieveTodoAsync_ReturnsCachedResult_OnTodoInCache()
         {
             _mockRepository.RetrieveAsync(_guid).Returns(_retrieveTodoResult);
-            _getTodoService.IsTodoInDbAsync(_guid);
+            _retrieveTodoService.IsTodoInDbAsync(_guid);
 
-            var actualResult = _getTodoService.RetrieveTodoAsync(_guid).Result;
+            var actualResult = _retrieveTodoService.RetrieveTodoAsync(_guid).Result;
 
             Assert.That(actualResult, Is.EqualTo(_retrieveTodoResult));
         }
@@ -75,10 +75,10 @@ namespace TodoApp.Api.Tests.Services.Todos
             };
             _mockRepository.RetrieveAsync(_guid).Returns(_retrieveTodoResult);
             _mockRepository.RetrieveAsync(guid).Returns(expectedResult);
-            _getTodoService.IsTodoInDbAsync(_guid);
+            _retrieveTodoService.IsTodoInDbAsync(_guid);
 
 
-            var actualResult = _getTodoService.RetrieveTodoAsync(guid).Result;
+            var actualResult = _retrieveTodoService.RetrieveTodoAsync(guid).Result;
 
             Assert.That(actualResult, Is.EqualTo(expectedResult));
         }

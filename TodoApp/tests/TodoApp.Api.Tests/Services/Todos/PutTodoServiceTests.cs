@@ -14,25 +14,25 @@ namespace TodoApp.Api.Tests.Services.Todos
     [TestFixture]
     class PutTodoServiceTests
     {
-        private IPutTodoService _putTodoService;
+        private IUpdateTodoService _updateTodoService;
         private IServiceHelper _mockServiceHelper;
         private ITodoRepository _mockTodoRepository;
-        private IGetTodoService _mockGetTodoService;
+        private IRetrieveTodoService _mockRetrieveTodoService;
 
         [SetUp]
         public void Init()
         {
             _mockTodoRepository = Substitute.For<ITodoRepository>();
             _mockServiceHelper = Substitute.For<IServiceHelper>();
-            _mockGetTodoService = Substitute.For<IGetTodoService>();
-            _putTodoService = new PutTodoService(_mockServiceHelper, _mockTodoRepository, _mockGetTodoService);
+            _mockRetrieveTodoService = Substitute.For<IRetrieveTodoService>();
+            _updateTodoService = new UpdateTodoService(_mockServiceHelper, _mockTodoRepository, _mockRetrieveTodoService);
         }
 
         [Test]
         public void UpdateTodoAsync_ReturnsCorrectTodo()
         {
             var guid = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
-            var todoViewModel = new TodoViewModel {Value = "Test PutTodoService"};
+            var todoViewModel = new TodoViewModel {Value = "Test UpdateTodoService"};
             var returnedTodo = new Todo
             {
                 Id = guid,
@@ -42,16 +42,16 @@ namespace TodoApp.Api.Tests.Services.Todos
             var expectedResult = new Todo
             {
                 Id = guid,
-                Value = "Test PutTodoService",
+                Value = "Test UpdateTodoService",
                 CreatedAt = new DateTime(2017, 10, 17, 10, 00, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 44, 12)
             };
-            _mockGetTodoService.CachedTodo.Returns(returnedTodo);
+            _mockRetrieveTodoService.CachedTodo.Returns(returnedTodo);
             _mockServiceHelper.GetCurrentDateTime().Returns(new DateTime(2017, 10, 21, 10, 44, 12));
 
             _mockTodoRepository.UpdateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
 
-            var result = _putTodoService.UpdateTodoAsync(todoViewModel).Result;
+            var result = _updateTodoService.UpdateTodoAsync(todoViewModel).Result;
 
             Assert.That(result, Is.EqualTo(expectedResult).Using(new TodosEqualityComparer()));
         }

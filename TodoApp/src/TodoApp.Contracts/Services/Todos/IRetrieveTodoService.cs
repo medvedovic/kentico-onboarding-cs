@@ -4,10 +4,8 @@ using TodoApp.Contracts.Models;
 
 namespace TodoApp.Contracts.Services.Todos
 {
-    public interface IGetTodoService
+    public interface IRetrieveTodoService
     {
-        Todo CachedTodo { get; }
-
         Task<Todo> RetrieveTodoAsync(Guid id);
 
         Task<bool> IsTodoInDbAsync(Guid id);

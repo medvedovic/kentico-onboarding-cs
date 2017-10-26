@@ -11,9 +11,9 @@ namespace TodoApp.Services
     {
         public IUnityContainer RegisterType(IUnityContainer container) =>
             container
-                .RegisterType<IPostTodoService, PostTodoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IPutTodoService, PutTodoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IGetTodoService, GetTodoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ICreateTodoService, CreateTodoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IUpdateTodoService, UpdateTodoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IRetrieveTodoService, RetrieveTodoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IServiceHelper, ServiceHelper>(new ContainerControlledLifetimeManager());
     }
 }

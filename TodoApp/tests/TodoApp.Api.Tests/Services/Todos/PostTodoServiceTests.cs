@@ -16,14 +16,14 @@ namespace TodoApp.Api.Tests.Services.Todos
     {
         private ITodoRepository _repository;
         private IServiceHelper _helper;
-        private IPostTodoService _service;
+        private ICreateTodoService _service;
 
         [SetUp]
         public void Init()
         {
             _repository = Substitute.For<ITodoRepository>();
             _helper = Substitute.For<IServiceHelper>();
-            _service = new PostTodoService(_repository, _helper);
+            _service = new CreateTodoService(_repository, _helper);
         }
 
         [Test]

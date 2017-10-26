@@ -7,12 +7,12 @@ using TodoApp.Contracts.Services.Todos;
 
 namespace TodoApp.Services.Todos
 {
-    class PostTodoService: IPostTodoService
+    class CreateTodoService: ICreateTodoService
     {
         private readonly ITodoRepository _repository;
         private readonly IServiceHelper _helper;
 
-        public PostTodoService(ITodoRepository repository, IServiceHelper helper)
+        public CreateTodoService(ITodoRepository repository, IServiceHelper helper)
         {
             _repository = repository;
             _helper = helper;

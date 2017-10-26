@@ -24,10 +24,10 @@ namespace TodoApp.Api.Tests.Controllers
         private TodosController _controller;
         private ITodoRepository _mockRepo;
         private IUriHelper _uriHelper;
-        private IPostTodoService _mockPostService;
-        private IPutTodoService _mockPutService;
+        private ICreateTodoService _mockCreateService;
+        private IUpdateTodoService _mockUpdateService;
         private IServiceHelper _mockServiceHelper;
-        private IGetTodoService _mockGetTodoService;
+        private IRetrieveTodoService _mockRetrieveTodoService;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
         private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
@@ -41,12 +41,12 @@ namespace TodoApp.Api.Tests.Controllers
             _uriHelper.BuildRouteUri(Arg.Any<Guid>())
                 .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
-            _mockPostService = Substitute.For<IPostTodoService>();
-            _mockPutService = Substitute.For<IPutTodoService>();
+            _mockCreateService = Substitute.For<ICreateTodoService>();
+            _mockUpdateService = Substitute.For<IUpdateTodoService>();
             _mockServiceHelper = Substitute.For<IServiceHelper>();
-            _mockGetTodoService = Substitute.For<IGetTodoService>();
+            _mockRetrieveTodoService = Substitute.For<IRetrieveTodoService>();
 
-            _controller = new TodosController(_mockRepo, _mockPostService, _uriHelper, _mockPutService, _mockGetTodoService)
+            _controller = new TodosController(_mockRepo, _mockCreateService, _uriHelper, _mockUpdateService, _mockRetrieveTodoService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -81,8 +81,8 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsOk_OnValidId()
         {
-            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
-            _mockGetTodoService.RetrieveTodoAsync(_guid).Returns(_mockTodo);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
+            _mockRetrieveTodoService.RetrieveTodoAsync(_guid).Returns(_mockTodo);
 
             var responseResult = _controller.GetTodoAsync(_guid).Result
                 .ExecuteAsync(CancellationToken.None).Result;
@@ -95,7 +95,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsNotFound_OnInvalidId()
         {
-            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(false);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(false);
 
             var responseResult = _controller.GetTodoAsync(_guid).Result
                 .ExecuteAsync(CancellationToken.None).Result;
@@ -110,7 +110,7 @@ namespace TodoApp.Api.Tests.Controllers
             {
                 Value = "Make more coffee"
             };
-            _mockPostService.CreateTodoAsync(Arg.Any<IConvertibleTo<Todo>>()).Returns(_mockTodo);
+            _mockCreateService.CreateTodoAsync(Arg.Any<IConvertibleTo<Todo>>()).Returns(_mockTodo);
             var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
 
             var responseResult = _controller.PostTodoAsync(todo).Result
@@ -146,7 +146,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNoContent_OnTodoFound()
         {
-            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
 
             var responseResult = _controller.DeleteTodoAsync(_guid)
                 .Result
@@ -159,7 +159,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNotFound_OnTodoNotFound()
         {
-            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(false);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(false);
 
             var responseResult = _controller.DeleteTodoAsync(_guid)
                 .Result
@@ -180,9 +180,9 @@ namespace TodoApp.Api.Tests.Controllers
                 CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
             };
-            _mockGetTodoService.IsTodoInDbAsync(_guid).Returns(true);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
             _mockRepo.RetrieveAsync(_guid).Returns(expectedTodo);
-            _mockPutService.UpdateTodoAsync(todo).Returns(expectedTodo);
+            _mockUpdateService.UpdateTodoAsync(todo).Returns(expectedTodo);
 
             var responseResult = _controller.PutTodoAsync(_guid, todo)
                 .Result
@@ -226,7 +226,7 @@ namespace TodoApp.Api.Tests.Controllers
             {
                 Value = "Make more coffee"
             };
-            _mockGetTodoService.IsTodoInDbAsync(id).Returns(false);
+            _mockRetrieveTodoService.IsTodoInDbAsync(id).Returns(false);
             
             var responseResult = _controller.PutTodoAsync(id, todo)
                 .Result
