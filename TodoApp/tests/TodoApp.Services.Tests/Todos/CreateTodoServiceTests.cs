@@ -31,21 +31,22 @@ namespace TodoApp.Services.Tests.Todos
         [Test]
         public void BuildsModelCorrectly()
         {
+            var id = Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7");
             var expectedResult = new Todo
             {
-                Id = Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7"),
+                Id = id,
                 Value = "Do stuff",
                 CreatedAt = new DateTime(2017, 10, 17, 12, 00, 00)
             };
             _repository.CreateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
-            _mockGuidGenerator.GenerateGuid().Returns(Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7"));
+            _mockGuidGenerator.GenerateGuid().Returns(id);
             _mockDateTimeProvider.GetCurrentDateTime().Returns(new DateTime(2017, 10, 17, 12, 00, 00));
-            var dto = new TodoViewModel
+            var todo = new TodoViewModel
             {
                 Value = "Do stuff"
             };
 
-            var result = _service.CreateTodoAsync(dto).Result;
+            var result = _service.CreateTodoAsync(todo).Result;
 
             Assert.That(result, Is.EqualTo(expectedResult).UsingTodosEqualityComparer());
         }

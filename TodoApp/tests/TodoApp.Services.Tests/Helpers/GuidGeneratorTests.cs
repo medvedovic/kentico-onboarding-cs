@@ -18,10 +18,10 @@ namespace TodoApp.Services.Tests.Helpers
         [Test]
         public void ReturnsDifferentGuids()
         {
-            var guid1 = _guidGenerator.GenerateGuid();
-            var guid2 = _guidGenerator.GenerateGuid();
+            var id1 = _guidGenerator.GenerateGuid();
+            var id2 = _guidGenerator.GenerateGuid();
 
-            Assert.That(guid1, Is.Not.EqualTo(guid2));
+            Assert.That(id1, Is.Not.EqualTo(id2));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace TodoApp.Api.Tests.Controllers
         private IRetrieveTodoService _mockRetrieveTodoService;
         private Todo _mockTodo;
         private List<Todo> _mockTodos;
-        private readonly Guid _guid = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
+        private readonly Guid _id = new Guid("38f61793-bf01-48ae-8e00-ccee139adba2");
 
         [SetUp]
         public void Init()
@@ -51,14 +51,14 @@ namespace TodoApp.Api.Tests.Controllers
 
             _mockTodo = new Todo
             {
-                Id = _guid,
+                Id = _id,
                 Value = "Make more coffee"
             };
 
             _mockTodos = new List<Todo>
             {
                 new Todo {Id = new Guid("2e2253c5-4bdb-45d8-8cbf-1a24e9b04d1c"), Value = "Make coffee"},
-                new Todo {Id = _guid, Value = "Make more coffee"}
+                new Todo {Id = _id, Value = "Make more coffee"}
             };
         }
 
@@ -78,10 +78,10 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsOk_OnValidId()
         {
-            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
-            _mockRetrieveTodoService.RetrieveTodoAsync(_guid).Returns(_mockTodo);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_id).Returns(true);
+            _mockRetrieveTodoService.RetrieveTodoAsync(_id).Returns(_mockTodo);
 
-            var responseResult = _controller.GetTodoAsync(_guid).Result
+            var responseResult = _controller.GetTodoAsync(_id).Result
                 .ExecuteAsync(CancellationToken.None).Result;
             responseResult.TryGetContentValue(out Todo actualtodo);
 
@@ -92,9 +92,9 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void GetTodo_ReturnsNotFound_OnInvalidId()
         {
-            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(false);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_id).Returns(false);
 
-            var responseResult = _controller.GetTodoAsync(_guid).Result
+            var responseResult = _controller.GetTodoAsync(_id).Result
                 .ExecuteAsync(CancellationToken.None).Result;
             
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
@@ -108,7 +108,7 @@ namespace TodoApp.Api.Tests.Controllers
                 Value = "Make more coffee"
             };
             _mockCreateService.CreateTodoAsync(Arg.Any<IConvertibleTo<Todo>>()).Returns(_mockTodo);
-            var expectedUriResult = new Uri($"/localhost/todos/{_guid}", UriKind.Relative);
+            var expectedUriResult = new Uri($"/localhost/todos/{_id}", UriKind.Relative);
 
             var responseResult = _controller.PostTodoAsync(todo).Result
                 .ExecuteAsync(CancellationToken.None).Result;
@@ -143,9 +143,9 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNoContent_OnTodoFound()
         {
-            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_id).Returns(true);
 
-            var responseResult = _controller.DeleteTodoAsync(_guid)
+            var responseResult = _controller.DeleteTodoAsync(_id)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
@@ -156,9 +156,9 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void DeleteTodo_ReturnsNotFound_OnTodoNotFound()
         {
-            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(false);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_id).Returns(false);
 
-            var responseResult = _controller.DeleteTodoAsync(_guid)
+            var responseResult = _controller.DeleteTodoAsync(_id)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
@@ -172,22 +172,23 @@ namespace TodoApp.Api.Tests.Controllers
             var todo = new TodoViewModel { Value = "Make more coffee" };
             var returnedTodo = new Todo
             {
-                Id = _guid,
+                Id = _id,
                 Value = "Make coffee",
-                CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00)
+                CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
+                UpdatedAt = new DateTime(2017, 10, 17, 10, 31, 00)
             };
             var expectedTodo = new Todo
             {
-                Id = _guid,
+                Id = _id,
                 Value = "Make more coffee",
                 CreatedAt = new DateTime(2017, 10, 17, 10, 31, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 31, 00)
             };
-            _mockRetrieveTodoService.IsTodoInDbAsync(_guid).Returns(true);
-            _mockRetrieveTodoService.RetrieveTodoAsync(_guid).Returns(returnedTodo);
+            _mockRetrieveTodoService.IsTodoInDbAsync(_id).Returns(true);
+            _mockRetrieveTodoService.RetrieveTodoAsync(_id).Returns(returnedTodo);
             _mockUpdateService.UpdateTodoAsync(returnedTodo, todo).Returns(expectedTodo);
 
-            var responseResult = _controller.PutTodoAsync(_guid, todo)
+            var responseResult = _controller.PutTodoAsync(_id, todo)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
@@ -202,7 +203,7 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _controller.ModelState.AddModelError(string.Empty, string.Empty);
 
-            var responseResult = _controller.PutTodoAsync(_guid, new TodoViewModel())
+            var responseResult = _controller.PutTodoAsync(_id, new TodoViewModel())
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
@@ -213,7 +214,7 @@ namespace TodoApp.Api.Tests.Controllers
         [Test]
         public void PutTodo_ReturnsBadRequest_OnValidId_OnNull()
         {
-            var responseResult = _controller.PutTodoAsync(_guid, null)
+            var responseResult = _controller.PutTodoAsync(_id, null)
                 .Result
                 .ExecuteAsync(CancellationToken.None)
                 .Result;
@@ -225,6 +226,7 @@ namespace TodoApp.Api.Tests.Controllers
         public void PutTodo_ReturnsCreated_OnIdNotExisting()
         {
             var id = new Guid("d85f4233-4da0-462e-a34d-6a3ad8e9ecfd");
+            var newId = new Guid("80c0fc24-2ede-48ee-b33c-acdbfa96107b");
             var todo = new TodoViewModel
             {
                 Value = "Make more coffee"
@@ -233,7 +235,7 @@ namespace TodoApp.Api.Tests.Controllers
             {
                 Value = "Make more coffee",
                 CreatedAt = new DateTime(2017, 10, 26),
-                Id = Guid.Parse("80c0fc24-2ede-48ee-b33c-acdbfa96107b")
+                Id = newId
             };
             _mockRetrieveTodoService.IsTodoInDbAsync(id).Returns(false);
             _mockCreateService.CreateTodoAsync(todo).Returns(returnedTodo);

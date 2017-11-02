@@ -29,17 +29,17 @@ namespace TodoApp.Services.Tests.Todos
         [Test]
         public void UpdateTodoAsync_ReturnsCorrectTodo()
         {
-            var guid = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
+            var id = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
             var todoViewModel = new TodoViewModel {Value = "Test UpdateTodoService"};
             var returnedTodo = new Todo
             {
-                Id = guid,
+                Id = id,
                 Value = "Test stuff",
                 CreatedAt = new DateTime(2017, 10, 17, 10, 00, 00)
             };
             var expectedResult = new Todo
             {
-                Id = guid,
+                Id = id,
                 Value = "Test UpdateTodoService",
                 CreatedAt = new DateTime(2017, 10, 17, 10, 00, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 44, 12)
