@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using TodoApp.Contracts.Bootstrap;
@@ -10,13 +11,15 @@ namespace TodoApp.Repository.Repositories
 {
     internal class TodoRepository : ITodoRepository
     {
+        private const string MONGO_COLLECTION_NAME = "todos";
         private readonly IMongoCollection<Todo> _todosCollection;
 
         public TodoRepository(IDatabaseConfig config)
         {
             var client = new MongoClient(config.ConnectionString);
-            var db = client.GetDatabase("onboarding_todoapp");
-            _todosCollection = db.GetCollection<Todo>("todos");
+            var databaseName = config.ConnectionString.Split('/').Last();
+            var db = client.GetDatabase(databaseName);
+            _todosCollection = db.GetCollection<Todo>(MONGO_COLLECTION_NAME);
         }
 
         public async Task<IEnumerable<Todo>> RetrieveAllAsync()
