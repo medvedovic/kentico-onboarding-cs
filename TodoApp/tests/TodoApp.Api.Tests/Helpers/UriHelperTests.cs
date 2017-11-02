@@ -11,7 +11,7 @@ using TodoApp.Contracts.Helpers;
 namespace TodoApp.Api.Tests.Helpers
 {
     [TestFixture]
-    class UriHelperTests
+    internal class UriHelperTests
     {
         private IUriHelper _uriHelper;
         private string routeTemplate = "api/todos";

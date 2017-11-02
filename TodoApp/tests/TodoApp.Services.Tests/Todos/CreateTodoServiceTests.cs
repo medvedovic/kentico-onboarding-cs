@@ -12,7 +12,7 @@ using TodoApp.Services.Todos;
 namespace TodoApp.Services.Tests.Todos
 {
     [TestFixture]
-    class CreateTodoServiceTests
+    internal class CreateTodoServiceTests
     {
         private ITodoRepository _repository;
         private IServiceHelper _helper;

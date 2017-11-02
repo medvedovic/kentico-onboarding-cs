@@ -9,7 +9,7 @@ using TodoApp.Services.Todos;
 
 namespace TodoApp.Services.Tests.Todos
 {
-    class RetrieveTodoServiceTests
+    internal class RetrieveTodoServiceTests
     {
         private IRetrieveTodoService _retrieveTodoService;
         private ITodoRepository _mockRepository;

@@ -12,7 +12,7 @@ using TodoApp.Services.Todos;
 namespace TodoApp.Services.Tests.Todos
 {
     [TestFixture]
-    class UpdateTodoServiceTests
+    internal class UpdateTodoServiceTests
     {
         private IUpdateTodoService _updateTodoService;
         private IServiceHelper _mockServiceHelper;

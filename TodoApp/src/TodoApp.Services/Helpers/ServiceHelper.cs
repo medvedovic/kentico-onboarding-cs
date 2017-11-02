@@ -3,7 +3,7 @@ using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Services.Helpers
 {
-    class ServiceHelper: IServiceHelper
+    internal class ServiceHelper: IServiceHelper
     {
         public DateTime GetCurrentDateTime() => DateTime.Now;
 

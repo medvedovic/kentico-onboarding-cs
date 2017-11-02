@@ -5,7 +5,7 @@ using TodoApp.Services.Helpers;
 namespace TodoApp.Services.Tests.Helpers
 {
     [TestFixture]
-    class ServiceHelperTests
+    internal class ServiceHelperTests
     {
         private IServiceHelper _serviceHelper;
 

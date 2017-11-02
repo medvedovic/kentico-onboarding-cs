@@ -7,7 +7,7 @@ using TodoApp.Contracts.Services.Todos;
 
 namespace TodoApp.Services.Todos
 {
-    class CreateTodoService: ICreateTodoService
+    internal class CreateTodoService: ICreateTodoService
     {
         private readonly ITodoRepository _repository;
         private readonly IServiceHelper _helper;

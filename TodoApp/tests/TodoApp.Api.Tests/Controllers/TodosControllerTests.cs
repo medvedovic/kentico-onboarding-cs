@@ -18,7 +18,7 @@ using TodoApp.Contracts.Services.Todos;
 namespace TodoApp.Api.Tests.Controllers
 {
     [TestFixture]
-    class TodosControllerTests
+    internal class TodosControllerTests
     {
         private TodosController _controller;
         private ITodoRepository _mockRepo;

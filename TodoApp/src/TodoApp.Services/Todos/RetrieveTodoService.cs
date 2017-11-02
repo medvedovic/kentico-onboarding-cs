@@ -6,7 +6,7 @@ using TodoApp.Contracts.Services.Todos;
 
 namespace TodoApp.Services.Todos
 {
-    class RetrieveTodoService: IRetrieveTodoService
+    internal class RetrieveTodoService: IRetrieveTodoService
     {
         private readonly ITodoRepository _repository;
         private Todo CachedTodo { get; set; }
