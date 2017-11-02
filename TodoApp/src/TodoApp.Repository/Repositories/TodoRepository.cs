@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using TodoApp.Contracts.Bootstrap;
@@ -17,8 +16,7 @@ namespace TodoApp.Repository.Repositories
         public TodoRepository(IDatabaseConfig config)
         {
             var client = new MongoClient(config.ConnectionString);
-            var databaseName = config.ConnectionString.Split('/').Last();
-            var db = client.GetDatabase(databaseName);
+            var db = client.GetDatabase(MongoUrl.Create(config.ConnectionString).DatabaseName);
             _todosCollection = db.GetCollection<Todo>(MONGO_COLLECTION_NAME);
         }
 
