@@ -6,7 +6,7 @@ namespace TodoApp.Contract.Base.EqualityComparer
     {
         public static EqualConstraint UsingTodosEqualityComparer(this EqualConstraint equalConstraint)
         {
-            return equalConstraint.Using(new TodosEqualityComparer());
+            return equalConstraint.Using(TodosEqualityComparer.Instance);
         }
     }
 }

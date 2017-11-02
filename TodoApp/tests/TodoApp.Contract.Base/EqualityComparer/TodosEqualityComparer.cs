@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TodoApp.Contracts.Models;
 
 namespace TodoApp.Contract.Base.EqualityComparer
 {
     internal class TodosEqualityComparer : IEqualityComparer<Todo>
     {
+        private static readonly Lazy<TodosEqualityComparer> _instance = new Lazy<TodosEqualityComparer>(() => new TodosEqualityComparer());
+
+        public static TodosEqualityComparer Instance => _instance.Value;
+        
+        private TodosEqualityComparer() { }
+
         public bool Equals(Todo x, Todo y)
         {
             return x.Id == y.Id
