@@ -2,9 +2,8 @@
 
 namespace TodoApp.Contracts.Helpers
 {
-    public interface IServiceHelper
+    public interface IDateTimeProvider
     {
         DateTime GetCurrentDateTime();
-        Guid GenerateGuid();
     }
 }

@@ -3,10 +3,8 @@ using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Services.Helpers
 {
-    internal class ServiceHelper: IServiceHelper
+    internal class DateTimeProvider: IDateTimeProvider
     {
         public DateTime GetCurrentDateTime() => DateTime.Now;
-
-        public Guid GenerateGuid() => Guid.NewGuid();
     }
 }

@@ -60,7 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ServiceHelperTests.cs" />
+    <Compile Include="Helpers\DateTimeProviderTests.cs" />
+    <Compile Include="Helpers\GuidGeneratorTests.cs" />
     <Compile Include="Todos\CreateTodoServiceTests.cs" />
     <Compile Include="Todos\RetrieveTodoServiceTests.cs" />
     <Compile Include="Todos\UpdateTodoServiceTests.cs" />

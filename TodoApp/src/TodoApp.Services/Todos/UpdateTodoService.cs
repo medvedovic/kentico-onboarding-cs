@@ -9,13 +9,13 @@ namespace TodoApp.Services.Todos
 {
     internal class UpdateTodoService: IUpdateTodoService
     {
-        private readonly IServiceHelper _helper;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ITodoRepository _repository;
 
-        public UpdateTodoService(IServiceHelper helper, ITodoRepository repository)
+        public UpdateTodoService(ITodoRepository repository, IDateTimeProvider dateTimeProvider)
         {
-            _helper = helper;
             _repository = repository;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Todo> UpdateTodoAsync(Todo existingTodo, IConvertibleTo<Todo> todoViewModel)
@@ -23,7 +23,7 @@ namespace TodoApp.Services.Todos
             var todo = todoViewModel.Convert();
 
             existingTodo.Value = todo.Value;
-            existingTodo.UpdatedAt = _helper.GetCurrentDateTime();
+            existingTodo.UpdatedAt = _dateTimeProvider.GetCurrentDateTime();
 
             return await _repository.UpdateAsync(existingTodo);
         }

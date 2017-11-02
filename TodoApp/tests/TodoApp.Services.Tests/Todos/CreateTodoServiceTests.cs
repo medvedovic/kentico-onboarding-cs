@@ -15,15 +15,17 @@ namespace TodoApp.Services.Tests.Todos
     internal class CreateTodoServiceTests
     {
         private ITodoRepository _repository;
-        private IServiceHelper _helper;
+        private IGuidGenerator _mockGuidGenerator;
+        private IDateTimeProvider _mockDateTimeProvider;
         private ICreateTodoService _service;
 
         [SetUp]
         public void Init()
         {
             _repository = Substitute.For<ITodoRepository>();
-            _helper = Substitute.For<IServiceHelper>();
-            _service = new CreateTodoService(_repository, _helper);
+            _mockDateTimeProvider = Substitute.For<IDateTimeProvider>();
+            _mockGuidGenerator = Substitute.For<IGuidGenerator>();
+            _service = new CreateTodoService(_repository, _mockDateTimeProvider, _mockGuidGenerator);
         }
 
         [Test]
@@ -36,8 +38,8 @@ namespace TodoApp.Services.Tests.Todos
                 CreatedAt = new DateTime(2017, 10, 17, 12, 00, 00)
             };
             _repository.CreateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
-            _helper.GenerateGuid().Returns(Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7"));
-            _helper.GetCurrentDateTime().Returns(new DateTime(2017, 10, 17, 12, 00, 00));
+            _mockGuidGenerator.GenerateGuid().Returns(Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7"));
+            _mockDateTimeProvider.GetCurrentDateTime().Returns(new DateTime(2017, 10, 17, 12, 00, 00));
             var dto = new TodoViewModel
             {
                 Value = "Do stuff"

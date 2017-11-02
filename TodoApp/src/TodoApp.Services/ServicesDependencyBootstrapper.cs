@@ -1,5 +1,4 @@
 ﻿using Microsoft.Practices.Unity;
-using TodoApp.Contracts;
 using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Services.Todos;
@@ -15,6 +14,7 @@ namespace TodoApp.Services
                 .RegisterType<ICreateTodoService, CreateTodoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IUpdateTodoService, UpdateTodoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IRetrieveTodoService, RetrieveTodoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IServiceHelper, ServiceHelper>(new ContainerControlledLifetimeManager());
+                .RegisterType<IGuidGenerator, GuidGenerator>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDateTimeProvider, DateTimeProvider>(new ContainerControlledLifetimeManager());
     }
 }

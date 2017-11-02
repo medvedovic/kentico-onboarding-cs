@@ -52,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ServiceHelper.cs" />
+    <Compile Include="Helpers\DateTimeProvider.cs" />
+    <Compile Include="Helpers\GuidGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesDependencyBootstrapper.cs" />
     <Compile Include="Todos\RetrieveTodoService.cs" />

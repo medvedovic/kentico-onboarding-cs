@@ -10,19 +10,21 @@ namespace TodoApp.Services.Todos
     internal class CreateTodoService: ICreateTodoService
     {
         private readonly ITodoRepository _repository;
-        private readonly IServiceHelper _helper;
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IGuidGenerator _guidGenerator;
 
-        public CreateTodoService(ITodoRepository repository, IServiceHelper helper)
+        public CreateTodoService(ITodoRepository repository, IDateTimeProvider dateTimeProvider, IGuidGenerator guidGenerator)
         {
             _repository = repository;
-            _helper = helper;
+            _dateTimeProvider = dateTimeProvider;
+            _guidGenerator = guidGenerator;
         }
 
         public async Task<Todo> CreateTodoAsync(IConvertibleTo<Todo> todoViewModel)
         {
             var newTodo = todoViewModel.Convert();
-            newTodo.Id = _helper.GenerateGuid();
-            newTodo.CreatedAt = _helper.GetCurrentDateTime();
+            newTodo.Id = _guidGenerator.GenerateGuid();
+            newTodo.CreatedAt = _dateTimeProvider.GetCurrentDateTime();
 
             return await _repository.CreateAsync(newTodo);
         }
