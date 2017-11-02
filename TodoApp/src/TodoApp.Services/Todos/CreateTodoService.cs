@@ -24,7 +24,9 @@ namespace TodoApp.Services.Todos
         {
             var newTodo = todoViewModel.Convert();
             newTodo.Id = _guidGenerator.GenerateGuid();
-            newTodo.CreatedAt = _dateTimeProvider.GetCurrentDateTime();
+            var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
+            newTodo.CreatedAt = currentDateTime;
+            newTodo.UpdatedAt = currentDateTime;
 
             return await _repository.CreateAsync(newTodo);
         }
