@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
@@ -62,6 +63,7 @@ namespace TodoApp.Services.Tests.Todos
             var actualResult = _retrieveTodoService.RetrieveTodoAsync(_id).Result;
 
             Assert.That(actualResult, Is.EqualTo(_retrieveTodoResult));
+            Assert.That(_mockRepository.ReceivedCalls().Count(), Is.Not.GreaterThan(1));
         }
 
         [Test]
