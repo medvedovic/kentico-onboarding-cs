@@ -12,12 +12,12 @@ namespace TodoApp.Api
     {
         public IUnityContainer RegisterType(IUnityContainer container) => 
             container
-                .RegisterType<DependencyBootstrapperConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(GenerateDependencyBootstrapperConfig))
+                .RegisterType<DatabaseConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(GenerateDatabaseConfig))
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
                 .RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());
 
-        private static DependencyBootstrapperConfig GenerateDependencyBootstrapperConfig(IUnityContainer arg) => 
-            new DependencyBootstrapperConfig
+        private static DatabaseConfig GenerateDatabaseConfig(IUnityContainer arg) => 
+            new DatabaseConfig
             {
                 ConnectionString = System.Configuration.ConfigurationManager
                     .ConnectionStrings["DefaultConnection"].ConnectionString

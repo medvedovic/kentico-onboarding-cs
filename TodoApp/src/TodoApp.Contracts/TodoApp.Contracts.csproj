@@ -53,9 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrap\IDatabaseConfig.cs" />
     <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\IUriHelper.cs" />
-    <Compile Include="Bootstrap\DependencyBootstrapperConfig.cs" />
+    <Compile Include="Bootstrap\DatabaseConfig.cs" />
     <Compile Include="IConvertibleTo.cs" />
     <Compile Include="Bootstrap\IUnityBootstrapper.cs" />
     <Compile Include="Models\Todo.cs" />

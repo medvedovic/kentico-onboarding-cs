@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using TodoApp.Contracts;
 using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -13,7 +12,7 @@ namespace TodoApp.Repository.Repositories
     {
         private readonly IMongoCollection<Todo> _todosCollection;
 
-        public TodoRepository(DependencyBootstrapperConfig config)
+        public TodoRepository(IDatabaseConfig config)
         {
             var client = new MongoClient(config.ConnectionString);
             var db = client.GetDatabase("onboarding_todoapp");
