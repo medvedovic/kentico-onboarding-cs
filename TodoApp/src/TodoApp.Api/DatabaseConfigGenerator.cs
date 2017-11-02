@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 using TodoApp.Contracts.Bootstrap;
+using TodoApp.Contracts.Models;
 
 namespace TodoApp.Api
 {

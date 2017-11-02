@@ -1,4 +1,6 @@
-﻿namespace TodoApp.Contracts.Bootstrap
+﻿using TodoApp.Contracts.Bootstrap;
+
+namespace TodoApp.Contracts.Models
 {
     public class DatabaseConfig : IDatabaseConfig
     {

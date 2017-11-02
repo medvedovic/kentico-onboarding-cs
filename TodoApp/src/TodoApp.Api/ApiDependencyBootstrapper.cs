@@ -4,6 +4,7 @@ using Microsoft.Practices.Unity;
 using TodoApp.Api.Helpers;
 using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Helpers;
+using TodoApp.Contracts.Models;
 
 namespace TodoApp.Api
 {
