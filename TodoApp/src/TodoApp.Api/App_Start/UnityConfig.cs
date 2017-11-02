@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Microsoft.Practices.Unity;
-using TodoApp.Api.Repositories;
 using TodoApp.Contracts;
 using TodoApp.Contracts.Bootstrap;
 using TodoApp.Repository;
