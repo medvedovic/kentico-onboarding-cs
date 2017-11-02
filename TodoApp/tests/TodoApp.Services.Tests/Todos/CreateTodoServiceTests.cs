@@ -1,15 +1,15 @@
 ﻿using System;
 using NSubstitute;
 using NUnit.Framework;
-using TodoApp.Api.Tests.Helpers;
 using TodoApp.Api.ViewModels;
+using TodoApp.Contract.Base;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
 using TodoApp.Services.Todos;
 
-namespace TodoApp.Api.Tests.Services.Todos
+namespace TodoApp.Services.Tests.Todos
 {
     [TestFixture]
     class CreateTodoServiceTests

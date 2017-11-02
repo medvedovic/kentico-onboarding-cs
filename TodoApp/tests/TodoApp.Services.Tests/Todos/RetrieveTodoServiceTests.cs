@@ -7,7 +7,7 @@ using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
 using TodoApp.Services.Todos;
 
-namespace TodoApp.Api.Tests.Services.Todos
+namespace TodoApp.Services.Tests.Todos
 {
     class RetrieveTodoServiceTests
     {

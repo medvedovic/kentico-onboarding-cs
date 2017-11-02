@@ -2,7 +2,7 @@
 using TodoApp.Contracts.Helpers;
 using TodoApp.Services.Helpers;
 
-namespace TodoApp.Api.Tests.Helpers
+namespace TodoApp.Services.Tests.Helpers
 {
     [TestFixture]
     class ServiceHelperTests

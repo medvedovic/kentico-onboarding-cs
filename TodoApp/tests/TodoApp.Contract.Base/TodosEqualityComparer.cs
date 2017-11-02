@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using TodoApp.Contracts.Models;
 
-namespace TodoApp.Api.Tests.Helpers
+namespace TodoApp.Contract.Base
 {
-    class TodosEqualityComparer : IEqualityComparer<Todo>
+    public class TodosEqualityComparer : IEqualityComparer<Todo>
     {
         public bool Equals(Todo x, Todo y)
         {
