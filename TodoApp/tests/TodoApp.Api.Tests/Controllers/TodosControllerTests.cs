@@ -8,7 +8,7 @@ using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.ViewModels;
-using TodoApp.Contract.Base;
+using TodoApp.Contract.Base.EqualityComparer;
 using TodoApp.Contracts;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
@@ -85,7 +85,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .ExecuteAsync(CancellationToken.None).Result;
             responseResult.TryGetContentValue(out Todo actualtodo);
 
-            Assert.That(actualtodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer));
+            Assert.That(actualtodo, Is.EqualTo(_mockTodo).UsingTodosEqualityComparer());
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
@@ -114,7 +114,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .ExecuteAsync(CancellationToken.None).Result;
             responseResult.TryGetContentValue(out Todo actualTodo);
 
-            Assert.That(actualTodo, Is.EqualTo(_mockTodo).Using(TodosEqualityComparer));
+            Assert.That(actualTodo, Is.EqualTo(_mockTodo).UsingTodosEqualityComparer());
             Assert.That(responseResult.Headers.Location, Is.EqualTo(expectedUriResult));
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
@@ -193,7 +193,7 @@ namespace TodoApp.Api.Tests.Controllers
                 .Result;
             responseResult.TryGetContentValue(out Todo actualResult);
 
-            Assert.That(actualResult, Is.EqualTo(expectedTodo).Using(TodosEqualityComparer));
+            Assert.That(actualResult, Is.EqualTo(expectedTodo).UsingTodosEqualityComparer());
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
@@ -245,10 +245,7 @@ namespace TodoApp.Api.Tests.Controllers
             responseResult.TryGetContentValue(out Todo actualResult);
 
             Assert.That(responseResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(actualResult, Is.EqualTo(returnedTodo).Using(TodosEqualityComparer));
+            Assert.That(actualResult, Is.EqualTo(returnedTodo).UsingTodosEqualityComparer());
         }
-
-        private static TodosEqualityComparer TodosEqualityComparer =>
-            new TodosEqualityComparer();
     }
 }

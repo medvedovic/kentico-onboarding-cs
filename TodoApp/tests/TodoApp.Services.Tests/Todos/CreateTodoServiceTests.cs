@@ -2,7 +2,7 @@
 using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.ViewModels;
-using TodoApp.Contract.Base;
+using TodoApp.Contract.Base.EqualityComparer;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -45,7 +45,7 @@ namespace TodoApp.Services.Tests.Todos
 
             var result = _service.CreateTodoAsync(dto).Result;
 
-            Assert.That(result, Is.EqualTo(expectedResult).Using(new TodosEqualityComparer()));
+            Assert.That(result, Is.EqualTo(expectedResult).UsingTodosEqualityComparer());
         }
     }
 }
