@@ -55,9 +55,9 @@
   <ItemGroup>
     <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\IUriHelper.cs" />
-    <Compile Include="DependencyBootstrapperConfig.cs" />
+    <Compile Include="Bootstrap\DependencyBootstrapperConfig.cs" />
     <Compile Include="IConvertibleTo.cs" />
-    <Compile Include="IUnityBootstrapper.cs" />
+    <Compile Include="Bootstrap\IUnityBootstrapper.cs" />
     <Compile Include="Models\Todo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ITodoRepository.cs" />

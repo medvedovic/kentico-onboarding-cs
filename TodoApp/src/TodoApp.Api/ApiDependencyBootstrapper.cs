@@ -3,6 +3,7 @@ using System.Web;
 using Microsoft.Practices.Unity;
 using TodoApp.Api.Helpers;
 using TodoApp.Contracts;
+using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api

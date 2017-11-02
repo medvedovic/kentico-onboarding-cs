@@ -1,4 +1,4 @@
-﻿namespace TodoApp.Contracts
+﻿namespace TodoApp.Contracts.Bootstrap
 {
     public class DependencyBootstrapperConfig
     {

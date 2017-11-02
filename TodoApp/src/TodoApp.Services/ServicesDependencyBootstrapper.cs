@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 using TodoApp.Contracts;
+using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Services.Todos;
 using TodoApp.Services.Helpers;
