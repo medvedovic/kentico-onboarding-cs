@@ -20,13 +20,13 @@ namespace TodoApp.Api.Controllers
         private readonly ICreateTodoService _createTodoService;
         private readonly IUpdateTodoService _updateTodoService;
         private readonly IRetrieveTodoService _retrieveTodoService;
-        private readonly IUriHelper _uriHelper;
+        private readonly ITodoLocationHelper _todoLocationHelper;
 
-        public TodosController(ITodoRepository todoRepository, ICreateTodoService createTodoService, IUriHelper uriHelper, IUpdateTodoService updateTodoService, IRetrieveTodoService retrieveTodoService)
+        public TodosController(ITodoRepository todoRepository, ICreateTodoService createTodoService, ITodoLocationHelper todoLocationHelper, IUpdateTodoService updateTodoService, IRetrieveTodoService retrieveTodoService)
         {
             _createTodoService = createTodoService;
             _repository = todoRepository;
-            _uriHelper = uriHelper;
+            _todoLocationHelper = todoLocationHelper;
             _updateTodoService = updateTodoService;
             _retrieveTodoService = retrieveTodoService;
         }
@@ -99,7 +99,7 @@ namespace TodoApp.Api.Controllers
         {
             var newTodo = await _createTodoService.CreateTodoAsync(todo);
 
-            var location = _uriHelper.BuildRouteUri(newTodo.Id);
+            var location = _todoLocationHelper.BuildRouteUri(newTodo.Id);
             return Created(location, newTodo);
         }
     }

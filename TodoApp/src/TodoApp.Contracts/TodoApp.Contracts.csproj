@@ -56,7 +56,7 @@
     <Compile Include="Bootstrap\IDatabaseConfig.cs" />
     <Compile Include="Helpers\IDateTimeProvider.cs" />
     <Compile Include="Helpers\IGuidGenerator.cs" />
-    <Compile Include="Helpers\IUriHelper.cs" />
+    <Compile Include="Helpers\ITodoLocationHelper.cs" />
     <Compile Include="Models\DatabaseConfig.cs" />
     <Compile Include="IConvertibleTo.cs" />
     <Compile Include="Bootstrap\IUnityBootstrapper.cs" />

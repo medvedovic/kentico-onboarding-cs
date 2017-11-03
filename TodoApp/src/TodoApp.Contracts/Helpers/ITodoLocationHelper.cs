@@ -2,7 +2,7 @@
 
 namespace TodoApp.Contracts.Helpers
 {
-    public interface IUriHelper
+    public interface ITodoLocationHelper
     {
         Uri BuildRouteUri(Guid id);
     }

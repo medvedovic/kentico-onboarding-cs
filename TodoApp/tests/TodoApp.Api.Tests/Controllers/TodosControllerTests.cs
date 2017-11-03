@@ -22,7 +22,7 @@ namespace TodoApp.Api.Tests.Controllers
     {
         private TodosController _controller;
         private ITodoRepository _mockRepo;
-        private IUriHelper _uriHelper;
+        private ITodoLocationHelper _todoLocationHelper;
         private ICreateTodoService _mockCreateService;
         private IUpdateTodoService _mockUpdateService;
         private IRetrieveTodoService _mockRetrieveTodoService;
@@ -35,15 +35,15 @@ namespace TodoApp.Api.Tests.Controllers
         {
             _mockRepo = Substitute.For<ITodoRepository>();
 
-            _uriHelper = Substitute.For<IUriHelper>();
-            _uriHelper.BuildRouteUri(Arg.Any<Guid>())
+            _todoLocationHelper = Substitute.For<ITodoLocationHelper>();
+            _todoLocationHelper.BuildRouteUri(Arg.Any<Guid>())
                 .Returns(parameters => new Uri($"/localhost/todos/{parameters.Arg<Guid>()}", UriKind.Relative));
 
             _mockCreateService = Substitute.For<ICreateTodoService>();
             _mockUpdateService = Substitute.For<IUpdateTodoService>();
             _mockRetrieveTodoService = Substitute.For<IRetrieveTodoService>();
 
-            _controller = new TodosController(_mockRepo, _mockCreateService, _uriHelper, _mockUpdateService, _mockRetrieveTodoService)
+            _controller = new TodosController(_mockRepo, _mockCreateService, _todoLocationHelper, _mockUpdateService, _mockRetrieveTodoService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()

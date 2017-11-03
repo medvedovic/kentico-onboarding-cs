@@ -6,11 +6,11 @@ using TodoApp.Contracts.Helpers;
 
 namespace TodoApp.Api.Helpers
 {
-    internal class UriHelper : IUriHelper
+    internal class TodoLocationHelper : ITodoLocationHelper
     {
         private readonly UrlHelper _urlHelper;
 
-        public UriHelper(HttpRequestMessage httpRequestMessage)
+        public TodoLocationHelper(HttpRequestMessage httpRequestMessage)
         {
             _urlHelper = new UrlHelper(httpRequestMessage);
         }

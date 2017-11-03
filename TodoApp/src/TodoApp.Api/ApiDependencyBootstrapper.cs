@@ -13,7 +13,7 @@ namespace TodoApp.Api
             container
                 .RegisterType<IDatabaseConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(DatabaseConfigGenerator.Generate))
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
-                .RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());
+                .RegisterType<ITodoLocationHelper, TodoLocationHelper>(new HierarchicalLifetimeManager());
 
         private static HttpRequestMessage GetHttpRequestMessage(IUnityContainer container) =>
             (HttpRequestMessage) HttpContext.Current.Items["MS_HttpRequestMessage"];
