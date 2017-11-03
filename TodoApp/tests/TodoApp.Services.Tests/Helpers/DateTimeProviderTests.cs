@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Threading;
+using NUnit.Framework;
 using TodoApp.Contracts.Helpers;
 using TodoApp.Services.Helpers;
 
@@ -16,12 +18,23 @@ namespace TodoApp.Services.Tests.Helpers
         }
 
         [Test]
-        public void ReturnsDifferentDateTimes()
+        public void ReturnsDifferentDateTimes_OnMultipleCalls()
         {
             var time1 = _dateTimeProvider.GetCurrentDateTime();
+            Thread.Sleep(1000);
             var time2 = _dateTimeProvider.GetCurrentDateTime();
 
             Assert.That(time1, Is.Not.EqualTo(time2));
+        }
+
+        [Test]
+        public void ReturnsApproximatelyCurrentDateTime()
+        {
+            var now = DateTime.Now;
+
+            var time1 = _dateTimeProvider.GetCurrentDateTime();
+
+            Assert.That(time1, Is.InRange(now.AddSeconds(-1), now.AddSeconds(1)));
         }
     }
 }
