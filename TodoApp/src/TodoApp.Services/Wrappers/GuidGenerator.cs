@@ -1,7 +1,7 @@
 ﻿using System;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Contracts.Wrappers;
 
-namespace TodoApp.Services.Helpers
+namespace TodoApp.Services.Wrappers
 {
     internal class GuidGenerator: IGuidGenerator
     {

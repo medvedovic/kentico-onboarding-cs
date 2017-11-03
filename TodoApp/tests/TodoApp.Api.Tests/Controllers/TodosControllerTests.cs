@@ -10,10 +10,10 @@ using TodoApp.Api.Controllers;
 using TodoApp.Api.ViewModels;
 using TodoApp.Contract.Base.EqualityComparer;
 using TodoApp.Contracts;
-using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
+using TodoApp.Contracts.Wrappers;
 
 namespace TodoApp.Api.Tests.Controllers
 {

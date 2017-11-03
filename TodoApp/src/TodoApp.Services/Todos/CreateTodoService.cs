@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TodoApp.Contracts;
-using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
+using TodoApp.Contracts.Wrappers;
 
 namespace TodoApp.Services.Todos
 {

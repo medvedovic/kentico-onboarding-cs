@@ -4,9 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TodoApp.Api.ViewModels;
-using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Repositories;
 using TodoApp.Contracts.Services.Todos;
+using TodoApp.Contracts.Wrappers;
 
 namespace TodoApp.Api.Controllers
 {

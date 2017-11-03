@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
 using System.Web;
 using Microsoft.Practices.Unity;
-using TodoApp.Api.Helpers;
+using TodoApp.Api.Wrappers;
 using TodoApp.Contracts.Bootstrap;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Contracts.Wrappers;
 
 namespace TodoApp.Api
 {

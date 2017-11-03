@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
-using TodoApp.Contracts.Helpers;
-using TodoApp.Services.Helpers;
+using TodoApp.Contracts.Wrappers;
+using TodoApp.Services.Wrappers;
 
-namespace TodoApp.Services.Tests.Helpers
+namespace TodoApp.Services.Tests.Wrappers
 {
     [TestFixture]
     internal class DateTimeProviderTests

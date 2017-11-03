@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TodoApp.Contracts.Helpers
+namespace TodoApp.Contracts.Wrappers
 {
     public interface IDateTimeProvider
     {

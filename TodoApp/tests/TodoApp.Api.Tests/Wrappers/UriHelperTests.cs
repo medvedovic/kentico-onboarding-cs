@@ -5,10 +5,10 @@ using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
-using TodoApp.Api.Helpers;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Api.Wrappers;
+using TodoApp.Contracts.Wrappers;
 
-namespace TodoApp.Api.Tests.Helpers
+namespace TodoApp.Api.Tests.Wrappers
 {
     [TestFixture]
     internal class UriHelperTests

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Practices.Unity;
 using TodoApp.Contracts.Bootstrap;
-using TodoApp.Contracts.Helpers;
 using TodoApp.Contracts.Services.Todos;
-using TodoApp.Services.Helpers;
+using TodoApp.Contracts.Wrappers;
 using TodoApp.Services.Todos;
+using TodoApp.Services.Wrappers;
 
 namespace TodoApp.Services
 {
