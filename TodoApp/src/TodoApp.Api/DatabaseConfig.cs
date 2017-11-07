@@ -1,6 +1,6 @@
 ﻿using TodoApp.Contracts.Bootstrap;
 
-namespace TodoApp.Contracts.Models
+namespace TodoApp.Api
 {
     public class DatabaseConfig : IDatabaseConfig
     {

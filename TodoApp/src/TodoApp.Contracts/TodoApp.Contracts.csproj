@@ -63,7 +63,6 @@
     <Compile Include="Wrappers\IDateTimeProvider.cs" />
     <Compile Include="Wrappers\IGuidGenerator.cs" />
     <Compile Include="Wrappers\ITodoLocationHelper.cs" />
-    <Compile Include="Models\DatabaseConfig.cs" />
     <Compile Include="IConvertibleTo.cs" />
     <Compile Include="Bootstrap\IUnityBootstrapper.cs" />
     <Compile Include="Models\Todo.cs" />

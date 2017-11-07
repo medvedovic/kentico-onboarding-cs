@@ -113,6 +113,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\TodosController.cs" />
+    <Compile Include="DatabaseConfig.cs" />
     <Compile Include="DatabaseConfigConstructor.cs" />
     <Compile Include="ViewModels\TodoViewModel.cs" />
     <Compile Include="Global.asax.cs">
