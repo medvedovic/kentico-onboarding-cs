@@ -1,7 +1,7 @@
 ﻿using System;
 using NSubstitute;
 using NUnit.Framework;
-using TodoApp.Api.ViewModels;
+using TodoApp.Contracts;
 using TodoApp.Contracts.Base.EqualityComparer;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -41,10 +41,8 @@ namespace TodoApp.Services.Tests.Todos
             _repository.CreateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
             _mockGuidGenerator.GenerateGuid().Returns(id);
             _mockDateTimeProvider.GetCurrentDateTime().Returns(new DateTime(2017, 10, 17, 12, 00, 00));
-            var todo = new TodoViewModel
-            {
-                Value = "Do stuff"
-            };
+            var todo = Substitute.For<IConvertibleTo<Todo>>();
+            todo.Convert().Returns(new Todo {Value = "Do stuff"});
 
             var result = _service.CreateTodoAsync(todo).Result;
 

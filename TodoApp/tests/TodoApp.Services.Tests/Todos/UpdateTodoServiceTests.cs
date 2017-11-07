@@ -1,7 +1,7 @@
 ﻿using System;
 using NSubstitute;
 using NUnit.Framework;
-using TodoApp.Api.ViewModels;
+using TodoApp.Contracts;
 using TodoApp.Contracts.Base.EqualityComparer;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
@@ -30,7 +30,6 @@ namespace TodoApp.Services.Tests.Todos
         public void UpdateTodoAsync_ReturnsCorrectTodo()
         {
             var id = new Guid("128539cb-a41e-42a1-805b-1eb533e86461");
-            var todoViewModel = new TodoViewModel {Value = "Test UpdateTodoService"};
             var returnedTodo = new Todo
             {
                 Id = id,
@@ -44,6 +43,8 @@ namespace TodoApp.Services.Tests.Todos
                 CreatedAt = new DateTime(2017, 10, 17, 10, 00, 00),
                 UpdatedAt = new DateTime(2017, 10, 21, 10, 44, 12)
             };
+            var todoViewModel = Substitute.For<IConvertibleTo<Todo>>();
+            todoViewModel.Convert().Returns(new Todo { Value = "Test UpdateTodoService" });
             _mockDateTimeProvider.GetCurrentDateTime().Returns(new DateTime(2017, 10, 21, 10, 44, 12));
 
             _mockTodoRepository.UpdateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());

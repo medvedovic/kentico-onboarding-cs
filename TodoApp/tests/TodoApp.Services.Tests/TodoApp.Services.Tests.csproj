@@ -69,10 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TodoApp.Api\TodoApp.Api.csproj">
-      <Project>{E69864E0-BB10-49BF-9405-603CD877493C}</Project>
-      <Name>TodoApp.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\TodoApp.Contracts\TodoApp.Contracts.csproj">
       <Project>{BCAD3D79-6BD9-4AB0-89DE-A4426FD75124}</Project>
       <Name>TodoApp.Contracts</Name>
