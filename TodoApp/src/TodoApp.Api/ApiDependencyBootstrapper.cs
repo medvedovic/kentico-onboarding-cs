@@ -11,7 +11,7 @@ namespace TodoApp.Api
     {
         public IUnityContainer RegisterType(IUnityContainer container) => 
             container
-                .RegisterType<IDatabaseConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(DatabaseConfigGenerator.Generate))
+                .RegisterType<IDatabaseConfig>(new HierarchicalLifetimeManager(), new InjectionFactory(DatabaseConfigConstructor.Create))
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
                 .RegisterType<ITodoLocationHelper, TodoLocationHelper>(new HierarchicalLifetimeManager());
 

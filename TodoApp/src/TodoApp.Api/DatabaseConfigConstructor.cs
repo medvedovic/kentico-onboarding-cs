@@ -4,9 +4,9 @@ using TodoApp.Contracts.Models;
 
 namespace TodoApp.Api
 {
-    internal class DatabaseConfigGenerator
+    internal class DatabaseConfigConstructor
     {
-        internal static IDatabaseConfig Generate(IUnityContainer arg) => 
+        internal static IDatabaseConfig Create(IUnityContainer arg) => 
             new DatabaseConfig
             {
                 ConnectionString = System.Configuration.ConfigurationManager
