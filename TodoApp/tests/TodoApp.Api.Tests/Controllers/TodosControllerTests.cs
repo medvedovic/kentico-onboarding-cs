@@ -8,7 +8,7 @@ using NSubstitute;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
 using TodoApp.Api.ViewModels;
-using TodoApp.Contract.Base.EqualityComparer;
+using TodoApp.Contracts.Base.EqualityComparer;
 using TodoApp.Contracts;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;

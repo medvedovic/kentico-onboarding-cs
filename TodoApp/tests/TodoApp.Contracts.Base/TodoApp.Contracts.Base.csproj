@@ -7,8 +7,8 @@
     <ProjectGuid>{52034D65-AF6B-4F13-89A8-1FB7EFA9EE5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TodoApp.Contract.Base</RootNamespace>
-    <AssemblyName>TodoApp.Contract.Base</AssemblyName>
+    <RootNamespace>TodoApp.Contracts.Base</RootNamespace>
+    <AssemblyName>TodoApp.Contracts.Base</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

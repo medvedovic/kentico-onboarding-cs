@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7BB7335B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Services", "src\TodoApp.Services\TodoApp.Services.csproj", "{2251A9FC-891E-4DF5-A426-367145297B09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Contract.Base", "tests\TodoApp.Contract.Base\TodoApp.Contract.Base.csproj", "{52034D65-AF6B-4F13-89A8-1FB7EFA9EE5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Contracts.Base", "tests\TodoApp.Contracts.Base\TodoApp.Contracts.Base.csproj", "{52034D65-AF6B-4F13-89A8-1FB7EFA9EE5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Services.Tests", "tests\TodoApp.Services.Tests\TodoApp.Services.Tests.csproj", "{BBF3F750-915B-43F7-909B-81E17FA6D7FB}"
 EndProject

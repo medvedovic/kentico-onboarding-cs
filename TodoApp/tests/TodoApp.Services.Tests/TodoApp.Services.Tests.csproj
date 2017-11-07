@@ -78,9 +78,9 @@
       <Project>{2251A9FC-891E-4DF5-A426-367145297B09}</Project>
       <Name>TodoApp.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TodoApp.Contract.Base\TodoApp.Contract.Base.csproj">
+    <ProjectReference Include="..\TodoApp.Contracts.Base\TodoApp.Contracts.Base.csproj">
       <Project>{52034D65-AF6B-4F13-89A8-1FB7EFA9EE5F}</Project>
-      <Name>TodoApp.Contract.Base</Name>
+      <Name>TodoApp.Contracts.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

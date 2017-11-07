@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework.Constraints;
 
-namespace TodoApp.Contract.Base.EqualityComparer
+namespace TodoApp.Contracts.Base.EqualityComparer
 {
     public static class TodosEqualityComparerExtensions
     {

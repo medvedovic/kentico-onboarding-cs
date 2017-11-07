@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TodoApp.Contracts.Models;
 
-namespace TodoApp.Contract.Base.EqualityComparer
+namespace TodoApp.Contracts.Base.EqualityComparer
 {
     internal class TodosEqualityComparer : IEqualityComparer<Todo>
     {
