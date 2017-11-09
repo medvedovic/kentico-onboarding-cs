@@ -14,14 +14,26 @@ namespace TodoApp.Contracts.Base.EqualityComparer
 
         public bool Equals(Todo x, Todo y)
         {
-            return x.Id == y.Id
-                && x.Value == y.Value
-                && x.CreatedAt == y.CreatedAt;
+            if (ReferenceEquals(x, y)) return true;
+            if (x == null || y == null) return false;
+            if (x.GetType() != y.GetType()) return false;
+
+            return x.Id.Equals(y.Id) 
+                && string.Equals(x.Value, y.Value) 
+                && x.CreatedAt.Equals(y.CreatedAt) 
+                && x.UpdatedAt.Equals(y.UpdatedAt);
         }
 
         public int GetHashCode(Todo obj)
         {
-            return obj.Id.GetHashCode() ^ obj.CreatedAt.GetHashCode();
+            unchecked
+            {
+                var hashCode = obj.Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ obj.Value.GetHashCode();
+                hashCode = (hashCode * 397) ^ obj.CreatedAt.GetHashCode();
+                hashCode = (hashCode * 397) ^ obj.UpdatedAt.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }
