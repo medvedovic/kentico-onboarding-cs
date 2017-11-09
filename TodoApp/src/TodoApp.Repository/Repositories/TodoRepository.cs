@@ -15,8 +15,9 @@ namespace TodoApp.Repository.Repositories
 
         public TodoRepository(IDatabaseConfig config)
         {
-            var client = new MongoClient(config.ConnectionString);
-            var db = client.GetDatabase(MongoUrl.Create(config.ConnectionString).DatabaseName);
+            var mongoUrl = MongoUrl.Create(config.ConnectionString);
+            var client = new MongoClient(mongoUrl);
+            var db = client.GetDatabase(mongoUrl.DatabaseName);
             _todosCollection = db.GetCollection<Todo>(MONGO_COLLECTION_NAME);
         }
 
