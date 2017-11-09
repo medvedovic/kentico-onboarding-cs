@@ -29,14 +29,15 @@ namespace TodoApp.Services.Tests.Todos
         }
 
         [Test]
-        public void BuildsModelCorrectly()
+        public void CreateTodoAsync_ReturnsCorrectTodo()
         {
             var id = Guid.Parse("f6deb310-7052-4a3f-b9cb-2827767803c7");
             var expectedResult = new Todo
             {
                 Id = id,
                 Value = "Do stuff",
-                CreatedAt = new DateTime(2017, 10, 17, 12, 00, 00)
+                CreatedAt = new DateTime(2017, 10, 17, 12, 00, 00),
+                UpdatedAt = new DateTime(2017, 10, 17, 12, 00, 00)
             };
             _repository.CreateAsync(Arg.Any<Todo>()).Returns(parameters => parameters.Arg<Todo>());
             _mockGuidGenerator.GenerateGuid().Returns(id);

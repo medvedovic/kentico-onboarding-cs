@@ -16,7 +16,7 @@ namespace TodoApp.Services.Tests.Wrappers
         }
 
         [Test]
-        public void ReturnsDifferentGuids()
+        public void GenerateGuid_ReturnsDifferentGuids_OnMultipleCalls()
         {
             var id1 = _guidGenerator.GenerateGuid();
             var id2 = _guidGenerator.GenerateGuid();

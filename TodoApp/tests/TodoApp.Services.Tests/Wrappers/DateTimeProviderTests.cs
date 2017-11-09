@@ -17,7 +17,7 @@ namespace TodoApp.Services.Tests.Wrappers
         }
 
         [Test]
-        public void ReturnsDateTimes_AsIncreasingSequence()
+        public void GetCurrentDateTime_ReturnsMultipleDateTimes_InCorrectOrder()
         {
             var time1 = _dateTimeProvider.GetCurrentDateTime();
             var time2 = _dateTimeProvider.GetCurrentDateTime();
