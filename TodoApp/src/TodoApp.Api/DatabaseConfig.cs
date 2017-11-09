@@ -3,7 +3,7 @@ using Unity;
 
 namespace TodoApp.Api
 {
-    public class DatabaseConfig : IDatabaseConfig
+    internal class DatabaseConfig : IDatabaseConfig
     {
         public string ConnectionString { get; set; }
 
