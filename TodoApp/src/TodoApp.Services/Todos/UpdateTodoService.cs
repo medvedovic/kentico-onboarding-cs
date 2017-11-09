@@ -20,9 +20,9 @@ namespace TodoApp.Services.Todos
 
         public async Task<Todo> UpdateTodoAsync(Todo existingTodo, IConvertibleTo<Todo> todoViewModel)
         {
-            var todo = todoViewModel.Convert();
+            var receivedTodo = todoViewModel.Convert();
 
-            existingTodo.Value = todo.Value;
+            existingTodo.Value = receivedTodo.Value;
             existingTodo.UpdatedAt = _dateTimeProvider.GetCurrentDateTime();
 
             return await _repository.UpdateAsync(existingTodo);
