@@ -22,9 +22,9 @@ namespace TodoApp.Services.Todos
 
         public async Task<Todo> CreateTodoAsync(IConvertibleTo<Todo> todoViewModel)
         {
+            var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
             var newTodo = todoViewModel.Convert();
             newTodo.Id = _guidGenerator.GenerateGuid();
-            var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
             newTodo.CreatedAt = currentDateTime;
             newTodo.UpdatedAt = currentDateTime;
 
