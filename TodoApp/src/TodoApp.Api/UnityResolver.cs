@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http.Dependencies;
-using Microsoft.Practices.Unity;
+using Unity;
+using Unity.Exceptions;
 
-namespace TodoApp.Api.Repositories
+namespace TodoApp.Api
 {
     public class UnityResolver : IDependencyResolver
     {

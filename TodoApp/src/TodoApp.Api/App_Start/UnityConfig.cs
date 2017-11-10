@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
-using Microsoft.Practices.Unity;
-using TodoApp.Api.Repositories;
-using TodoApp.Contracts;
+using TodoApp.Contracts.Bootstrap;
 using TodoApp.Repository;
+using TodoApp.Services;
+using Unity;
 
 namespace TodoApp.Api
 {
@@ -12,7 +12,8 @@ namespace TodoApp.Api
         {
             var container = new UnityContainer()
                 .Register<RepositoryDependencyBootstrapper>()
-                .Register<ApiDependencyBootstrapper>();
+                .Register<ApiDependencyBootstrapper>()
+                .Register<ServicesDependencyBootstrapper>();
 
             config.DependencyResolver = new UnityResolver(container);
         }

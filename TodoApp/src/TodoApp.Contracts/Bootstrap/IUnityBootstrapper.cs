@@ -1,6 +1,6 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Unity;
 
-namespace TodoApp.Contracts
+namespace TodoApp.Contracts.Bootstrap
 {
     public interface IUnityBootstrapper
     {

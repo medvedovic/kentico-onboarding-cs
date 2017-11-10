@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Driver;
+using TodoApp.Contracts.Bootstrap;
 using TodoApp.Contracts.Models;
 using TodoApp.Contracts.Repositories;
 
@@ -8,30 +10,38 @@ namespace TodoApp.Repository.Repositories
 {
     internal class TodoRepository : ITodoRepository
     {
-        private readonly List<Todo> _todos;
+        private const string MONGO_COLLECTION_NAME = "todos";
+        private readonly IMongoCollection<Todo> _todosCollection;
 
-        public TodoRepository()
+        public TodoRepository(IDatabaseConfig config)
         {
-            _todos = new List<Todo>
-            {
-                new Todo { Id = new Guid("454ad8b4-d5c8-4117-81d6-6a8385cfdc38"), Value = "Make coffee" },
-                new Todo { Id = new Guid("466083f9-14f9-4286-ae56-b95a2ccdc7d3"), Value = "Master ASP.NET web api" }
-            };
+            var mongoUrl = MongoUrl.Create(config.ConnectionString);
+            var client = new MongoClient(mongoUrl);
+            var db = client.GetDatabase(mongoUrl.DatabaseName);
+            _todosCollection = db.GetCollection<Todo>(MONGO_COLLECTION_NAME);
         }
 
         public async Task<IEnumerable<Todo>> RetrieveAllAsync()
-            => await Task.FromResult(_todos);      
+            => await _todosCollection.AsQueryable().ToListAsync();
 
         public Task<Todo> RetrieveAsync(Guid id)
-            => Task.FromResult(_todos[0]);
+            => _todosCollection.Find(doc => doc.Id == id).SingleOrDefaultAsync();
 
-        public Task<Todo> CreateAsync(Todo todo)
-            => Task.FromResult(todo);            
+        public async Task<Todo> CreateAsync(Todo todo)
+        {
+            await _todosCollection.InsertOneAsync(todo);
+            
+            return todo;
+        }
 
-        public Task<bool> RemoveAsync(Guid id)
-            => Task.FromResult(true);
+        public async Task<bool> RemoveAsync(Guid id)
+        {
+            var result = await _todosCollection.DeleteOneAsync(todo => todo.Id == id);
 
-        public Task<Todo> UpdateAsync(Todo todo)
-            => Task.FromResult(todo);
+            return result.IsAcknowledged;
+        }
+
+        public async Task<Todo> UpdateAsync(Todo todo)
+            => await _todosCollection.FindOneAndReplaceAsync(doc => doc.Id == todo.Id, todo);      
     }
 }

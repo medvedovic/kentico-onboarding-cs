@@ -3,9 +3,10 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using TodoApp.Contracts.Helpers;
-using TodoApp.Contracts.Models;
+using TodoApp.Api.ViewModels;
 using TodoApp.Contracts.Repositories;
+using TodoApp.Contracts.Services.Todos;
+using TodoApp.Contracts.Wrappers;
 
 namespace TodoApp.Api.Controllers
 {
@@ -16,50 +17,90 @@ namespace TodoApp.Api.Controllers
         public const string DEFAULT_ROUTE = "TodosDefault";
 
         private readonly ITodoRepository _repository;
-        private readonly IUriHelper _uriHelper;
+        private readonly ICreateTodoService _createTodoService;
+        private readonly IUpdateTodoService _updateTodoService;
+        private readonly IRetrieveTodoService _retrieveTodoService;
+        private readonly ITodoLocationHelper _todoLocationHelper;
 
-        public TodosController(ITodoRepository todoRepository, IUriHelper uriHelper)
+        public TodosController(ITodoRepository todoRepository, ICreateTodoService createTodoService, ITodoLocationHelper todoLocationHelper, IUpdateTodoService updateTodoService, IRetrieveTodoService retrieveTodoService)
         {
+            _createTodoService = createTodoService;
             _repository = todoRepository;
-            _uriHelper = uriHelper;
+            _todoLocationHelper = todoLocationHelper;
+            _updateTodoService = updateTodoService;
+            _retrieveTodoService = retrieveTodoService;
         }
 
-        public async Task<IHttpActionResult> GetAllTodosAsync()
-        {
-            var todos = await _repository.RetrieveAllAsync();
-
-            return Ok(todos);
-        }
+        public async Task<IHttpActionResult> GetAllTodosAsync() => 
+            Ok(await _repository.RetrieveAllAsync());
 
         public async Task<IHttpActionResult> GetTodoAsync(Guid id)
         {
-            var todo = await _repository.RetrieveAsync(id);
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
+            {
+                return NotFound();
+            }
 
-            return Ok(todo);
+            return Ok(await _retrieveTodoService.RetrieveTodoAsync(id));
         }
 
-        public async Task<IHttpActionResult> PostTodoAsync(Todo todo)
+        public async Task<IHttpActionResult> PostTodoAsync(TodoViewModel todo)
         {
-            var newTodo = await _repository.CreateAsync(todo);
+            ValidateViewModelForNull(todo);
 
-            var location = _uriHelper.BuildRouteUri(newTodo.Id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return Created(location, newTodo);
+            return await CreateNewTodoAsync(todo);
         }
+
 
         public async Task<IHttpActionResult> DeleteTodoAsync(Guid id)
         {
-            if (await _repository.RemoveAsync(id))
-                return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
+            {
+                return NotFound();
+            }
 
-            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            await _repository.RemoveAsync(id);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] Todo updated)
+        public async Task<IHttpActionResult> PutTodoAsync(Guid id, [FromBody] TodoViewModel updated)
         {
-            var newTodo = await _repository.UpdateAsync(updated);
+            ValidateViewModelForNull(updated);
 
-            return await Task.FromResult(Ok(newTodo));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _retrieveTodoService.IsTodoInDbAsync(id))
+            {
+                return await CreateNewTodoAsync(updated);
+            }
+
+            var existringTodo = await _retrieveTodoService.RetrieveTodoAsync(id);
+            return Ok(await _updateTodoService.UpdateTodoAsync(existringTodo, updated));
+        }
+
+        private void ValidateViewModelForNull(TodoViewModel todo)
+        {
+            if (todo == null)
+            {
+                ModelState.AddModelError(string.Empty, "TodoViewModel cannot be null");
+            }
+        }
+
+        private async Task<IHttpActionResult> CreateNewTodoAsync(TodoViewModel todo)
+        {
+            var newTodo = await _createTodoService.CreateTodoAsync(todo);
+
+            var location = _todoLocationHelper.BuildRouteUri(newTodo.Id);
+            return Created(location, newTodo);
         }
     }
 }

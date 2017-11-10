@@ -2,15 +2,15 @@
 using System.Net.Http;
 using System.Web.Http.Routing;
 using TodoApp.Api.Controllers;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Contracts.Wrappers;
 
-namespace TodoApp.Api.Helpers
+namespace TodoApp.Api.Wrappers
 {
-    internal class UriHelper : IUriHelper
+    internal class TodoLocationHelper : ITodoLocationHelper
     {
         private readonly UrlHelper _urlHelper;
 
-        public UriHelper(HttpRequestMessage httpRequestMessage)
+        public TodoLocationHelper(HttpRequestMessage httpRequestMessage)
         {
             _urlHelper = new UrlHelper(httpRequestMessage);
         }

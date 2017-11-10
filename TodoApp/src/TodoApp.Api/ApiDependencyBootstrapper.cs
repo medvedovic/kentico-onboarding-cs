@@ -1,9 +1,11 @@
 ﻿using System.Net.Http;
 using System.Web;
-using Microsoft.Practices.Unity;
-using TodoApp.Api.Helpers;
-using TodoApp.Contracts;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Api.Wrappers;
+using TodoApp.Contracts.Bootstrap;
+using TodoApp.Contracts.Wrappers;
+using Unity;
+using Unity.Injection;
+using Unity.Lifetime;
 
 namespace TodoApp.Api
 {
@@ -11,8 +13,9 @@ namespace TodoApp.Api
     {
         public IUnityContainer RegisterType(IUnityContainer container) => 
             container
+                .RegisterType<IDatabaseConfig>(new ContainerControlledLifetimeManager(), new InjectionFactory(DatabaseConfig.Create))
                 .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(GetHttpRequestMessage))
-                .RegisterType<IUriHelper, UriHelper>(new HierarchicalLifetimeManager());
+                .RegisterType<ITodoLocationHelper, TodoLocationHelper>(new HierarchicalLifetimeManager());
 
         private static HttpRequestMessage GetHttpRequestMessage(IUnityContainer container) =>
             (HttpRequestMessage) HttpContext.Current.Items["MS_HttpRequestMessage"];

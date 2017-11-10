@@ -5,30 +5,30 @@ using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using NUnit.Framework;
 using TodoApp.Api.Controllers;
-using TodoApp.Api.Helpers;
-using TodoApp.Contracts.Helpers;
+using TodoApp.Api.Wrappers;
+using TodoApp.Contracts.Wrappers;
 
-namespace TodoApp.Api.Tests.Helpers
+namespace TodoApp.Api.Tests.Wrappers
 {
     [TestFixture]
-    class UriHelperTests
+    internal class UriHelperTests
     {
-        private IUriHelper _uriHelper;
+        private ITodoLocationHelper _todoLocationHelper;
         private string routeTemplate = "api/todos";
 
         [SetUp]
         public void Init()
         {
-            _uriHelper = new UriHelper(ConfigurePostRequestMessage());
+            _todoLocationHelper = new TodoLocationHelper(ConfigurePostRequestMessage());
         }
 
         [Test]
         public void BuidlsUriCorrectly()
         {
-            var guid = new Guid("93c4a131-5d1d-4856-818b-b5d234731f1b");
-            var expectedResult = $"/{routeTemplate}/{guid}";
+            var id = new Guid("93c4a131-5d1d-4856-818b-b5d234731f1b");
+            var expectedResult = $"/{routeTemplate}/{id}";
 
-            var uri = _uriHelper.BuildRouteUri(guid);
+            var uri = _todoLocationHelper.BuildRouteUri(id);
 
 
             Assert.That(uri.ToString(), Is.EqualTo(expectedResult));
