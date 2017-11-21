@@ -8,3 +8,7 @@ script:
   - msbuild ./TodoApp/TodoApp.sln
   - nunit-console ./TodoApp/tests/TodoApp.Api.Tests/bin/Debug/TodoApp.Api.Tests.dll
   - nunit-console ./TodoApp/tests/TodoApp.Services.Tests/bin/Debug/TodoApp.Services.Tests.dll
+deploy:
+  provider: azure_web_apps
+  on:
+    branch: master
