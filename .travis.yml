@@ -1,0 +1,8 @@
+language: csharp
+solution: TodoApp.sln
+
+install:
+  - nuget restore ./TodoApp/TodoApp.sln
+
+script:
+  - msbuild ./TodoApp/TodoApp.sln
