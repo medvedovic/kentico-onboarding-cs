@@ -1,8 +1,10 @@
 language: csharp
 solution: TodoApp.sln
-
+before_install:
+  - sudo apt-get install nunit-console
 install:
   - nuget restore ./TodoApp/TodoApp.sln
-
 script:
   - msbuild ./TodoApp/TodoApp.sln
+  - nunit-console ./TodoApp/tests/TodoApp.Api.Tests/bin/Debug/TodoApp.Api.Tests.dll
+  - nunit-console ./TodoApp/tests/TodoApp.Services.Tests/bin/Debug/TodoApp.Services.Tests.dll
